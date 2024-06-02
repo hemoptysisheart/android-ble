@@ -1,10 +1,8 @@
-# Android Template
+# Android Bluetooth LE
 
-Android 앱 개발용 레포지토리 초기 설정을 할 수 있는 템플릿 프로젝트.
+Android에서 Bluetooth LE 라이브러리 및 샘플앱 개발.
 
-## 사용법
+## 개발환경 구축
 
-1. GitHub에서 저장소를 만들 때 `Repository template`으로 이 템플릿을 선택한다.
-2. 레포지토리를 로컬로 클론한다.
-3. [`sample-local.properties`](sample-local.properties)를 참고해서 `local.properties`를 만든다.
-4. 각 모듈의 `android.namespace`를 프로젝트에 맞게 변경한다.
+1. `git clone`
+2. [`sample-local.properties`](sample-local.properties)를 참고해서 `local.properties`를 수정.
