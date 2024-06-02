@@ -33,7 +33,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-template"
+rootProject.name = "android-ble"
 
 include(
     ":app",

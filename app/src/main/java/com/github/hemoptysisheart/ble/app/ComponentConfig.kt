@@ -1,7 +1,7 @@
-package com.github.hemoptysisheart.android.app
+package com.github.hemoptysisheart.ble.app
 
 import android.util.Log
-import com.github.hemoptysisheart.android.model.SampleModel
+import com.github.hemoptysisheart.ble.model.SampleModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

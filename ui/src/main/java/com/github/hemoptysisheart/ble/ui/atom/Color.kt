@@ -1,4 +1,4 @@
-package com.github.hemoptysisheart.android.ui.atom
+package com.github.hemoptysisheart.ble.ui.atom
 
 import androidx.compose.ui.graphics.Color
 

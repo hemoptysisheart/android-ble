@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="clean app" type="AndroidRunConfigurationType" factoryName="Android App"
         activateToolWindowBeforeRun="false">
-        <module name="android-template.app.main" />
+        <module name="android-ble.app.main" />
         <option name="DEPLOY" value="true" />
         <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
         <option name="DEPLOY_AS_INSTANT" value="false" />

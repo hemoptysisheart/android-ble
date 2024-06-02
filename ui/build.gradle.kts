@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.android.ui"
+    namespace = "com.github.hemoptysisheart.ble.ui"
     compileSdk = 34
 
     defaultConfig {

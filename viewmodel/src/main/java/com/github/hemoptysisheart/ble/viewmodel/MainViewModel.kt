@@ -1,9 +1,9 @@
-package com.github.hemoptysisheart.android.viewmodel
+package com.github.hemoptysisheart.ble.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.hemoptysisheart.android.model.SampleModel
+import com.github.hemoptysisheart.ble.model.SampleModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

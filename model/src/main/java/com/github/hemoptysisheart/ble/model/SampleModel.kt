@@ -1,4 +1,4 @@
-package com.github.hemoptysisheart.android.model
+package com.github.hemoptysisheart.ble.model
 
 import android.util.Log
 

@@ -1,4 +1,4 @@
-package com.github.hemoptysisheart.android.ui.page
+package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.github.hemoptysisheart.android.ui.atom.AndroidTemplateTheme
-import com.github.hemoptysisheart.android.viewmodel.MainViewModel
+import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
+import com.github.hemoptysisheart.ble.viewmodel.MainViewModel
 import java.time.Instant
 
 @Composable
@@ -55,7 +55,7 @@ private fun MainPageContent(
 @PreviewLightDark
 @PreviewScreenSizes
 fun MainPagePreview() {
-    AndroidTemplateTheme {
+    AndroidBleTheme {
         MainPageContent(Instant.now())
     }
 }

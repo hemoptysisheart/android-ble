@@ -1,4 +1,4 @@
-package com.github.hemoptysisheart.android.ui.atom
+package com.github.hemoptysisheart.ble.ui.atom
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -33,7 +33,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun AndroidTemplateTheme(
+fun AndroidBleTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

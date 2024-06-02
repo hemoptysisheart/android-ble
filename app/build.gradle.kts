@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.android"
+    namespace = "com.github.hemoptysisheart.ble"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.github.hemoptysisheart.android"
+        applicationId = "com.github.hemoptysisheart.ble"
         minSdk = 29
         targetSdk = 34
         versionCode = 1

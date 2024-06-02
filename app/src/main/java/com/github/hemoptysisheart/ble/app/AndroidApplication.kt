@@ -1,8 +1,8 @@
-package com.github.hemoptysisheart.android.app
+package com.github.hemoptysisheart.ble.app
 
 import android.app.Application
 import android.util.Log
-import com.github.hemoptysisheart.android.model.SampleModel
+import com.github.hemoptysisheart.ble.model.SampleModel
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

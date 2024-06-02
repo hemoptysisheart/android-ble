@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.android.model"
+    namespace = "com.github.hemoptysisheart.ble.model"
     compileSdk = 34
 
     defaultConfig {

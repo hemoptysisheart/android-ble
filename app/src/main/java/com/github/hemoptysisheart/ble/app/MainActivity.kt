@@ -1,12 +1,12 @@
-package com.github.hemoptysisheart.android.app
+package com.github.hemoptysisheart.ble.app
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.github.hemoptysisheart.android.model.SampleModel
-import com.github.hemoptysisheart.android.ui.RootUI
+import com.github.hemoptysisheart.ble.model.SampleModel
+import com.github.hemoptysisheart.ble.ui.RootUI
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
