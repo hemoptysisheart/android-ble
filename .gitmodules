@@ -1,0 +1,3 @@
+[submodule "ble-spec"]
+	path = ble-spec
+	url = https://bitbucket.org/bluetooth-SIG/public.git
