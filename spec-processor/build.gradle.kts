@@ -16,4 +16,12 @@ dependencies {
     implementation(libs.ksp.symbol.processing.api)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kaml)
+
+    testImplementation(libs.kotlin.logging)
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.kotest.runner.junit5)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
