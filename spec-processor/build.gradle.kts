@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 java {
@@ -13,4 +14,6 @@ dependencies {
     implementation(project(":spec-annotation"))
 
     implementation(libs.ksp.symbol.processing.api)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kaml)
 }
