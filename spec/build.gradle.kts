@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+
+    idea
 }
 
 android {
@@ -34,6 +36,14 @@ android {
 
 ksp {
     arg("public.path", file("${rootProject.rootDir}/ble-spec").toString())
+}
+
+idea {
+    module {
+        sourceDirs = sourceDirs +
+                file("build/generated/ksp/main/kotlin") +
+                file("build/generated/ksp/test/kotlin")
+    }
 }
 
 dependencies {

@@ -7,7 +7,9 @@ import com.github.hemoptysisheart.ble.spec.processor.loader.DeviceClassLoader
 import com.google.devtools.ksp.symbol.KSAnnotation
 import java.nio.file.Paths
 
-class ClassOfDeviceConfigurationProcessor(private val configuration: Config) {
+class ClassOfDeviceConfigurationProcessor(
+    private val configuration: Config
+) {
     companion object {
         private const val TAG = "ClassOfDeviceConfigurationProcessor"
     }
@@ -35,6 +37,7 @@ class ClassOfDeviceConfigurationProcessor(private val configuration: Config) {
         val definitions = loader.load()
         LOGGER.info("$TAG#process : definitions=$definitions")
 
-        DeviceClassProcessor().process(definitions.deviceClass)
+        DeviceClassProcessor(this.configuration)
+            .process(definitions.deviceClass)
     }
 }

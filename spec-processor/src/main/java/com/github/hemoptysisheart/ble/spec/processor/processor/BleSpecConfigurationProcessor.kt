@@ -19,6 +19,7 @@ class BleSpecConfigurationProcessor(
             .value as KSAnnotation
         LOGGER.info("$TAG#process : deviceClass=$deviceClass")
 
-        ClassOfDeviceConfigurationProcessor(this.configuration).process(deviceClass)
+        ClassOfDeviceConfigurationProcessor(this.configuration)
+            .process(deviceClass)
     }
 }
