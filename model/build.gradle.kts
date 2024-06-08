@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    api(project(":spec"))
+
     implementation(libs.androidx.core)
     implementation(libs.hilt)
 
