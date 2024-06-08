@@ -32,6 +32,10 @@ android {
     }
 }
 
+ksp {
+    arg("public.path", file("${rootProject.rootDir}/ble-spec").toString())
+}
+
 dependencies {
     implementation(project(":spec-annotation"))
     implementation(project(":spec-processor"))

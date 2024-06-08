@@ -1,17 +1,22 @@
 package com.github.hemoptysisheart.ble.spec.processor
 
+import com.github.hemoptysisheart.ble.spec.processor.config.toConfig
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 class BleSymbolProcessorProvider : SymbolProcessorProvider {
     companion object {
-        private val TAG = BleSymbolProcessorProvider::class.simpleName
+        private const val TAG = "BleSymbolProcessorProvider"
     }
 
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
         LOGGER = environment.logger
-        LOGGER.info("$TAG#create args : environment=$environment")
+        environment.options.forEach { (key, value) ->
+            LOGGER.info("$TAG#create option : $key=$value")
+        }
+        val config = environment.toConfig()
+        LOGGER.info("$TAG#create : config=$config")
 
         val provider = BleSymbolProcessor()
 
