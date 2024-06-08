@@ -39,5 +39,8 @@ include(
     ":app",
     ":ui",
     ":viewmodel",
-    ":model"
+    ":model",
+    ":spec",
+    ":spec-processor",
+    ":spec-annotation"
 )
