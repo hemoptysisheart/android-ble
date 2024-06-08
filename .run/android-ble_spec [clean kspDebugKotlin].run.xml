@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="android-ble:spec [clean build]" type="GradleRunConfiguration"
+    <configuration default="false" name="android-ble:spec [clean kspDebugKotlin]" type="GradleRunConfiguration"
         factoryName="Gradle">
         <ExternalSystemSettings>
             <option name="executionName" />
@@ -12,7 +12,7 @@
             <option name="taskNames">
                 <list>
                     <option value="clean" />
-                    <option value="build" />
+                    <option value="kspDebugKotlin" />
                 </list>
             </option>
             <option name="vmOptions" />
