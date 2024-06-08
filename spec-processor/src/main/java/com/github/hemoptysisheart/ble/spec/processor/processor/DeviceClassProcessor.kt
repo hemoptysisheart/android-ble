@@ -6,6 +6,7 @@ import com.github.hemoptysisheart.ble.spec.processor.data.DeviceClass
 import com.google.devtools.ksp.processing.Dependencies
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.writeTo
 
@@ -19,22 +20,33 @@ class DeviceClassProcessor(
     fun process(deviceClasses: List<DeviceClass>) {
         LOGGER.info("$TAG#process args : deviceClasses=$deviceClasses")
 
-        val builder = TypeSpec.enumBuilder("DeviceClass")
+        val builder = TypeSpec.enumBuilder("MajorDeviceClass")
             .primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter("value", Int::class)
-                    .addParameter("name", String::class)
+                    .addParameter("label", String::class)
+                    .build()
+            )
+            .addProperty(
+                PropertySpec.builder("value", Int::class)
+                    .initializer("value")
+                    .build()
+            )
+            .addProperty(
+                PropertySpec.builder("label", String::class)
+                    .initializer("label")
                     .build()
             )
 
         for (clz in deviceClasses) {
-            builder.addEnumConstant(
-                name = name2enumName(clz.name),
-                typeSpec = TypeSpec.anonymousClassBuilder()
-                    .addSuperclassConstructorParameter("%L", clz.major)
-                    .addSuperclassConstructorParameter("%S", clz.name.trim())
-                    .build()
-            )
+            builder
+                .addEnumConstant(
+                    name = name2enumName(clz.name),
+                    typeSpec = TypeSpec.anonymousClassBuilder()
+                        .addSuperclassConstructorParameter("%L", clz.major)
+                        .addSuperclassConstructorParameter("%S", clz.name.trim())
+                        .build()
+                )
         }
         val spec = builder.build()
         LOGGER.info("$TAG#process : spec=$spec")
