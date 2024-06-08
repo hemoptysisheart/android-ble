@@ -18,7 +18,7 @@ class BleSymbolProcessorProvider : SymbolProcessorProvider {
         val config = environment.toConfig()
         LOGGER.info("$TAG#create : config=$config")
 
-        val provider = BleSymbolProcessor()
+        val provider = BleSymbolProcessor(config)
 
         LOGGER.info("$TAG#create return : provider=$provider")
         return provider
