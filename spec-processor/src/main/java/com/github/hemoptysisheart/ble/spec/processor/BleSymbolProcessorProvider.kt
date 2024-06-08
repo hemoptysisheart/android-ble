@@ -15,8 +15,9 @@ class BleSymbolProcessorProvider : SymbolProcessorProvider {
         environment.options.forEach { (key, value) ->
             LOGGER.info("$TAG#create option : $key=$value")
         }
+        val codeGenerator = environment.codeGenerator
         val config = environment.toConfig()
-        LOGGER.info("$TAG#create : config=$config")
+        LOGGER.info("$TAG#create : config=$config, codeGenerator=$codeGenerator")
 
         val provider = BleSymbolProcessor(config)
 

@@ -3,8 +3,11 @@ package com.github.hemoptysisheart.ble.spec.processor.processor
 import com.github.hemoptysisheart.ble.spec.processor.LOGGER
 import com.github.hemoptysisheart.ble.spec.processor.config.Config
 import com.github.hemoptysisheart.ble.spec.processor.data.DeviceClass
+import com.google.devtools.ksp.processing.Dependencies
+import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.ksp.writeTo
 
 class DeviceClassProcessor(
     private val configuration: Config
@@ -33,9 +36,13 @@ class DeviceClassProcessor(
                     .build()
             )
         }
-
         val spec = builder.build()
         LOGGER.info("$TAG#process : spec=$spec")
+
+        FileSpec.builder(configuration.target.packageName, "DeviceClass")
+            .addType(spec)
+            .build()
+            .writeTo(configuration.target.codeGenerator, Dependencies(true))
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

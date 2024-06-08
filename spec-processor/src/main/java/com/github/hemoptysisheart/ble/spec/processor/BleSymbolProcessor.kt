@@ -23,13 +23,16 @@ class BleSymbolProcessor(
         val config = resolver.getSymbolsWithAnnotation(BleSpecConfiguration::class.qualifiedName!!)
             .filterIsInstance(KSClassDeclaration::class.java)
             .filter(KSNode::validate)
-            .first()
-            .annotations
-            .filter { it.shortName.asString() == BleSpecConfiguration::class.simpleName }
-            .first()
+            .firstOrNull()
+            ?.annotations
+            ?.filter { it.shortName.asString() == BleSpecConfiguration::class.simpleName }
+            ?.firstOrNull()
+            ?: return emptyList()
+
         LOGGER.info("$TAG#process : class=$config")
 
-        BleSpecConfigurationProcessor(this.configuration).process(config)
+        BleSpecConfigurationProcessor(this.configuration)
+            .process(config)
 
         return emptyList()
     }

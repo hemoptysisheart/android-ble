@@ -8,6 +8,6 @@ fun SymbolProcessorEnvironment.toConfig(): Config {
         source = Source(
             path = File(this.options["public.path"]!!)
         ),
-        target = Target()
+        target = Target(codeGenerator = this.codeGenerator)
     )
 }
