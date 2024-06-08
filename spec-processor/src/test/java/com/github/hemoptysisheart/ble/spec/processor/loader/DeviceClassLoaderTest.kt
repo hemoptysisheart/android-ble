@@ -1,5 +1,6 @@
 package com.github.hemoptysisheart.ble.spec.processor.loader
 
+import com.github.hemoptysisheart.ble.spec.processor.util.repositoryRootDir
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.spec.style.BehaviorSpec
 import java.nio.file.Paths
@@ -9,15 +10,8 @@ class DeviceClassLoaderTest : BehaviorSpec() {
 
     init {
         given("파일 경로로 로더를 만들어서") {
-            val process = ProcessBuilder("git", "rev-parse", "--show-toplevel")
-                .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.PIPE)
-                .start()
-
-            process.waitFor()
-
             val file = Paths.get(
-                process.inputStream.bufferedReader().readText().trim(),
+                repositoryRootDir.absolutePath,
                 "ble-spec/assigned_numbers/core/class_of_device.yaml"
             ).toFile()
 
