@@ -7,6 +7,9 @@ import com.github.hemoptysisheart.ble.spec.processor.loader.DeviceClassLoader
 import com.google.devtools.ksp.symbol.KSAnnotation
 import java.nio.file.Paths
 
+/**
+ * [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers) >  "2.8 Class of Device"
+ */
 class ClassOfDeviceConfigurationProcessor(
     private val configuration: Config
 ) {

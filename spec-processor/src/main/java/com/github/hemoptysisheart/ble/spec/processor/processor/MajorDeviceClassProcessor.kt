@@ -10,6 +10,9 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.writeTo
 
+/**
+ * [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers) >  "2.8.2 Major Device Class"
+ */
 class MajorDeviceClassProcessor(
     private val configuration: Config
 ) {
