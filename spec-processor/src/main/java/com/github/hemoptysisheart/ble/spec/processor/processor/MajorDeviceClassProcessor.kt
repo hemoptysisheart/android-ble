@@ -54,7 +54,7 @@ class MajorDeviceClassProcessor(
         val spec = builder.build()
         LOGGER.info("$TAG#process : spec=$spec")
 
-        FileSpec.builder(configuration.target.packageName, CLASS_NAME)
+        FileSpec.builder("${configuration.target.packageName}.core", CLASS_NAME)
             .addType(spec)
             .build()
             .writeTo(configuration.target.codeGenerator, Dependencies(true))

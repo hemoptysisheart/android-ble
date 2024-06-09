@@ -1,7 +1,7 @@
 package com.github.hemoptysisheart.ble.model
 
 import android.util.Log
-import com.github.hemoptysisheart.ble.spec.MajorDeviceClass
+import com.github.hemoptysisheart.ble.spec.core.MajorDeviceClass
 
 @Deprecated("This is a sample model.")
 class SampleModel {

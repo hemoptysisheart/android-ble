@@ -1,9 +1,8 @@
-package com.github.hemoptysisheart.ble.spec
+package com.github.hemoptysisheart.ble.spec.core
 
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothClass.Device
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.headers
@@ -13,10 +12,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 
-class UtilTest : BehaviorSpec() {
+class ConvertersTest : BehaviorSpec() {
     private val logger = KotlinLogging.logger { }
-
-    override fun isolationMode() = IsolationMode.InstancePerLeaf
 
     init {
         table(
