@@ -93,13 +93,13 @@ class DeviceClassProcessor(
         )
 
         // minor 항목.
-        if (majorClass.minor.isEmpty()) {
+        if (majorClass.minor.isEmpty() && null == majorClass.minorBits) {
             builder.addEnumConstant(
                 name = "${majorClassLabel}_$majorClassLabel",
                 typeSpec = TypeSpec.anonymousClassBuilder()
                     .addKdoc(majorClass.name.replace("%", "%%"))
                     .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
-                    .addSuperclassConstructorParameter("%L", majorClass.major)
+                    .addSuperclassConstructorParameter("%L", 0)
                     .addSuperclassConstructorParameter("%S", majorClass.name.trim())
                     .build()
             )
@@ -110,7 +110,7 @@ class DeviceClassProcessor(
             val value = if (null != majorClass.subSplit) {
                 minorClass.value shl (8 - majorClass.subSplit)
             } else {
-                minorClass.value
+                minorClass.value shl 2
             }
 
             builder.addEnumConstant(
@@ -142,7 +142,7 @@ class DeviceClassProcessor(
                 typeSpec = TypeSpec.anonymousClassBuilder()
                     .addKdoc(subMinorClass.name.replace("%", "%%"))
                     .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
-                    .addSuperclassConstructorParameter("%L", subMinorClass.value shl majorClass.subSplit!!)
+                    .addSuperclassConstructorParameter("%L", subMinorClass.value shl 2)
                     .addSuperclassConstructorParameter("%S", subMinorClass.name.trim())
                     .build()
             )
