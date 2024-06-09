@@ -84,23 +84,56 @@ class DeviceClassProcessor(
 
     private fun processMajor(builder: TypeSpec.Builder, majorClass: DeviceClass) {
         val majorClassLabel = MajorDeviceClassProcessor.name2enumName(majorClass.name)
+        val major = MemberName(
+            enclosingClassName = ClassName(
+                packageName = "${configuration.target.packageName}.core",
+                MajorDeviceClassProcessor.CLASS_NAME
+            ),
+            simpleName = MajorDeviceClassProcessor.name2enumName(majorClass.name)
+        )
+
+        // minor 항목.
         for (minorClass in majorClass.minor) {
             val minorClassLabel = "${majorClassLabel}_${name2enumName(minorClass.name)}"
-            val major = MemberName(
-                enclosingClassName = ClassName(
-                    packageName = "${configuration.target.packageName}.core",
-                    MajorDeviceClassProcessor.CLASS_NAME
-                ),
-                simpleName = MajorDeviceClassProcessor.name2enumName(majorClass.name)
-            )
             LOGGER.info("$TAG#processMajor : major=$major, minor=$minorClassLabel")
+
+            val value = if (null != majorClass.subSplit) {
+                minorClass.value shl (8 - majorClass.subSplit)
+            } else {
+                minorClass.value
+            }
+
             builder.addEnumConstant(
                 name = minorClassLabel,
                 typeSpec = TypeSpec.anonymousClassBuilder()
                     .addKdoc(minorClass.name.replace("%", "%%"))
                     .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
-                    .addSuperclassConstructorParameter("%L", minorClass.value)
+                    .addSuperclassConstructorParameter("%L", value)
                     .addSuperclassConstructorParameter("%S", minorClass.name.trim())
+                    .build()
+            )
+        }
+
+        for (minorBit in majorClass.minorBits ?: emptyList()) {
+            builder.addEnumConstant(
+                name = "${majorClassLabel}_${name2enumName(minorBit.name)}",
+                typeSpec = TypeSpec.anonymousClassBuilder()
+                    .addKdoc(minorBit.name.replace("%", "%%"))
+                    .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
+                    .addSuperclassConstructorParameter("%L", 1 shl minorBit.value)
+                    .addSuperclassConstructorParameter("%S", minorBit.name.trim())
+                    .build()
+            )
+        }
+
+        for (subMinorClass in majorClass.subMinor ?: emptyList()) {
+            builder.addEnumConstant(
+                name = "${majorClassLabel}_${name2enumName(subMinorClass.name)}",
+                typeSpec = TypeSpec.anonymousClassBuilder()
+                    .addKdoc(subMinorClass.name.replace("%", "%%"))
+                    .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
+                    .addSuperclassConstructorParameter("%L", subMinorClass.value shl majorClass.subSplit!!)
+                    .addSuperclassConstructorParameter("%S", subMinorClass.name.trim())
                     .build()
             )
         }
