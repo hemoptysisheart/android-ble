@@ -1,7 +1,6 @@
 package com.github.hemoptysisheart.ble.app
 
 import android.util.Log
-import com.github.hemoptysisheart.ble.model.SampleModel
 import com.github.hemoptysisheart.statepump.ScaffoldPump
 import com.github.hemoptysisheart.statepump.ScaffoldPumpImpl
 import dagger.Module
@@ -15,14 +14,6 @@ import javax.inject.Singleton
 class ComponentConfig {
     companion object {
         private const val TAG = "ComponentConfig"
-    }
-
-    @Provides
-    @Singleton
-    fun provideSampleModel(): SampleModel {
-        val model = SampleModel()
-        Log.i(TAG, "#provideSampleModel return : model=$model")
-        return model
     }
 
     @Provides
