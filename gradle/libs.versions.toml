@@ -4,6 +4,7 @@ hemoptysisheart = "0.0.1"
 hilt = "2.51.1"
 kotlin = "1.9.24"
 lifecycle = "2.8.1"
+poet = "1.17.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.0" }
@@ -27,12 +28,15 @@ hemoptysisheart-ui-compose = { group = "com.github.hemoptysisheart.android", nam
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }
+kaml = { group = "com.charleskorn.kaml", name = "kaml", version = "0.59.0" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.9.0" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version = "6.0.9" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version = "1.6.3" }
 ksp-symbol-processing-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "2.0.0-1.0.21" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.6" }
-kaml = { group = "com.charleskorn.kaml", name = "kaml", version = "0.59.0" }
+mockk = { group = "io.mockk", name = "mockk", version = "1.13.11" }
+poet = { group = "com.squareup", name = "kotlinpoet", version.ref = "poet" }
+poet-ksp = { group = "com.squareup", name = "kotlinpoet-ksp", version.ref = "poet" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

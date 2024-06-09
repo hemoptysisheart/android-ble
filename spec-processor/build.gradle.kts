@@ -16,6 +16,8 @@ dependencies {
     implementation(libs.ksp.symbol.processing.api)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kaml)
+    implementation(libs.poet)
+    implementation(libs.poet.ksp)
 
     testImplementation(libs.kotlin.logging)
     testImplementation(libs.logback.classic)
