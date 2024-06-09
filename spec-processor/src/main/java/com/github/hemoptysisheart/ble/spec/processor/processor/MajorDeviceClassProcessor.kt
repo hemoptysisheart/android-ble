@@ -22,6 +22,14 @@ class MajorDeviceClassProcessor(
         const val CLASS_NAME = "MajorDeviceClass"
         const val PROP_VALUE = "value"
         const val PROP_LABEL = "label"
+
+        internal fun name2enumName(source: String): String {
+            val endIndex = source.indexOf(" ").takeIf { it != -1 }
+                ?: source.length
+            return source.substring(0, endIndex)
+                .replace(Regex("\\W"), "_")
+                .uppercase()
+        }
     }
 
     fun process(deviceClasses: List<DeviceClass>) {
@@ -61,14 +69,5 @@ class MajorDeviceClassProcessor(
             .addType(spec)
             .build()
             .writeTo(configuration.target.codeGenerator, Dependencies(true))
-    }
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    internal fun name2enumName(source: String): String {
-        val endIndex = source.indexOf(" ").takeIf { it != -1 }
-            ?: source.length
-        return source.substring(0, endIndex)
-            .replace(Regex("\\W"), "_")
-            .uppercase()
     }
 }

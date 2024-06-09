@@ -22,6 +22,15 @@ class MajorServiceClassProcessor(
         const val CLASS_NAME = "MajorServiceClass"
         const val PROP_MASK = "mask"
         const val PROP_LABEL = "label"
+
+        internal fun name2enumName(source: String): String {
+            val endIndex = source.indexOf("(").takeIf { it != -1 }
+                ?: source.length
+            return source.substring(0, endIndex)
+                .trim()
+                .replace(Regex("\\W"), "_")
+                .uppercase()
+        }
     }
 
     fun process(serviceClasses: List<ServiceClass>) {
@@ -59,16 +68,5 @@ class MajorServiceClassProcessor(
             .addType(builder.build())
             .build()
             .writeTo(configuration.target.codeGenerator, Dependencies(true))
-    }
-
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    internal fun name2enumName(source: String): String {
-        val endIndex = source.indexOf("(").takeIf { it != -1 }
-            ?: source.length
-        return source.substring(0, endIndex)
-            .trim()
-            .replace(Regex("\\W"), "_")
-            .uppercase()
     }
 }

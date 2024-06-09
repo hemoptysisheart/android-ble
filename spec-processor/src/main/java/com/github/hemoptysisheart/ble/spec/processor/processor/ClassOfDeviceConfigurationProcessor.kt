@@ -44,5 +44,7 @@ class ClassOfDeviceConfigurationProcessor(
             .process(definitions.serviceClass)
         MajorDeviceClassProcessor(this.configuration)
             .process(definitions.deviceClass)
+        DeviceClassProcessor(this.configuration)
+            .process(definitions.deviceClass)
     }
 }
