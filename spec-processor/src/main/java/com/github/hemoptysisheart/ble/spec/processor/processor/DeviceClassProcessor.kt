@@ -93,7 +93,17 @@ class DeviceClassProcessor(
         )
 
         // minor 항목.
-        for (minorClass in majorClass.minor) {
+        if (majorClass.minor.isEmpty()) {
+            builder.addEnumConstant(
+                name = "${majorClassLabel}_$majorClassLabel",
+                typeSpec = TypeSpec.anonymousClassBuilder()
+                    .addKdoc(majorClass.name.replace("%", "%%"))
+                    .addSuperclassConstructorParameter(CodeBlock.of("%M", major))
+                    .addSuperclassConstructorParameter("%L", majorClass.major)
+                    .addSuperclassConstructorParameter("%S", majorClass.name.trim())
+                    .build()
+            )
+        } else for (minorClass in majorClass.minor) {
             val minorClassLabel = "${majorClassLabel}_${name2enumName(minorClass.name)}"
             LOGGER.info("$TAG#processMajor : major=$major, minor=$minorClassLabel")
 
