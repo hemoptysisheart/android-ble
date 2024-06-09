@@ -2,6 +2,8 @@ package com.github.hemoptysisheart.ble.app
 
 import android.util.Log
 import com.github.hemoptysisheart.ble.model.SampleModel
+import com.github.hemoptysisheart.statepump.ScaffoldPump
+import com.github.hemoptysisheart.statepump.ScaffoldPumpImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +21,15 @@ class ComponentConfig {
     @Singleton
     fun provideSampleModel(): SampleModel {
         val model = SampleModel()
-        Log.d(TAG, "#provideSampleModel return : model=$model")
+        Log.i(TAG, "#provideSampleModel return : model=$model")
         return model
+    }
+
+    @Provides
+    @Singleton
+    fun provideScaffoldPump(): ScaffoldPump {
+        val pump = ScaffoldPumpImpl()
+        Log.i(TAG, "#provideScaffoldPump return : pump=$pump")
+        return pump
     }
 }

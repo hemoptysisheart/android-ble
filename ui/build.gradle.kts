@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    api(libs.hemoptysisheart.ui.navigation)
+
     implementation(project(":viewmodel"))
 
     implementation(platform(libs.androidx.compose.bom))

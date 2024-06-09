@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.1"
-hemoptysisheart = "0.0.1"
+hemoptysisheart = "0.0.4"
 hilt = "2.51.1"
 kotlin = "1.9.24"
 lifecycle = "2.8.1"
@@ -25,6 +25,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 hemoptysisheart-ui-compose = { group = "com.github.hemoptysisheart.android", name = "ui-compose", version.ref = "hemoptysisheart" }
+hemoptysisheart-ui-navigation = { group = "com.github.hemoptysisheart.android", name = "ui-navigation", version.ref = "hemoptysisheart" }
+hemoptysisheart-viewmodel = { group = "com.github.hemoptysisheart.android", name = "viewmodel", version.ref = "hemoptysisheart" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }

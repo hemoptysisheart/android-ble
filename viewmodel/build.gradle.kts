@@ -38,6 +38,7 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core)
+    implementation(libs.hemoptysisheart.viewmodel)
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)
