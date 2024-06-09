@@ -52,3 +52,19 @@ fun MajorDeviceClass(bleClass: BluetoothClass) = when (bleClass.majorDeviceClass
             "unsupported majorDeviceClass : bleClass=$bleClass(bleClass.majorDeviceClass=${bleClass.majorDeviceClass})"
         )
 }
+
+/**
+ *
+ * Android 플랫폼의 [BluetoothClass]를 [DeviceClass]로 변환한다.
+ */
+fun DeviceClass(bleClass: BluetoothClass): DeviceClass {
+    val major = MajorDeviceClass(bleClass)
+    val value = (bleClass.deviceClass and 0xFC)
+    val deviceClass = DeviceClass.entries.firstOrNull {
+        it.major == major &&
+                it.value == value
+    }
+    println("bleClass=$bleClass(0x${bleClass.majorDeviceClass.toString(16)}, 0x${bleClass.deviceClass.toString(16)}), major=$major, value=$value => $deviceClass")
+    return deviceClass
+        ?: throw IllegalArgumentException("unsupported deviceClass : bleClass=$bleClass")
+}
