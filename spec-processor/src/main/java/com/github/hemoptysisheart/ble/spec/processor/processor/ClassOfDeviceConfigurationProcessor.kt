@@ -37,6 +37,8 @@ class ClassOfDeviceConfigurationProcessor(
         val definitions = loader.load()
         LOGGER.info("$TAG#process : definitions=$definitions")
 
+        MajorServiceClassProcessor(this.configuration)
+            .process(definitions.serviceClass)
         MajorDeviceClassProcessor(this.configuration)
             .process(definitions.deviceClass)
     }
