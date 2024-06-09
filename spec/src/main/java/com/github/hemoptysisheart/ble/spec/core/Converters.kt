@@ -4,6 +4,13 @@ import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothClass.Device
 
 /**
+ * Android 플랫폼의 [BluetoothClass]를 [MajorServiceClass] 목록으로 변환한다.
+ */
+fun MajorServiceClass(bleClass: BluetoothClass) = MajorServiceClass.entries.filter {
+    bleClass.hasService(1 shl it.mask)
+}
+
+/**
  * Android 플랫폼의 [BluetoothClass]를 [MajorDeviceClass]로 변환한다.
  */
 fun MajorDeviceClass(bleClass: BluetoothClass) = when (bleClass.majorDeviceClass) {
