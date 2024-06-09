@@ -10,48 +10,51 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.writeTo
 
-class DeviceClassProcessor(
+class MajorDeviceClassProcessor(
     private val configuration: Config
 ) {
     companion object {
-        private const val TAG = "DeviceClassProcessor"
+        private const val TAG = "MajorDeviceClassProcessor"
+
+        const val CLASS_NAME = "MajorDeviceClass"
+        const val PROP_VALUE = "value"
+        const val PROP_LABEL = "label"
     }
 
     fun process(deviceClasses: List<DeviceClass>) {
         LOGGER.info("$TAG#process args : deviceClasses=$deviceClasses")
 
-        val builder = TypeSpec.enumBuilder("MajorDeviceClass")
+        val builder = TypeSpec.enumBuilder(CLASS_NAME)
             .primaryConstructor(
                 FunSpec.constructorBuilder()
-                    .addParameter("value", Int::class)
-                    .addParameter("label", String::class)
+                    .addParameter(PROP_VALUE, Int::class)
+                    .addParameter(PROP_LABEL, String::class)
                     .build()
             )
             .addProperty(
-                PropertySpec.builder("value", Int::class)
-                    .initializer("value")
+                PropertySpec.builder(PROP_VALUE, Int::class)
+                    .initializer(PROP_VALUE)
                     .build()
             )
             .addProperty(
-                PropertySpec.builder("label", String::class)
-                    .initializer("label")
+                PropertySpec.builder(PROP_LABEL, String::class)
+                    .initializer(PROP_LABEL)
                     .build()
             )
 
         for (clz in deviceClasses) {
-            builder
-                .addEnumConstant(
-                    name = name2enumName(clz.name),
-                    typeSpec = TypeSpec.anonymousClassBuilder()
-                        .addSuperclassConstructorParameter("%L", clz.major)
-                        .addSuperclassConstructorParameter("%S", clz.name.trim())
-                        .build()
-                )
+            builder.addEnumConstant(
+                name = name2enumName(clz.name),
+                typeSpec = TypeSpec.anonymousClassBuilder()
+                    .addSuperclassConstructorParameter("%L", clz.major)
+                    .addSuperclassConstructorParameter("%S", clz.name.trim())
+                    .build()
+            )
         }
         val spec = builder.build()
         LOGGER.info("$TAG#process : spec=$spec")
 
-        FileSpec.builder(configuration.target.packageName, "DeviceClass")
+        FileSpec.builder(configuration.target.packageName, CLASS_NAME)
             .addType(spec)
             .build()
             .writeTo(configuration.target.codeGenerator, Dependencies(true))
