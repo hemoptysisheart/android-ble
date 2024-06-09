@@ -9,12 +9,16 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.SplashNavigator
 import com.github.hemoptysisheart.ble.viewmodel.SplashViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -26,17 +30,24 @@ fun SplashPage(
     viewModel: SplashViewModel = baseViewModel()
 ) {
     val progress by viewModel.progress.collectAsStateWithLifecycle()
+    val timeout by viewModel.timeout.collectAsStateWithLifecycle()
 
-    SplashPageContent(
-        navigator = navigator,
-        progress = progress
-    )
+    var breakaway by remember {
+        mutableStateOf(false)
+    }
+
+    if (timeout && !breakaway) {
+        breakaway = true
+        navigator.main()
+    } else {
+        SplashPageContent(navigator, progress)
+    }
 }
 
 @Composable
 internal fun SplashPageContent(
     navigator: SplashNavigator,
-    progress: Float,
+    progress: Float
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +68,9 @@ internal data class SplashParam(
 internal class SplashParamProvider : PreviewParameterProvider<SplashParam> {
     override val values = sequenceOf(
         SplashParam(progress = 0.0F),
+        SplashParam(progress = 0.25F),
         SplashParam(progress = 0.5F),
+        SplashParam(progress = 0.75F),
         SplashParam(progress = 1.0F)
     )
 }
@@ -67,8 +80,10 @@ internal class SplashParamProvider : PreviewParameterProvider<SplashParam> {
 internal fun SplashPagePreview(
     @PreviewParameter(SplashParamProvider::class) param: SplashParam
 ) {
-    SplashPageContent(
-        navigator = SplashNavigator(baseNavigator()),
-        progress = param.progress
-    )
+    AndroidBleTheme {
+        SplashPageContent(
+            navigator = SplashNavigator(baseNavigator()),
+            progress = param.progress
+        )
+    }
 }
