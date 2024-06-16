@@ -11,7 +11,7 @@ interface ScanModel {
         /**
          * 기본 기기 검색 시간 제한.
          */
-        const val SCAN_TIMEOUT = 10_000L
+        const val SCAN_TIMEOUT = 5_000L
     }
 
     /**

@@ -25,11 +25,11 @@ class ScanModelImpl(
         private const val TAG = "ScanModelImpl"
     }
 
-    private val devices = mutableListOf<Device>()
+    private val devices = mutableSetOf<Device>()
 
     private val callback = object : ScanCallback() {
         private fun handle(result: ScanResult) {
-            devices.add(Device(result.device))
+            devices.add(Device(result.device, result.rssi))
         }
 
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -86,8 +86,9 @@ class ScanModelImpl(
                 scanner.stopScan(callback)
             }.join()
 
-            val result = devices.toList()
+            val result = devices.toMutableList()
             devices.clear()
+            result.sort()
             result
         }
     }

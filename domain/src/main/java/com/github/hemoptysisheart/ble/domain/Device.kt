@@ -20,4 +20,9 @@ interface Device {
      * 기기 종류.
      */
     val category: DeviceClass
+
+    /**
+     * 기기 신호 세기.
+     */
+    val rssi: Int
 }

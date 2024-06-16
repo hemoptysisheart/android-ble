@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.hemoptysisheart.ble.domain.AbstractDevice
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
@@ -74,21 +75,28 @@ internal fun ScanPageContent(
                         text = "name : ${device.name ?: "null"}",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp),
+                            .padding(8.dp, 2.dp),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "address : ${device.address}",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp),
+                            .padding(8.dp, 2.dp),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "category : ${device.category.label}",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp),
+                            .padding(8.dp, 2.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "rssi : ${device.rssi} dBm",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp, 2.dp),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -97,11 +105,10 @@ internal fun ScanPageContent(
         HorizontalDivider(
             Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 8.dp)
         )
         Button(
             onClick = onClickScan,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(16.dp),
             enabled = !scanning
         ) {
             Text(text = "검색", modifier = Modifier.padding(8.dp))
@@ -121,10 +128,23 @@ internal class ScanPageParamProvider : PreviewParameterProvider<ScanPageParam> {
         ScanPageParam(
             scanning = true,
             devices = listOf(
-                object : Device {
-                    override val name = null
+                object : AbstractDevice() {
+                    override val name = "Device A"
                     override val address = "00:00:00:00:00:00:7B:AE"
                     override val category: DeviceClass = DeviceClass.entries.random()
+                    override val rssi = -60
+                },
+                object : AbstractDevice() {
+                    override val name = "Device B"
+                    override val address = "00:00:00:00:00:01:7B:AE"
+                    override val category: DeviceClass = DeviceClass.entries.random()
+                    override val rssi = -94
+                },
+                object : AbstractDevice() {
+                    override val name = null
+                    override val address = "00:00:00:00:00:02:7B:AE"
+                    override val category: DeviceClass = DeviceClass.entries.random()
+                    override val rssi = -99
                 }
             )
         )
