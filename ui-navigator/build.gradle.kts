@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.ble.viewmodel"
+    namespace = "com.github.hemoptysisheart.ble.ui.navigator"
     compileSdk = 34
 
     defaultConfig {
@@ -19,7 +17,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -35,16 +36,6 @@ android {
 
 dependencies {
     api(project(":domain"))
-    api(project(":ui-navigator"))
-    api(project(":ui-state"))
 
-    implementation(project(":model"))
-
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
-    implementation(libs.androidx.core)
-    implementation(libs.hemoptysisheart.viewmodel)
-    implementation(libs.hilt)
-
-    ksp(libs.hilt.compiler)
+    api(libs.hemoptysisheart.ui.navigation)
 }

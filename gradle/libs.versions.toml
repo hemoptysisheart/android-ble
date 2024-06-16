@@ -5,6 +5,8 @@ hilt = "2.51.1"
 kotlin = "1.9.24"
 lifecycle = "2.8.1"
 poet = "1.17.0"
+junit = "1.1.5"
+material = "1.12.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.34.0" }
@@ -42,6 +44,8 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version 
 mockk = { group = "io.mockk", name = "mockk", version = "1.13.11" }
 poet = { group = "com.squareup", name = "kotlinpoet", version.ref = "poet" }
 poet-ksp = { group = "com.squareup", name = "kotlinpoet-ksp", version.ref = "poet" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
