@@ -1,5 +1,6 @@
 package com.github.hemoptysisheart.ble.ui.page
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,8 +42,6 @@ fun SplashPage(
     if (timeout && !breakaway) {
         breakaway = true
         when (requiredPermission) {
-            null -> {}
-
             RequiredPermission.BLUETOOTH_SCAN ->
                 navigator.requestScan()
 
@@ -50,7 +49,10 @@ fun SplashPage(
                 navigator.main()
         }
     } else {
-        SplashPageContent(navigator, progress)
+        SplashPageContent(
+            navigator = navigator,
+            progress = progress
+        )
     }
 }
 
@@ -59,6 +61,7 @@ internal fun SplashPageContent(
     navigator: SplashNavigator,
     progress: Float
 ) {
+    Log.v(TAG, "#SplashPageContent args : navigator=$navigator, progress=$progress")
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
