@@ -58,7 +58,7 @@ kotlin {
 }
 
 ksp {
-    arg("public.path", file("${rootProject.rootDir}/ble-spec").toString())
+    arg("public.path", "${rootProject.rootDir}/ble-spec")
 }
 
 idea {
