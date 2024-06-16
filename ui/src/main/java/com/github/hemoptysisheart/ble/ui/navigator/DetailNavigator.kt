@@ -1,45 +1,45 @@
 package com.github.hemoptysisheart.ble.ui.navigator
 
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ui.navigation.destination.BaseNavigator
 import com.github.hemoptysisheart.ui.navigation.destination.Destination
 import com.github.hemoptysisheart.ui.navigation.destination.Navigator
 
 @Immutable
-class ScanNavigator(
+class DetailNavigator(
     private val base: BaseNavigator
 ) : Navigator by base {
     companion object : Destination {
-        private const val TAG = "ScanNavigator"
+        const val ARG_ADDRESS = "address"
 
-        override val arguments: List<NamedNavArgument> = emptyList()
+        override val id = "detail/{$ARG_ADDRESS}"
+
+        override val arguments: List<NamedNavArgument> = listOf(
+            navArgument(ARG_ADDRESS) {
+                nullable = false
+                type = NavType.StringType
+            }
+        )
 
         override val deepLinks: List<NavDeepLink> = emptyList()
 
-        override val id = "scan"
+        override fun route(vararg arguments: Any) = when (arguments.size) {
+            1 ->
+                route(arguments[0] as Device)
 
-        override fun route(vararg arguments: Any) = if (arguments.isEmpty()) {
-            id
-        } else {
-            throw IllegalArgumentException("ScanPage does not have arguments.")
+            else ->
+                throw IllegalArgumentException("DetailPage requires 1 argument.")
         }
+
+        fun route(device: Device): String = "detail/${device.address}"
 
         override fun toString() = "id=$id"
     }
 
     override val destination: Destination = Companion
-
-    fun detail(device: Device) {
-        Log.d(TAG, "#detail args : device=$device")
-
-        base.navHostController.navigate(DetailNavigator.route(device))
-    }
-
-    override fun toString() = listOf(
-        "destination=$destination"
-    ).joinToString(", ", "$TAG(", ")")
 }

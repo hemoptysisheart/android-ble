@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 
 class ScanModelImpl(
     private val permissionModel: PermissionModel,
+    private val deviceCacheModel: DeviceCacheModel,
     private val scanner: BluetoothLeScanner,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ScanModel {
@@ -89,6 +90,7 @@ class ScanModelImpl(
             val result = devices.toMutableList()
             devices.clear()
             result.sort()
+            deviceCacheModel.cache(result)
             result
         }
     }

@@ -1,6 +1,7 @@
 package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,6 +71,7 @@ internal fun ScanPageContent(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
+                        .clickable { navigator.detail(device) }
                 ) {
                     Text(
                         text = "name : ${device.name ?: "null"}",

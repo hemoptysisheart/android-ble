@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":model"))
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
     implementation(libs.androidx.core)
     implementation(libs.hemoptysisheart.viewmodel)
     implementation(libs.hilt)

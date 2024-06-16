@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Context.BLUETOOTH_SERVICE
 import android.util.Log
+import com.github.hemoptysisheart.ble.model.DeviceCacheModel
+import com.github.hemoptysisheart.ble.model.DeviceCacheModelImpl
 import com.github.hemoptysisheart.ble.model.PermissionModel
 import com.github.hemoptysisheart.ble.model.PermissionModelImpl
 import com.github.hemoptysisheart.ble.model.ScanModel
@@ -36,9 +38,22 @@ class ComponentConfig {
 
     @Provides
     @Singleton
-    fun provideScanModel(@ApplicationContext context: Context, permissionModel: PermissionModel): ScanModel {
+    fun provideDeviceCacheModel(): DeviceCacheModel {
+        val model = DeviceCacheModelImpl()
+        Log.i(TAG, "#provideDeviceCacheModel return : model=$model")
+        return model
+    }
+
+    @Provides
+    @Singleton
+    fun provideScanModel(
+        @ApplicationContext context: Context,
+        permissionModel: PermissionModel,
+        deviceCacheModel: DeviceCacheModel
+    ): ScanModel {
         val model = ScanModelImpl(
             permissionModel = permissionModel,
+            deviceCacheModel = deviceCacheModel,
             scanner = (context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter.bluetoothLeScanner
         )
         Log.i(TAG, "#provideScanModel return : model=$model")
