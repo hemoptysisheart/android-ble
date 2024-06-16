@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.MainNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.RequestScanNavigator
+import com.github.hemoptysisheart.ble.ui.navigator.ScanNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.SplashNavigator
 import com.github.hemoptysisheart.ble.ui.page.MainPage
 import com.github.hemoptysisheart.ble.ui.page.RequestScanPage
+import com.github.hemoptysisheart.ble.ui.page.ScanPage
 import com.github.hemoptysisheart.ble.ui.page.SplashPage
 import com.github.hemoptysisheart.ui.navigation.compose.NavigationGraph
 import com.github.hemoptysisheart.ui.navigation.compose.page
@@ -37,6 +39,10 @@ fun RootUI(
 
                 page(MainNavigator(baseNavigator)) { navigator ->
                     MainPage(navigator)
+                }
+
+                page(ScanNavigator(baseNavigator)) { navigator ->
+                    ScanPage(navigator)
                 }
             }
         }
