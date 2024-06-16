@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
-import com.github.hemoptysisheart.ble.ui.organism.DeviceScanCard
+import com.github.hemoptysisheart.ble.ui.organism.DeviceScanListItem
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_LIST
 
 @Composable
@@ -26,7 +26,7 @@ fun DeviceScanList(
         modifier = modifier
     ) {
         items(devices) { device ->
-            DeviceScanCard(
+            DeviceScanListItem(
                 device = device,
                 modifier = Modifier
                     .padding(8.dp)
