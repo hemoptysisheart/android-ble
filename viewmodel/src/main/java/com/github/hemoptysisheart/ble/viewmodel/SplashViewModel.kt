@@ -15,7 +15,7 @@ class SplashViewModel @Inject constructor(
     private val scanModel: ScanModel
 ) : BaseViewModel("SplashViewModel") {
     companion object {
-        const val TIMEOUT = 5_000L
+        const val TIMEOUT = 3_000L
     }
 
     private val _progress = MutableStateFlow(0F)

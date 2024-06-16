@@ -3,19 +3,22 @@ package com.github.hemoptysisheart.ble.ui.page
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.github.hemoptysisheart.ble.domain.AbstractDevice
+import androidx.compose.ui.unit.dp
 import com.github.hemoptysisheart.ble.domain.Device
-import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
+import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_1
+import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_2
+import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_3
+import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
@@ -38,10 +41,11 @@ internal fun DetailPageContent(
     Log.v(TAG, "#DetailPageContent args : navigator=$navigator, device=$device")
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp, 0.dp),
     ) {
-        Text(text = "$device")
+        DeviceDetail(device, Modifier.fillMaxWidth())
     }
 }
 
@@ -51,14 +55,9 @@ internal data class DetailPageParam(
 
 internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
     override val values = sequenceOf(
-        DetailPageParam(
-            device = object : AbstractDevice() {
-                override val address = "00:00:00:00:00:00"
-                override val category = DeviceClass.entries.random()
-                override val rssi: Int = -100
-                override val name = "device"
-            }
-        )
+        DetailPageParam(device = PREVIEW_DEVICE_1),
+        DetailPageParam(device = PREVIEW_DEVICE_2),
+        DetailPageParam(device = PREVIEW_DEVICE_3)
     )
 }
 

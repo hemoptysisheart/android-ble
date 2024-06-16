@@ -1,5 +1,6 @@
 package com.github.hemoptysisheart.ble.ui.preview
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.github.hemoptysisheart.ble.domain.AbstractDevice
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 
@@ -25,3 +26,7 @@ val PREVIEW_DEVICE_3 = object : AbstractDevice() {
 }
 
 val PREVIEW_DEVICE_LIST = listOf(PREVIEW_DEVICE_1, PREVIEW_DEVICE_2, PREVIEW_DEVICE_3)
+
+internal class DevicePreviewProvider : PreviewParameterProvider<AbstractDevice> {
+    override val values = PREVIEW_DEVICE_LIST.asSequence()
+}
