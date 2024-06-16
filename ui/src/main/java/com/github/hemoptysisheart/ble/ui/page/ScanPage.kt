@@ -3,9 +3,14 @@ package com.github.hemoptysisheart.ble.ui.page
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +23,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.hemoptysisheart.ble.domain.Device
+import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.ScanNavigator
 import com.github.hemoptysisheart.ble.viewmodel.ScanViewModel
@@ -28,10 +35,12 @@ fun ScanPage(navigator: ScanNavigator, viewModel: ScanViewModel = hiltViewModel(
     Log.v(TAG, "#ScanPage args : navigator=$navigator")
 
     val scanning by viewModel.scanning.collectAsStateWithLifecycle()
+    val devices by viewModel.devices.collectAsStateWithLifecycle()
 
     ScanPageContent(
         navigator = navigator,
         scanning = scanning,
+        devices = devices,
         onClickScan = viewModel::onClickScan
     )
 }
@@ -40,32 +49,85 @@ fun ScanPage(navigator: ScanNavigator, viewModel: ScanViewModel = hiltViewModel(
 internal fun ScanPageContent(
     navigator: ScanNavigator,
     scanning: Boolean,
+    devices: List<Device>,
     onClickScan: () -> Unit = {}
 ) {
-    Log.v(TAG, "#ScanPageContent args : navigator=$navigator")
+    Log.v(TAG, "#ScanPageContent args : navigator=$navigator, scanning=$scanning, devices=$devices")
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazyColumn(Modifier.weight(1F)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1F)
+        ) {
+            items(devices) { device ->
+                OutlinedCard(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "name : ${device.name ?: "null"}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "address : ${device.address}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "category : ${device.category.label}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
         }
-        Button(onClick = onClickScan, modifier = Modifier.padding(8.dp), enabled = !scanning) {
+        HorizontalDivider(
+            Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 8.dp)
+        )
+        Button(
+            onClick = onClickScan,
+            modifier = Modifier.padding(8.dp),
+            enabled = !scanning
+        ) {
             Text(text = "검색", modifier = Modifier.padding(8.dp))
         }
     }
 }
 
 internal data class ScanPageParam(
-    val scanning: Boolean
+    val scanning: Boolean,
+    val devices: List<Device>
 )
 
 internal class ScanPageParamProvider : PreviewParameterProvider<ScanPageParam> {
     override val values = sequenceOf(
-        ScanPageParam(false),
-        ScanPageParam(true)
+        ScanPageParam(false, emptyList()),
+        ScanPageParam(true, emptyList()),
+        ScanPageParam(
+            scanning = true,
+            devices = listOf(
+                object : Device {
+                    override val name = null
+                    override val address = "00:00:00:00:00:00:7B:AE"
+                    override val category: DeviceClass = DeviceClass.entries.random()
+                }
+            )
+        )
     )
 }
 
@@ -74,6 +136,10 @@ internal class ScanPageParamProvider : PreviewParameterProvider<ScanPageParam> {
 @PreviewFontScale
 internal fun ScanPagePreview(@PreviewParameter(ScanPageParamProvider::class) param: ScanPageParam) {
     AndroidBleTheme {
-        ScanPageContent(ScanNavigator(baseNavigator()), param.scanning)
+        ScanPageContent(
+            navigator = ScanNavigator(baseNavigator()),
+            scanning = param.scanning,
+            devices = param.devices
+        )
     }
 }

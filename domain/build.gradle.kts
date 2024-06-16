@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.ble.model"
+    namespace = "com.github.hemoptysisheart.ble.domain"
     compileSdk = 34
 
     defaultConfig {
@@ -34,10 +32,5 @@ android {
 }
 
 dependencies {
-    api(project(":domain"))
-
-    implementation(libs.androidx.core)
-    implementation(libs.hilt)
-
-    ksp(libs.hilt.compiler)
+    api(project(":spec"))
 }

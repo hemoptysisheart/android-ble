@@ -34,7 +34,9 @@ android {
 }
 
 dependencies {
+    api(project(":domain"))
     api(project(":ui-state"))
+
     implementation(project(":model"))
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
