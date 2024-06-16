@@ -1,5 +1,6 @@
 package com.github.hemoptysisheart.ble.ui.navigator
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
@@ -23,7 +24,19 @@ class MainNavigator(
         } else {
             throw IllegalArgumentException("MainPage does not have arguments.")
         }
+
+        override fun toString() = "id=$id"
     }
 
     override val destination: Destination = MainNavigator
+
+    fun scan() {
+        Log.d(TAG, "#scan called.")
+
+        base.navHostController.navigate(ScanNavigator.route())
+    }
+
+    override fun toString() = listOf(
+        "destination=$destination"
+    ).joinToString(", ", "$TAG(", ")")
 }

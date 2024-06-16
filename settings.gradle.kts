@@ -41,6 +41,7 @@ include(
     ":viewmodel",
     ":ui-state",
     ":model",
+    ":domain",
     ":spec",
     ":spec-processor",
     ":spec-annotation"

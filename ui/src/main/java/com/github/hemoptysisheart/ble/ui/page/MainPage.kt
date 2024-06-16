@@ -2,25 +2,25 @@ package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.MainNavigator
 import com.github.hemoptysisheart.ble.viewmodel.MainViewModel
-import java.time.Instant
+import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 
 @Composable
 fun MainPage(
@@ -29,35 +29,35 @@ fun MainPage(
 ) {
     Log.v(TAG, "#MainPage args : navigator=$navigator, viewModel=$viewModel")
 
-    val clock by viewModel.clock.collectAsStateWithLifecycle()
-
-    MainPageContent(clock)
+    MainPageContent(navigator)
 }
 
 @Composable
-private fun MainPageContent(
-    clock: Instant
+internal fun MainPageContent(
+    navigator: MainNavigator
 ) {
-    Log.v(TAG, "#MainPageContent args : clock=$clock")
+    Log.v(TAG, "#MainPageContent args : navigator=$navigator")
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = clock.toString(), color = MaterialTheme.colorScheme.onBackground)
+        Spacer(modifier = Modifier.height(100.dp))
+        Text(text = "주변의 Bluetooth 기기 검색", modifier = Modifier.padding(16.dp))
+        Button(onClick = navigator::scan, modifier = Modifier.padding(8.dp)) {
+            Text("검색", modifier = Modifier.padding(8.dp))
+        }
+        Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
 @Composable
-@PreviewDynamicColors
 @PreviewFontScale
 @PreviewLightDark
-@PreviewScreenSizes
-fun MainPagePreview() {
+internal fun MainPagePreview() {
     AndroidBleTheme {
-        MainPageContent(Instant.now())
+        MainPageContent(MainNavigator(baseNavigator()))
     }
 }

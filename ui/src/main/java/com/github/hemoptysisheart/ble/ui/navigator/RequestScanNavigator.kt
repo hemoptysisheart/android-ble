@@ -28,6 +28,8 @@ class RequestScanNavigator(
         } else {
             throw IllegalArgumentException("RequestScanPage does not have arguments.")
         }
+
+        override fun toString() = "id=$id"
     }
 
     override val destination = Companion
@@ -46,4 +48,8 @@ class RequestScanNavigator(
         intent.setData(Uri.fromParts("package", base.activity.packageName, null))
         base.activity.startActivity(intent)
     }
+
+    override fun toString() = listOf(
+        "destination=$destination"
+    ).joinToString(", ", "$TAG(", ")")
 }
