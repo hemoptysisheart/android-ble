@@ -40,4 +40,9 @@ dependencies {
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)
+
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.logging)
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.mockk)
 }
