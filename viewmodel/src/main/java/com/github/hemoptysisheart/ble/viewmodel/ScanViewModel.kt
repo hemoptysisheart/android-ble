@@ -1,6 +1,7 @@
 package com.github.hemoptysisheart.ble.viewmodel
 
 import androidx.annotation.RequiresPermission
+import androidx.lifecycle.LifecycleOwner
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.model.ScanModel
 import com.github.hemoptysisheart.ui.state.InteractionImpact
@@ -28,6 +29,13 @@ class ScanViewModel @Inject constructor(
             val deviceList = scanModel.scan()
             _devices.emit(deviceList)
             _scanning.emit(false)
+        }
+    }
+
+    @RequiresPermission("android.permission.BLUETOOTH_SCAN")
+    override fun doOnStart(owner: LifecycleOwner) {
+        if (_devices.value.isNotEmpty()) {
+            onClickScan()
         }
     }
 
