@@ -1,5 +1,8 @@
 package com.github.hemoptysisheart.ble.ui.navigator
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.navigation.NamedNavArgument
@@ -7,6 +10,7 @@ import androidx.navigation.NavDeepLink
 import com.github.hemoptysisheart.ui.navigation.destination.BaseNavigator
 import com.github.hemoptysisheart.ui.navigation.destination.Destination
 import com.github.hemoptysisheart.ui.navigation.destination.Navigator
+
 
 @Immutable
 class RequestScanNavigator(
@@ -33,5 +37,13 @@ class RequestScanNavigator(
 
         base.navHostController.popBackStack()
         base.navHostController.navigate(MainNavigator.route())
+    }
+
+    fun settings() {
+        Log.d(TAG, "#settings called.")
+
+        val intent: Intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.setData(Uri.fromParts("package", base.activity.packageName, null))
+        base.activity.startActivity(intent)
     }
 }

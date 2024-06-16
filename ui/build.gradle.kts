@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":viewmodel"))
 
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.core)
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.lifecycle.runtime.compose)
