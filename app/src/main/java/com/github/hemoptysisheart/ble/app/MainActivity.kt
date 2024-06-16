@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            RootUI(baseNavigator(SplashNavigator))
+            RootUI(baseNavigator(startDestination = SplashNavigator))
         }
     }
 }

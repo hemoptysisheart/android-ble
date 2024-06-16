@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.github.hemoptysisheart.ble.viewmodel"
+    namespace = "com.github.hemoptysisheart.ble.ui.state"
     compileSdk = 34
 
     defaultConfig {
@@ -31,16 +29,16 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
 }
 
 dependencies {
-    api(project(":ui-state"))
-    implementation(project(":model"))
-
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.core)
-    implementation(libs.hemoptysisheart.viewmodel)
-    implementation(libs.hilt)
-
-    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.compose.runtime)
 }

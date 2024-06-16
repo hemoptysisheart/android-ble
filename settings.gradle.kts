@@ -39,6 +39,7 @@ include(
     ":app",
     ":ui",
     ":viewmodel",
+    ":ui-state",
     ":model",
     ":spec",
     ":spec-processor",

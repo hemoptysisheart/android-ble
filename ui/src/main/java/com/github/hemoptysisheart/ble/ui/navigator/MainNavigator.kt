@@ -1,11 +1,13 @@
 package com.github.hemoptysisheart.ble.ui.navigator
 
+import androidx.compose.runtime.Immutable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
 import com.github.hemoptysisheart.ui.navigation.destination.BaseNavigator
 import com.github.hemoptysisheart.ui.navigation.destination.Destination
 import com.github.hemoptysisheart.ui.navigation.destination.Navigator
 
+@Immutable
 class MainNavigator(
     private val base: BaseNavigator
 ) : Navigator by base {

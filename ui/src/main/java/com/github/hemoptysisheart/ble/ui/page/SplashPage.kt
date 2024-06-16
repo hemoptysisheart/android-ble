@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.SplashNavigator
+import com.github.hemoptysisheart.ble.ui.state.RequiredPermission
 import com.github.hemoptysisheart.ble.viewmodel.SplashViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
@@ -31,6 +32,7 @@ fun SplashPage(
 ) {
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val timeout by viewModel.timeout.collectAsStateWithLifecycle()
+    val requiredPermission by viewModel.requiredPermission.collectAsStateWithLifecycle()
 
     var breakaway by remember {
         mutableStateOf(false)
@@ -38,7 +40,15 @@ fun SplashPage(
 
     if (timeout && !breakaway) {
         breakaway = true
-        navigator.main()
+        when (requiredPermission) {
+            null -> {}
+
+            RequiredPermission.BLUETOOTH_SCAN ->
+                navigator.requestScan()
+
+            else ->
+                navigator.main()
+        }
     } else {
         SplashPageContent(navigator, progress)
     }
