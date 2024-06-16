@@ -3,7 +3,6 @@ package com.github.hemoptysisheart.ble.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.hemoptysisheart.ble.model.SampleModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,9 +13,7 @@ import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val sampleModel: SampleModel
-) : ViewModel() {
+class MainViewModel @Inject constructor() : ViewModel() {
     companion object {
         private const val TAG = "MainViewModel"
     }
@@ -35,7 +32,6 @@ class MainViewModel @Inject constructor(
                 delay(1_000L)
             }
         }
-        Log.d(TAG, "#init : sampleModel=$sampleModel, clockJob=$clockJob")
     }
 
     override fun onCleared() {
@@ -46,7 +42,6 @@ class MainViewModel @Inject constructor(
     }
 
     override fun toString() = listOf(
-        "sampleModel=$sampleModel",
         "clock=${clock.value}",
         "clockJob=$clockJob"
     ).joinToString(", ", "$TAG(", ")")

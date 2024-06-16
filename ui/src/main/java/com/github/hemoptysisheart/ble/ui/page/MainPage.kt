@@ -18,14 +18,16 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
+import com.github.hemoptysisheart.ble.ui.navigator.MainNavigator
 import com.github.hemoptysisheart.ble.viewmodel.MainViewModel
 import java.time.Instant
 
 @Composable
 fun MainPage(
+    navigator: MainNavigator,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    Log.v(TAG, "#MainPage args : viewModel=$viewModel")
+    Log.v(TAG, "#MainPage args : navigator=$navigator, viewModel=$viewModel")
 
     val clock by viewModel.clock.collectAsStateWithLifecycle()
 

@@ -42,25 +42,28 @@ android {
 }
 
 dependencies {
+    api(libs.hemoptysisheart.ui.navigation)
+
     implementation(project(":viewmodel"))
 
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.core)
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)
 
-    debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
