@@ -15,6 +15,4 @@ class Device(
     override val address = source.address
 
     override val category: DeviceClass = DeviceClass(source.bluetoothClass)
-
-    override val connection = Connection(source)
 }

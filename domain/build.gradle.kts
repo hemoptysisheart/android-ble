@@ -33,6 +33,4 @@ android {
 
 dependencies {
     api(project(":spec"))
-
-    api(libs.kotlinx.coroutines.core)
 }
