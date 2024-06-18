@@ -25,4 +25,6 @@ interface Device {
      * 기기 신호 세기.
      */
     val rssi: Int
+
+    val connection: Connection
 }
