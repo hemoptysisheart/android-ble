@@ -22,15 +22,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.Connection.State.CONNECTED
+import com.github.hemoptysisheart.ble.domain.Connection.State.CONNECTING
+import com.github.hemoptysisheart.ble.domain.Connection.State.DISCONNECTED
+import com.github.hemoptysisheart.ble.domain.Connection.State.DISCONNECTING
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_LIST
-import com.github.hemoptysisheart.ble.ui.state.ConnectionState
-import com.github.hemoptysisheart.ble.ui.state.ConnectionState.CONNECTED
-import com.github.hemoptysisheart.ble.ui.state.ConnectionState.CONNECTING
-import com.github.hemoptysisheart.ble.ui.state.ConnectionState.DISCONNECTED
-import com.github.hemoptysisheart.ble.ui.state.ConnectionState.DISCONNECTING
+import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
@@ -43,9 +44,10 @@ fun DetailPage(
     Log.v(TAG, "#DetailPage args : navigator=$navigator, viewModel=$viewModel")
 
     val connection by viewModel.connection.collectAsStateWithLifecycle()
+
     DetailPageContent(
         navigator = navigator,
-//        device = viewModel.device!!,
+        device = viewModel.device,
         connection = connection,
         onClickConnect = viewModel::onClickConnect,
         onClickDisconnect = viewModel::onClickDisconnect
@@ -55,16 +57,20 @@ fun DetailPage(
 @Composable
 internal fun DetailPageContent(
     navigator: DetailNavigator,
-//    device: Device,
-    connection: ConnectionState,
+    device: Device,
+    connection: Connection?,
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { }
 ) {
-//    Log.v(TAG, "#DetailPageContent args : navigator=$navigator, device=$device")
+    Log.v(
+        TAG,
+        "#DetailPageContent args : navigator=$navigator, device=$device, connection=$connection, onClickConnect=$onClickConnect, onClickDisconnect=$onClickDisconnect"
+    )
 
     Column(Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(32.dp))
-        //DeviceDetail(device, Modifier.fillMaxWidth())
+
+        DeviceDetail(device, Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.weight(1F))
 
@@ -74,14 +80,14 @@ internal fun DetailPageContent(
             Button(
                 onClick = onClickConnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = connection == DISCONNECTED
+                enabled = null == connection || DISCONNECTED == connection.state
             ) {
                 Text(text = "연결")
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = connection == CONNECTED
+                enabled = CONNECTED == connection?.state
             ) {
                 Text(text = "해제")
             }
@@ -92,15 +98,40 @@ internal fun DetailPageContent(
 
 internal data class DetailPageParam(
     val device: Device,
-    val connection: ConnectionState
+    val connection: Connection?
 )
 
 internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
     override val values = sequenceOf(
-        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = DISCONNECTED),
-        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = CONNECTING),
-        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = CONNECTED),
-        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = DISCONNECTING),
+        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = null),
+        DetailPageParam(
+            device = PREVIEW_DEVICE_LIST.random(),
+            connection = object : Connection {
+                override val device: Device = PREVIEW_DEVICE_LIST.random()
+                override val state: Connection.State = DISCONNECTED
+            }
+        ),
+        DetailPageParam(
+            device = PREVIEW_DEVICE_LIST.random(),
+            connection = object : Connection {
+                override val device: Device = PREVIEW_DEVICE_LIST.random()
+                override val state: Connection.State = CONNECTING
+            }
+        ),
+        DetailPageParam(
+            device = PREVIEW_DEVICE_LIST.random(),
+            connection = object : Connection {
+                override val device: Device = PREVIEW_DEVICE_LIST.random()
+                override val state: Connection.State = CONNECTED
+            }
+        ),
+        DetailPageParam(
+            device = PREVIEW_DEVICE_LIST.random(),
+            connection = object : Connection {
+                override val device: Device = PREVIEW_DEVICE_LIST.random()
+                override val state: Connection.State = DISCONNECTING
+            }
+        ),
     )
 }
 
@@ -111,7 +142,7 @@ internal fun Preview_DetailPage(@PreviewParameter(DetailPageParamProvider::class
     AndroidBleTheme {
         DetailPageContent(
             navigator = DetailNavigator(baseNavigator()),
-//            device = param.device,
+            device = param.device,
             connection = param.connection
         )
     }

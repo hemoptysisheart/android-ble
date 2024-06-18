@@ -18,7 +18,10 @@ class ConnectionModelImpl(
             ?: throw IllegalArgumentException("device not found : address=$address")
         Log.d(TAG, "#connect : device=$device")
 
-        TODO("Not yet implemented")
+        val connection = Connection(device as Device)
+
+        Log.d(TAG, "#connect return : connection=$connection")
+        return connection
     }
 
     override fun toString() = listOf(
