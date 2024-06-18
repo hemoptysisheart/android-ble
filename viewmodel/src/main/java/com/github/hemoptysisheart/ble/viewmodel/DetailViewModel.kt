@@ -2,7 +2,7 @@ package com.github.hemoptysisheart.ble.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import com.github.hemoptysisheart.ble.model.DeviceCacheModel
+import com.github.hemoptysisheart.ble.model.ConnectionModel
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator.Companion.ARG_ADDRESS
 import com.github.hemoptysisheart.ble.ui.state.ConnectionState
 import com.github.hemoptysisheart.ble.ui.state.ConnectionState.CONNECTED
@@ -19,12 +19,10 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     saveStateHandle: SavedStateHandle,
-    private val deviceCacheModel: DeviceCacheModel
+    private val connectionModel: ConnectionModel
 ) : BaseViewModel("DetailViewModel") {
     private val address = saveStateHandle.get<String>(ARG_ADDRESS)
         ?: throw IllegalArgumentException("address is required")
-
-    val device = deviceCacheModel[address]
 
     private val _connection = MutableStateFlow(DISCONNECTED)
     val connection: StateFlow<ConnectionState> = _connection
@@ -34,7 +32,9 @@ class DetailViewModel @Inject constructor(
 
         launch {
             _connection.emit(CONNECTING)
-            delay(2000)
+
+            connectionModel.connect(address)
+
             _connection.emit(CONNECTED)
         }
     }
@@ -52,6 +52,5 @@ class DetailViewModel @Inject constructor(
     override fun toString() = listOf(
         super.toString(),
         "address=$address",
-        "device=$device"
     ).joinToString(", ", "$tag(", ")")
 }

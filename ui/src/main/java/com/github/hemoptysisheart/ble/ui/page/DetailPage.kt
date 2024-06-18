@@ -31,7 +31,6 @@ import com.github.hemoptysisheart.ble.ui.state.ConnectionState.CONNECTED
 import com.github.hemoptysisheart.ble.ui.state.ConnectionState.CONNECTING
 import com.github.hemoptysisheart.ble.ui.state.ConnectionState.DISCONNECTED
 import com.github.hemoptysisheart.ble.ui.state.ConnectionState.DISCONNECTING
-import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
@@ -46,7 +45,7 @@ fun DetailPage(
     val connection by viewModel.connection.collectAsStateWithLifecycle()
     DetailPageContent(
         navigator = navigator,
-        device = viewModel.device!!,
+//        device = viewModel.device!!,
         connection = connection,
         onClickConnect = viewModel::onClickConnect,
         onClickDisconnect = viewModel::onClickDisconnect
@@ -56,16 +55,16 @@ fun DetailPage(
 @Composable
 internal fun DetailPageContent(
     navigator: DetailNavigator,
-    device: Device,
+//    device: Device,
     connection: ConnectionState,
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { }
 ) {
-    Log.v(TAG, "#DetailPageContent args : navigator=$navigator, device=$device")
+//    Log.v(TAG, "#DetailPageContent args : navigator=$navigator, device=$device")
 
     Column(Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(32.dp))
-        DeviceDetail(device, Modifier.fillMaxWidth())
+        //DeviceDetail(device, Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.weight(1F))
 
@@ -112,7 +111,7 @@ internal fun Preview_DetailPage(@PreviewParameter(DetailPageParamProvider::class
     AndroidBleTheme {
         DetailPageContent(
             navigator = DetailNavigator(baseNavigator()),
-            device = param.device,
+//            device = param.device,
             connection = param.connection
         )
     }

@@ -10,6 +10,7 @@ import android.bluetooth.le.ScanSettings
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import com.github.hemoptysisheart.ble.domain.defaultToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -94,4 +95,9 @@ class ScanModelImpl(
             result
         }
     }
+
+    override fun toString() = listOf(
+        "permission=${permissionModel.defaultToString()}",
+        "deviceCacheModel=${deviceCacheModel.defaultToString()}"
+    ).joinToString(", ", "$TAG(", ")")
 }
