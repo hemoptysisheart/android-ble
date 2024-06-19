@@ -23,14 +23,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Connection
-import com.github.hemoptysisheart.ble.domain.Connection.State.CONNECTED
-import com.github.hemoptysisheart.ble.domain.Connection.State.CONNECTING
-import com.github.hemoptysisheart.ble.domain.Connection.State.DISCONNECTED
-import com.github.hemoptysisheart.ble.domain.Connection.State.DISCONNECTING
+import com.github.hemoptysisheart.ble.domain.ConnectionState.CONNECTED
+import com.github.hemoptysisheart.ble.domain.ConnectionState.DISCONNECTED
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
-import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_LIST
+import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
+import com.github.hemoptysisheart.ble.ui.template.Connection
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -44,7 +43,6 @@ fun DetailPage(
     Log.v(TAG, "#DetailPage args : navigator=$navigator, viewModel=$viewModel")
 
     val connection by viewModel.connection.collectAsStateWithLifecycle()
-
     DetailPageContent(
         navigator = navigator,
         device = viewModel.device,
@@ -72,6 +70,7 @@ internal fun DetailPageContent(
 
         DeviceDetail(device, Modifier.fillMaxWidth())
 
+        Connection(connection, Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.weight(1F))
 
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outline)
@@ -80,14 +79,14 @@ internal fun DetailPageContent(
             Button(
                 onClick = onClickConnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = null == connection || DISCONNECTED == connection.state
+                enabled = null == connection || DISCONNECTED == connection.connectionState
             ) {
                 Text(text = "연결")
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = CONNECTED == connection?.state
+                enabled = CONNECTED == connection?.connectionState
             ) {
                 Text(text = "해제")
             }
@@ -102,37 +101,12 @@ internal data class DetailPageParam(
 )
 
 internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
-    override val values = sequenceOf(
-        DetailPageParam(device = PREVIEW_DEVICE_LIST.random(), connection = null),
+    override val values = PREVIEW_CONNECTION_LIST.map {
         DetailPageParam(
-            device = PREVIEW_DEVICE_LIST.random(),
-            connection = object : Connection {
-                override val device: Device = PREVIEW_DEVICE_LIST.random()
-                override val state: Connection.State = DISCONNECTED
-            }
-        ),
-        DetailPageParam(
-            device = PREVIEW_DEVICE_LIST.random(),
-            connection = object : Connection {
-                override val device: Device = PREVIEW_DEVICE_LIST.random()
-                override val state: Connection.State = CONNECTING
-            }
-        ),
-        DetailPageParam(
-            device = PREVIEW_DEVICE_LIST.random(),
-            connection = object : Connection {
-                override val device: Device = PREVIEW_DEVICE_LIST.random()
-                override val state: Connection.State = CONNECTED
-            }
-        ),
-        DetailPageParam(
-            device = PREVIEW_DEVICE_LIST.random(),
-            connection = object : Connection {
-                override val device: Device = PREVIEW_DEVICE_LIST.random()
-                override val state: Connection.State = DISCONNECTING
-            }
-        ),
-    )
+            device = it.device,
+            connection = it
+        )
+    }.asSequence()
 }
 
 @Composable

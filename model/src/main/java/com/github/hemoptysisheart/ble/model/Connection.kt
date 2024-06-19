@@ -9,6 +9,10 @@ import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.ConnectionState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class Connection(
     device: Device,
@@ -27,35 +31,36 @@ class Connection(
                 throw IllegalArgumentException("status is not success : status=$status")
             }
 
-            state = when (newState) {
+            val connectionState = when (newState) {
                 STATE_DISCONNECTED ->
-                    Connection.State.DISCONNECTED
+                    ConnectionState.DISCONNECTED
 
                 STATE_CONNECTING ->
-                    Connection.State.CONNECTING
+                    ConnectionState.CONNECTING
 
                 STATE_CONNECTED ->
-                    Connection.State.CONNECTED
+                    ConnectionState.CONNECTED
 
                 STATE_DISCONNECTING ->
-                    Connection.State.DISCONNECTING
+                    ConnectionState.DISCONNECTING
 
                 else ->
                     throw IllegalArgumentException("unsupported newState : newState=$newState")
             }
 
+            _state.update { it.copy(connectionState = connectionState) }
             Log.i(TAG, "#callback.onConnectionStateChange : connection=${this@Connection}")
         }
     }
 
     private val gatt = gatt(callback)
 
-    override var state: Connection.State = Connection.State.CONNECTING
-        private set
+    private val _state = MutableStateFlow(Connection.State(ConnectionState.CONNECTING))
+    override val state: StateFlow<Connection.State> = _state
 
     override fun toString() = listOf(
         "device=$device",
-        "state=$state",
+        "state=${state.value}",
         "gatt=$gatt",
         "callback=$callback"
     ).joinToString(", ", "$TAG(", ")")
