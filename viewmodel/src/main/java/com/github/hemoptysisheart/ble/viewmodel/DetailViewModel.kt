@@ -36,13 +36,13 @@ class DetailViewModel @Inject constructor(
 
         launch {
             val connection = connectionModel.connect(address)
+            Log.d(tag, "#onClickConnect : connection=$connection")
             if (this@DetailViewModel.device !== connection.device) {
                 Log.w(
                     tag,
                     "#onClickConnect device does not match : this.device=${this@DetailViewModel.device}, connection.device=${connection.device}"
                 )
             }
-            Log.d(tag, "#onClickConnect : connection=$connection")
 
             _connection.emit(connection)
         }

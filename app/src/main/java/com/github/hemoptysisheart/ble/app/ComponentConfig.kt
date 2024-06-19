@@ -65,9 +65,10 @@ class ComponentConfig {
     @Provides
     @Singleton
     fun provideConnectionModel(
+        @ApplicationContext context: Context,
         deviceCacheModel: DeviceCacheModel
     ): ConnectionModel {
-        val model = ConnectionModelImpl(deviceCacheModel)
+        val model = ConnectionModelImpl(context, deviceCacheModel)
         Log.i(TAG, "#provideConnectionModel return : model=$model")
         return model
     }
