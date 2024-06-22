@@ -3,12 +3,14 @@ package com.github.hemoptysisheart.ble.model
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
+import android.bluetooth.BluetoothClass.Service
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.defaultToString
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,10 +32,62 @@ class ScanModelImpl(
     private val devices = mutableSetOf<Device>()
 
     private val callback = object : ScanCallback() {
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         private fun handle(result: ScanResult) {
             devices.add(Device(result.device, result.rssi))
+
+            // 서비스 정보가 있는지 확인.
+            if (true == result.device.name?.isNotEmpty()) {
+                result.device.bluetoothClass?.apply {
+                    val limitedDiscoverability = hasService(Service.LIMITED_DISCOVERABILITY)
+                    val leAudio = hasService(Service.LE_AUDIO)
+                    val positioning = hasService(Service.POSITIONING)
+                    val networking = hasService(Service.NETWORKING)
+                    val render = hasService(Service.RENDER)
+                    val capture = hasService(Service.CAPTURE)
+                    val objectTransfer = hasService(Service.OBJECT_TRANSFER)
+                    val audio = hasService(Service.AUDIO)
+                    val telephony = hasService(Service.TELEPHONY)
+                    val information = hasService(Service.INFORMATION)
+                    val hasService = listOf(
+                        limitedDiscoverability,
+                        leAudio,
+                        positioning,
+                        networking,
+                        render,
+                        capture,
+                        objectTransfer,
+                        audio,
+                        telephony,
+                        information
+                    ).any { it }
+
+                    if (hasService) {
+                        Log.i(
+                            TAG,
+                            listOf(
+                                "result=$result",
+                                "device=${result.device}",
+                                "limitedDiscoverability=$limitedDiscoverability",
+                                "leAudio=$leAudio",
+                                "positioning=$positioning",
+                                "networking=$networking",
+                                "render=$render",
+                                "capture=$capture",
+                                "objectTransfer=$objectTransfer",
+                                "audio=$audio",
+                                "telephony=$telephony",
+                                "information=$information"
+                            ).joinToString(", ", "#callback.onScanResult service check. : ")
+                        )
+                    }
+                }
+            }
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             Log.v(TAG, "#callback.onScanResult args : callbackType=$callbackType, result=$result")
 
@@ -42,6 +96,8 @@ class ScanModelImpl(
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             Log.v(TAG, "#callback.onBatchScanResults args : results=$results")
 
