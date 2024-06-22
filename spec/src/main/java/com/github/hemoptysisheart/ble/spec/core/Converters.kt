@@ -6,7 +6,7 @@ import android.bluetooth.BluetoothClass.Device
 /**
  * Android 플랫폼의 [BluetoothClass]를 [MajorServiceClass] 목록으로 변환한다.
  */
-fun MajorServiceClass(bleClass: BluetoothClass) = MajorServiceClass.entries.filter {
+fun MajorServiceClass(bleClass: BluetoothClass): List<MajorServiceClass> = MajorServiceClass.entries.filter {
     bleClass.hasService(1 shl it.mask)
 }
 
