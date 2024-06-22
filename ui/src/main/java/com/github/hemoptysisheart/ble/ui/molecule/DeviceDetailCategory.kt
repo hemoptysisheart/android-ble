@@ -17,7 +17,7 @@ fun DeviceDetailCategory(device: Device, modifier: Modifier = Modifier) {
     Log.v(TAG, "#DeviceDetailCategory args : device=$device, modifier=$modifier")
 
     Text(
-        text = device.category.label,
+        text = "Class : ${device.category.label}",
         modifier = modifier,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodyMedium

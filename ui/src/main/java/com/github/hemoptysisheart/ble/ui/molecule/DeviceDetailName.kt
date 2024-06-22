@@ -20,7 +20,7 @@ fun DeviceDetailName(device: Device, modifier: Modifier = Modifier) {
     device.name.let { name ->
         if (null == name) {
             Text(
-                text = "null",
+                text = "Name : null",
                 modifier = modifier,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -28,7 +28,7 @@ fun DeviceDetailName(device: Device, modifier: Modifier = Modifier) {
             )
         } else {
             Text(
-                text = name,
+                text = "Name : $name",
                 modifier = modifier,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,

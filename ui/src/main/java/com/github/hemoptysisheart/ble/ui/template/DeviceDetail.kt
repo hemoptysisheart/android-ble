@@ -19,6 +19,7 @@ import com.github.hemoptysisheart.ble.ui.molecule.DeviceDetailAddress
 import com.github.hemoptysisheart.ble.ui.molecule.DeviceDetailCategory
 import com.github.hemoptysisheart.ble.ui.molecule.DeviceDetailName
 import com.github.hemoptysisheart.ble.ui.molecule.DeviceDetailRssi
+import com.github.hemoptysisheart.ble.ui.molecule.DeviceDetailServices
 import com.github.hemoptysisheart.ble.ui.preview.DevicePreviewProvider
 
 @Composable
@@ -26,22 +27,38 @@ fun ColumnScope.DeviceDetail(device: Device, modifier: Modifier = Modifier) {
     Log.v(TAG, "#DeviceDetail args : device=$device")
 
     Column(modifier = modifier) {
-        DeviceDetailName(device,
+        DeviceDetailName(
+            device,
             Modifier
                 .fillMaxWidth()
-                .padding(8.dp))
-        DeviceDetailCategory(device,
+                .padding(8.dp)
+        )
+        DeviceDetailCategory(
+            device,
             Modifier
                 .fillMaxWidth()
-                .padding(4.dp))
-        DeviceDetailAddress(device,
+                .padding(4.dp)
+        )
+        if (device.services.isNotEmpty()) {
+            DeviceDetailServices(
+                device.services,
+                Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp)
+            )
+        }
+        DeviceDetailAddress(
+            device,
             Modifier
                 .fillMaxWidth()
-                .padding(4.dp))
-        DeviceDetailRssi(device,
+                .padding(4.dp)
+        )
+        DeviceDetailRssi(
+            device,
             Modifier
                 .fillMaxWidth()
-                .padding(4.dp))
+                .padding(4.dp)
+        )
     }
 }
 

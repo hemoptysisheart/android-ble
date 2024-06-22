@@ -44,17 +44,26 @@ fun DeviceScanListItem(
         supportingContent = {
             Column {
                 Text(
-                    text = device.category.label,
+                    text = "Category : ${device.category.label}",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                device.services.let { services ->
+                    if (services.isNotEmpty()) {
+                        Text(
+                            text = services.joinToString(", ", "Service : ") { it.label },
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+                Text(
+                    text = "Address : ${device.address}",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = device.address,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "${device.rssi} dBm",
+                    text = "RSSI : ${device.rssi} dBm",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )

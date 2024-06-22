@@ -17,7 +17,7 @@ fun DeviceDetailAddress(device: Device, modifier: Modifier = Modifier) {
     Log.v(TAG, "#DeviceDetailAddress args : device=$device, modifier=$modifier")
 
     Text(
-        text = device.address,
+        text = "Address : ${device.address}",
         modifier = modifier,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodyMedium
