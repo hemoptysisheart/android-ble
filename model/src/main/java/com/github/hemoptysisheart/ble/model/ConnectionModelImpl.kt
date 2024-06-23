@@ -9,6 +9,7 @@ import com.github.hemoptysisheart.ble.domain.defaultToString
 
 class ConnectionModelImpl(
     private val context: Context,
+    private val permissionModel: PermissionModel,
     private val deviceCacheModel: DeviceCacheModel
 ) : ConnectionModel {
     companion object {
@@ -16,25 +17,25 @@ class ConnectionModelImpl(
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
-    override fun connect(address: String): Connection {
-        Log.d(TAG, "#connect args : address=$address")
+    override fun build(address: String): Connection {
+        Log.d(TAG, "#build args : address=$address")
 
         val device = deviceCacheModel[address]
             ?: throw IllegalArgumentException("device not found : address=$address")
-        Log.d(TAG, "#connect : device=$device")
+        Log.d(TAG, "#build : device=$device")
         require(device is Device) { "unsupported device type : device::class=${device::class}" }
 
+        val connection = Connection(device) { callback ->
+            device.source.connectGatt(context, false, callback, TRANSPORT_LE)
+        }
 
-        val connection = Connection(
-            device = device,
-            gatt = { callback -> device.source.connectGatt(context, false, callback, TRANSPORT_LE) }
-        )
-
-        Log.d(TAG, "#connect return : connection=$connection")
+        Log.d(TAG, "#build return : connection=$connection")
         return connection
     }
 
     override fun toString() = listOf(
+        "context=$context",
+        "permissionModel=${permissionModel.defaultToString()}",
         "deviceCacheModel=${deviceCacheModel.defaultToString()}"
     ).joinToString(", ", "$TAG(", ")")
 }

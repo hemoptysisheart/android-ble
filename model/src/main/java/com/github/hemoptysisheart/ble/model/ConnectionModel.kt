@@ -11,5 +11,5 @@ interface ConnectionModel {
      *
      * @param address 연결할 기기 주소.
      */
-    fun connect(address: String): Connection
+    fun build(address: String): Connection
 }
