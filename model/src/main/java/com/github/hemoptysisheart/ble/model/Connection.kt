@@ -110,6 +110,7 @@ class Connection(
         }
 
         level = Level.DISCONNECTING
+        services = null
         gatt.disconnect()
     }
 
