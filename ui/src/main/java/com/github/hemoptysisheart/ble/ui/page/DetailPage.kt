@@ -23,10 +23,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.Connection.Level
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
+import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_STATE_LIST
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -84,14 +86,14 @@ internal fun DetailPageContent(
             Button(
                 onClick = onClickConnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = Connection.Level.DISCONNECTED == connection.level
+                enabled = Level.DISCONNECTED == connection.level
             ) {
                 Text(text = "연결")
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = Connection.Level.CONNECTED == connection.level
+                enabled = Level.CONNECTED == connection.level
             ) {
                 Text(text = "해제")
             }
@@ -106,10 +108,10 @@ internal data class DetailPageParam(
 )
 
 internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
-    override val values = PREVIEW_CONNECTION_LIST.map {
+    override val values = PREVIEW_CONNECTION_STATE_LIST.map {
         DetailPageParam(
-            device = it.device,
-            connection = it.state.value
+            device = PREVIEW_CONNECTION_LIST.random().device,
+            connection = it
         )
     }.asSequence()
 }
