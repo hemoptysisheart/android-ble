@@ -9,7 +9,9 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import com.github.hemoptysisheart.ble.domain.defaultToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,6 +20,7 @@ import kotlinx.coroutines.withContext
 
 class ScanModelImpl(
     private val permissionModel: PermissionModel,
+    private val deviceCacheModel: DeviceCacheModel,
     private val scanner: BluetoothLeScanner,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ScanModel {
@@ -28,22 +31,33 @@ class ScanModelImpl(
     private val devices = mutableSetOf<Device>()
 
     private val callback = object : ScanCallback() {
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         private fun handle(result: ScanResult) {
+            result.log(TAG)
             devices.add(Device(result.device, result.rssi))
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             Log.v(TAG, "#callback.onScanResult args : callbackType=$callbackType, result=$result")
 
-            if (null != result) {
+            if (null == result) {
+                Log.w(TAG, "#callback.onScanResult result is null.")
+            } else {
                 handle(result)
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             Log.v(TAG, "#callback.onBatchScanResults args : results=$results")
 
-            for (result in results ?: emptyList()) {
+            if (null == results) {
+                Log.w(TAG, "#callback.onBatchScanResults results is null.")
+            } else for (result in results) {
                 handle(result)
             }
         }
@@ -89,7 +103,13 @@ class ScanModelImpl(
             val result = devices.toMutableList()
             devices.clear()
             result.sort()
+            deviceCacheModel.cache(result)
             result
         }
     }
+
+    override fun toString() = listOf(
+        "permission=${permissionModel.defaultToString()}",
+        "deviceCacheModel=${deviceCacheModel.defaultToString()}"
+    ).joinToString(", ", "$TAG(", ")")
 }

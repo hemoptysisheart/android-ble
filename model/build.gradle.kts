@@ -31,6 +31,14 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    @Suppress("UnstableApiUsage")
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -40,4 +48,9 @@ dependencies {
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)
+
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.logging)
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.mockk)
 }

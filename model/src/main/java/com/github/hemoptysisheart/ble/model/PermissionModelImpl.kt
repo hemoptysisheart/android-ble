@@ -18,4 +18,8 @@ class PermissionModelImpl(
         Log.d(TAG, "#hasPermission : ${permissions.toList()} => $has")
         return has
     }
+
+    override fun toString() = listOf(
+        "context=$context"
+    ).joinToString(", ", "$TAG(", ")")
 }

@@ -1,17 +1,18 @@
 [versions]
-agp = "8.4.1"
-hemoptysisheart = "0.0.4"
+agp = "8.5.0"
+compose = "1.5.14"
+hemoptysisheart = "0.0.5"
 hilt = "2.51.1"
 kotlin = "1.9.24"
-lifecycle = "2.8.1"
+lifecycle = "2.8.2"
 poet = "1.17.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.34.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2024.05.00" }
-androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version = "1.6.7" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2024.06.00" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version = "1.6.8" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -25,6 +26,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit-ktx", version = "1
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 hemoptysisheart-ui-compose = { group = "com.github.hemoptysisheart.android", name = "ui-compose", version.ref = "hemoptysisheart" }
 hemoptysisheart-ui-navigation = { group = "com.github.hemoptysisheart.android", name = "ui-navigation", version.ref = "hemoptysisheart" }
@@ -35,6 +37,7 @@ junit = { group = "junit", name = "junit", version = "4.13.2" }
 kaml = { group = "com.charleskorn.kaml", name = "kaml", version = "0.59.0" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.9.0" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version = "6.0.9" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.6.4" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version = "1.6.3" }
 ksp-symbol-processing-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "2.0.0-1.0.21" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.6" }

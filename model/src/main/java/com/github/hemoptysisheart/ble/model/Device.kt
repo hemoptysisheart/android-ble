@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import com.github.hemoptysisheart.ble.domain.AbstractDevice
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
+import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 
 @SuppressLint("MissingPermission")
 class Device(
@@ -15,4 +16,6 @@ class Device(
     override val address = source.address
 
     override val category: DeviceClass = DeviceClass(source.bluetoothClass)
+
+    override val services: List<MajorServiceClass> = MajorServiceClass(source.bluetoothClass)
 }

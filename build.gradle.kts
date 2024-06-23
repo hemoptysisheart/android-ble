@@ -8,3 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ksp) apply false
 }
+
+tasks.register<Delete>("clean") {
+    delete("${rootProject.projectDir}/build")
+}

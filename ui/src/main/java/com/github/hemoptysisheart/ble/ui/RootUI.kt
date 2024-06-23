@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
+import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.MainNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.RequestScanNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.ScanNavigator
 import com.github.hemoptysisheart.ble.ui.navigator.SplashNavigator
+import com.github.hemoptysisheart.ble.ui.page.DetailPage
 import com.github.hemoptysisheart.ble.ui.page.MainPage
 import com.github.hemoptysisheart.ble.ui.page.RequestScanPage
 import com.github.hemoptysisheart.ble.ui.page.ScanPage
@@ -43,6 +45,10 @@ fun RootUI(
 
                 page(ScanNavigator(baseNavigator)) { navigator ->
                     ScanPage(navigator)
+                }
+
+                page(DetailNavigator(baseNavigator)) { navigator ->
+                    DetailPage(navigator)
                 }
             }
         }

@@ -37,13 +37,11 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
 }
 
 dependencies {
-    api(libs.hemoptysisheart.ui.navigation)
-
     implementation(project(":viewmodel"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -55,6 +53,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.hemoptysisheart.ui.compose)
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)

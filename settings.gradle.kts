@@ -46,3 +46,4 @@ include(
     ":spec-processor",
     ":spec-annotation"
 )
+include(":ui-navigator")
