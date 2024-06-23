@@ -18,7 +18,16 @@ abstract class AbstractConnection<D : AbstractDevice>(
     override var level: Level = Level.DISCONNECTED
         protected set(value) {
             Log.d(tag, "#level.set : $value")
+
             field = value
             _state.update { it.copy(level = value) }
+        }
+
+    override var services: List<Service>? = null
+        protected set(value) {
+            Log.d(tag, "#services.set : $value")
+
+            field = value
+            _state.update { it.copy(services = value) }
         }
 }

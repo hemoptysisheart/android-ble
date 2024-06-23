@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.spec.core.ServiceImpl
 
 class Connection(
     device: Device,
@@ -80,8 +81,12 @@ class Connection(
     private fun updateService() {
         Log.d(tag, "#updateService called.")
 
-        for (service in gatt.services) {
-            Log.d(tag, "#updateService : service=$service")
+        if (Level.CONNECTED != level) {
+            throw IllegalStateException("connection is not connected : level=$level")
+        }
+
+        services = gatt.services.map {
+            Service(ServiceImpl(it.uuid))
         }
     }
 

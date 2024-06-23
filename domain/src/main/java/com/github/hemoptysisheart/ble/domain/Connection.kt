@@ -25,7 +25,12 @@ interface Connection {
         /**
          * 연결 수준.
          */
-        val level: Level
+        val level: Level,
+
+        /**
+         * 연결이 사용할 수 있는 서비스 목록.
+         */
+        val services: List<Service>? = null
     )
 
     /**
@@ -42,6 +47,12 @@ interface Connection {
      * 기기 연결 상태.
      */
     val level: Level
+
+    /**
+     * 연결이 사용할 수 있는 서비스 목록.
+     * [level]이 [Level.CONNECTED]일 때만 `null`이 아니다.
+     */
+    val services: List<Service>?
 
     /**
      * 기기에 연결을 시도한다.
