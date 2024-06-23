@@ -36,7 +36,7 @@ fun ColumnScope.Connection(
             text = "서비스 목록",
             modifier = modifier,
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.titleMedium
         )
 
         for (service in services) {

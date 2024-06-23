@@ -16,7 +16,8 @@ class PreviewService(
 
 val PREVIEW_SERVICE_GAP = PreviewService(
     type = ServiceImpl(
-        uuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb")
+        uuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb"),
+        characteristics = emptyList()
     )
 )
 

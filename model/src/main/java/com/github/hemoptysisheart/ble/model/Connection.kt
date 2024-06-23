@@ -10,6 +10,8 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.spec.core.CharacteristicImpl
+import com.github.hemoptysisheart.ble.spec.core.DescriptorImpl
 import com.github.hemoptysisheart.ble.spec.core.ServiceImpl
 
 class Connection(
@@ -85,8 +87,22 @@ class Connection(
             throw IllegalStateException("connection is not connected : level=$level")
         }
 
-        services = gatt.services.map {
-            Service(ServiceImpl(it.uuid))
+        services = gatt.services.map { service ->
+            Service(
+                type = ServiceImpl(
+                    uuid = service.uuid,
+                    characteristics = service.characteristics
+                        .map { characteristic ->
+                            CharacteristicImpl(
+                                uuid = characteristic.uuid,
+                                descriptors = characteristic.descriptors
+                                    .map { descriptor ->
+                                        DescriptorImpl(descriptor.uuid)
+                                    }
+                            )
+                        }
+                )
+            )
         }
     }
 
