@@ -2,12 +2,12 @@ package com.github.hemoptysisheart.ble.spec.core
 
 import java.util.UUID
 
-class ServiceImpl(
+class CharacteristicImpl(
     override val uuid: UUID,
-    override val characteristics: List<Characteristic>
-) : Service {
+    override val descriptors: List<Descriptor>
+) : Characteristic {
     override fun equals(other: Any?) = this === other || (
-            other is ServiceImpl &&
+            other is CharacteristicImpl &&
                     uuid == other.uuid
             )
 
@@ -15,6 +15,6 @@ class ServiceImpl(
 
     override fun toString() = listOf(
         "uuid=$uuid",
-        "characteristics=$characteristics"
-    ).joinToString(", ", "ServiceImpl(", ")")
+        "descriptors=$descriptors"
+    ).joinToString(", ", "CharacteristicImpl(", ")")
 }
