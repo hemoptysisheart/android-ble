@@ -2,20 +2,49 @@ package com.github.hemoptysisheart.ble.domain
 
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Bluetooth LE 연결.
+ */
 interface Connection {
+    /**
+     * 연결 수준.
+     */
+    enum class Level(
+        val label: String
+    ) {
+        DISCONNECTED("Disconnected"),
+        CONNECTING("Connecting"),
+        CONNECTED("Connected"),
+        DISCONNECTING("Disconnecting")
+    }
+
+    /**
+     * 연결 상태.
+     */
     data class State(
-        val connectionState: ConnectionState
+        /**
+         * 연결 수준.
+         */
+        val level: Level
     )
 
+    /**
+     * 연결 상태.
+     */
     val state: StateFlow<State>
 
+    /**
+     * 연결 대상 기기.
+     */
     val device: Device
 
     /**
      * 기기 연결 상태.
-     *
-     * 기기에 연결하기 전에는 [Connection] 인스턴스 자체가 없기 때문에 [ConnectionState.CONNECTING] 상태로 시작한다.
      */
-    val connectionState: ConnectionState
-        get() = state.value.connectionState
+    val level: Level
+
+    /**
+     * 기기에 연결을 시도한다.
+     */
+    fun connect()
 }

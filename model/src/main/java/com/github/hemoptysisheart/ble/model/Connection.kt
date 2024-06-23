@@ -8,15 +8,12 @@ import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
-import com.github.hemoptysisheart.ble.domain.Connection
-import com.github.hemoptysisheart.ble.domain.ConnectionState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.github.hemoptysisheart.ble.domain.Connection.Level
 import kotlinx.coroutines.flow.update
 
 class Connection(
     device: Device,
-    gatt: (BluetoothGattCallback) -> BluetoothGatt
+    private val connector: (BluetoothGattCallback) -> BluetoothGatt
 ) : AbstractConnection<Device>(device) {
     companion object {
         internal const val TAG = "Connection"
@@ -31,32 +28,34 @@ class Connection(
                 throw IllegalArgumentException("status is not success : status=$status")
             }
 
-            val connectionState = when (newState) {
+            val newLevel = when (newState) {
                 STATE_DISCONNECTED ->
-                    ConnectionState.DISCONNECTED
+                    Level.DISCONNECTED
 
                 STATE_CONNECTING ->
-                    ConnectionState.CONNECTING
+                    Level.CONNECTING
 
                 STATE_CONNECTED ->
-                    ConnectionState.CONNECTED
+                    Level.CONNECTED
 
                 STATE_DISCONNECTING ->
-                    ConnectionState.DISCONNECTING
+                    Level.DISCONNECTING
 
                 else ->
                     throw IllegalArgumentException("unsupported newState : newState=$newState")
             }
 
-            _state.update { it.copy(connectionState = connectionState) }
+            level = newLevel
+            _state.update { it.copy(level = newLevel) }
             Log.i(TAG, "#callback.onConnectionStateChange : connection=${this@Connection}")
         }
     }
 
-    private val gatt = gatt(callback)
+    private lateinit var gatt: BluetoothGatt
 
-    private val _state = MutableStateFlow(Connection.State(ConnectionState.CONNECTING))
-    override val state: StateFlow<Connection.State> = _state
+    override fun connect() {
+        gatt = connector(callback)
+    }
 
     override fun toString() = listOf(
         "device=$device",
