@@ -11,6 +11,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
@@ -29,8 +31,19 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 
 @Composable
-fun ScanPage(navigator: ScanNavigator, viewModel: ScanViewModel = hiltViewModel()) {
-    Log.v(TAG, "#ScanPage args : navigator=$navigator")
+fun ScanPage(
+    navigator: ScanNavigator,
+    viewModel: ScanViewModel = hiltViewModel()
+) {
+    Log.v(TAG, "#ScanPage args : navigator=$navigator, viewModel=$viewModel")
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(viewModel) {
+        lifecycleOwner.lifecycle.addObserver(viewModel)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(viewModel)
+        }
+    }
 
     val scanning by viewModel.scanning.collectAsStateWithLifecycle()
     val devices by viewModel.devices.collectAsStateWithLifecycle()
