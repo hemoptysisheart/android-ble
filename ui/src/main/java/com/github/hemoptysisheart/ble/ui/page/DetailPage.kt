@@ -43,7 +43,6 @@ fun DetailPage(
     Log.v(TAG, "#DetailPage args : navigator=$navigator, viewModel=$viewModel")
 
     val connection by viewModel.connection.collectAsStateWithLifecycle()
-
     DetailPageContent(
         navigator = navigator,
         device = viewModel.device,
