@@ -23,13 +23,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Connection
-import com.github.hemoptysisheart.ble.domain.ConnectionState.CONNECTED
-import com.github.hemoptysisheart.ble.domain.ConnectionState.DISCONNECTED
+import com.github.hemoptysisheart.ble.domain.Connection.Level
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
-import com.github.hemoptysisheart.ble.ui.template.Connection
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -70,7 +68,6 @@ internal fun DetailPageContent(
 
         DeviceDetail(device, Modifier.fillMaxWidth())
 
-        Connection(connection, Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.weight(1F))
 
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outline)
@@ -79,14 +76,14 @@ internal fun DetailPageContent(
             Button(
                 onClick = onClickConnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = null == connection || DISCONNECTED == connection.connectionState
+                enabled = null == connection || Level.DISCONNECTED == connection.level
             ) {
                 Text(text = "연결")
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = CONNECTED == connection?.connectionState
+                enabled = Level.CONNECTED == connection?.level
             ) {
                 Text(text = "해제")
             }
