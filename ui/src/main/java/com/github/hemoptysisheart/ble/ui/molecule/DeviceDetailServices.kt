@@ -1,19 +1,21 @@
 package com.github.hemoptysisheart.ble.ui.molecule
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.MajorServiceClassListProvider
+import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun DeviceDetailServices(services: Collection<MajorServiceClass>, modifier: Modifier = Modifier) {
+fun ColumnScope.DeviceDetailServices(services: Collection<MajorServiceClass>, modifier: Modifier = Modifier) {
     Log.v(TAG, "#DeviceDetailServices args : services=$services, modifier=$modifier")
 
     if (services.isNotEmpty()) {
@@ -29,10 +31,11 @@ fun DeviceDetailServices(services: Collection<MajorServiceClass>, modifier: Modi
 }
 
 @Composable
-@PreviewFontScale
-@PreviewLightDark
+@PreviewComponent
 internal fun DeviceDetailServicesPreview(@PreviewParameter(MajorServiceClassListProvider::class) services: List<MajorServiceClass>) {
     AndroidBleTheme {
-        DeviceDetailServices(services)
+        Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+            DeviceDetailServices(services)
+        }
     }
 }

@@ -1,19 +1,19 @@
 package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -25,6 +25,7 @@ import com.github.hemoptysisheart.ble.ui.navigator.ScanNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_LIST
 import com.github.hemoptysisheart.ble.ui.template.DeviceScanList
 import com.github.hemoptysisheart.ble.viewmodel.ScanViewModel
+import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 
 @Composable
@@ -53,7 +54,8 @@ internal fun ScanPageContent(
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         DeviceScanList(
@@ -73,7 +75,7 @@ internal fun ScanPageContent(
             modifier = Modifier.padding(16.dp),
             enabled = !scanning
         ) {
-            Text(text = "검색", modifier = Modifier.padding(8.dp))
+            Text(text = "검색", color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.padding(8.dp))
         }
     }
 }
@@ -92,9 +94,8 @@ internal class ScanPageParamProvider : PreviewParameterProvider<ScanPageParam> {
 }
 
 @Composable
-@PreviewLightDark
-@PreviewFontScale
-internal fun ScanPagePreview(@PreviewParameter(ScanPageParamProvider::class) param: ScanPageParam) {
+@PreviewPage
+internal fun PreviewScanPageContent(@PreviewParameter(ScanPageParamProvider::class) param: ScanPageParam) {
     AndroidBleTheme {
         ScanPageContent(
             navigator = ScanNavigator(baseNavigator()),

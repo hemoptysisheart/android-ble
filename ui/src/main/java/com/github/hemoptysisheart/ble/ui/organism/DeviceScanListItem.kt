@@ -1,21 +1,23 @@
 package com.github.hemoptysisheart.ble.ui.organism
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_DEVICE_LIST
+import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun DeviceScanListItem(
+fun LazyItemScope.DeviceScanListItem(
     device: Device,
     modifier: Modifier = Modifier,
     onClick: (Device) -> Unit = { }
@@ -78,10 +80,13 @@ fun DeviceScanListItem(
 }
 
 @Composable
-@PreviewLightDark
-@PreviewFontScale
+@PreviewComponent
 internal fun DeviceScanCardPreview() {
     AndroidBleTheme {
-        DeviceScanListItem(PREVIEW_DEVICE_LIST.random())
+        LazyColumn(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            item {
+                DeviceScanListItem(PREVIEW_DEVICE_LIST.random())
+            }
+        }
     }
 }

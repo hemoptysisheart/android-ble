@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.hemoptysisheart.ui.compose)
     implementation(libs.hilt)
 
     ksp(libs.hilt.compiler)

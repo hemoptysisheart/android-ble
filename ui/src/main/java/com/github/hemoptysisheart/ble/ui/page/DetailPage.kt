@@ -1,6 +1,7 @@
 package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -32,6 +31,7 @@ import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_STATE_LIST
 import com.github.hemoptysisheart.ble.ui.template.Connection
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
+import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
 
@@ -72,7 +72,11 @@ internal fun DetailPageContent(
         ).joinToString(", ", "#DetailPageContent args : ")
     )
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Spacer(modifier = Modifier.height(32.dp))
 
         DeviceDetail(device, Modifier.fillMaxWidth())
@@ -89,14 +93,14 @@ internal fun DetailPageContent(
                 modifier = Modifier.padding(8.dp),
                 enabled = Level.DISCONNECTED == connection.level
             ) {
-                Text(text = "연결")
+                Text(text = "연결", color = MaterialTheme.colorScheme.onPrimary)
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
                 enabled = Level.CONNECTED == connection.level
             ) {
-                Text(text = "해제")
+                Text(text = "해제", color = MaterialTheme.colorScheme.onPrimary)
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -118,9 +122,8 @@ internal class DetailPageParamProvider : PreviewParameterProvider<DetailPagePara
 }
 
 @Composable
-@PreviewLightDark
-@PreviewFontScale
-internal fun Preview_DetailPage(@PreviewParameter(DetailPageParamProvider::class) param: DetailPageParam) {
+@PreviewPage
+internal fun PreviewDetailPageContent(@PreviewParameter(DetailPageParamProvider::class) param: DetailPageParam) {
     AndroidBleTheme {
         DetailPageContent(
             navigator = DetailNavigator(baseNavigator()),

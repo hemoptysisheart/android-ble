@@ -5,12 +5,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.DevicePreviewProvider
+import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
 fun DeviceDetailAddress(device: Device, modifier: Modifier = Modifier) {
@@ -25,8 +24,7 @@ fun DeviceDetailAddress(device: Device, modifier: Modifier = Modifier) {
 }
 
 @Composable
-@PreviewFontScale
-@PreviewLightDark
+@PreviewComponent
 internal fun DeviceDetailAddressPreview(@PreviewParameter(DevicePreviewProvider::class) device: Device) {
     AndroidBleTheme {
         DeviceDetailAddress(device)

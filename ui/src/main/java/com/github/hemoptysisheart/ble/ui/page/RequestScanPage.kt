@@ -1,6 +1,7 @@
 package com.github.hemoptysisheart.ble.ui.page
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -23,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.RequestScanNavigator
 import com.github.hemoptysisheart.ble.viewmodel.RequestScanViewModel
+import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 import com.github.hemoptysisheart.ui.navigation.compose.baseViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -59,7 +59,9 @@ internal fun RequestScanPageContent(
     onClickRequestPermission: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(100.dp))
@@ -74,7 +76,11 @@ internal fun RequestScanPageContent(
                 )
                 Spacer(modifier = Modifier.weight(1F))
                 Button(onClick = navigator::main, modifier = Modifier.padding(16.dp)) {
-                    Text(text = "메인 화면", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "메인 화면",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
@@ -103,11 +109,19 @@ internal fun RequestScanPageContent(
                 )
 
                 Button(onClick = navigator::settings, modifier = Modifier.padding(16.dp)) {
-                    Text(text = "앱 설정 열기", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "앱 설정 열기",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
                 Spacer(modifier = Modifier.weight(1F))
                 Button(onClick = onClickRequestPermission, modifier = Modifier.padding(16.dp)) {
-                    Text(text = "기기 검색 권한 요청", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "기기 검색 권한 요청",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
@@ -122,7 +136,11 @@ internal fun RequestScanPageContent(
 
                 Spacer(modifier = Modifier.weight(1F))
                 Button(onClick = onClickRequestPermission, modifier = Modifier.padding(16.dp)) {
-                    Text(text = "기기 검색 권한 요청", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "기기 검색 권한 요청",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
         }
@@ -145,9 +163,8 @@ internal class RequestScanPageParamProvider : PreviewParameterProvider<RequestSc
 }
 
 @Composable
-@PreviewFontScale
-@PreviewLightDark
-internal fun RequestScanPagePreview(
+@PreviewPage
+internal fun PreviewRequestScanPageContent(
     @PreviewParameter(RequestScanPageParamProvider::class) param: RequestScanPageParam
 ) {
     AndroidBleTheme {

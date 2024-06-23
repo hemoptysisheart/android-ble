@@ -13,13 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.MainNavigator
 import com.github.hemoptysisheart.ble.viewmodel.MainViewModel
+import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
 
 @Composable
@@ -45,18 +44,21 @@ internal fun MainPageContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(100.dp))
-        Text(text = "주변의 Bluetooth 기기 검색", modifier = Modifier.padding(16.dp))
+        Text(
+            text = "주변의 Bluetooth 기기 검색",
+            modifier = Modifier.padding(16.dp),
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Button(onClick = navigator::scan, modifier = Modifier.padding(8.dp)) {
-            Text("검색", modifier = Modifier.padding(8.dp))
+            Text("검색", modifier = Modifier.padding(8.dp), color = MaterialTheme.colorScheme.onPrimary)
         }
         Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
 @Composable
-@PreviewFontScale
-@PreviewLightDark
-internal fun MainPagePreview() {
+@PreviewPage
+internal fun PreviewMainPageContent() {
     AndroidBleTheme {
         MainPageContent(MainNavigator(baseNavigator()))
     }
