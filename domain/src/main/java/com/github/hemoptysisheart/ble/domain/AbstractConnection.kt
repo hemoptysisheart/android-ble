@@ -11,7 +11,7 @@ abstract class AbstractConnection<D : AbstractDevice>(
     protected val tag: String = "AbstractConnection",
     override val device: D
 ) : Connection {
-    @Suppress("PropertyName")
+    @Suppress("PropertyName", "MemberVisibilityCanBePrivate")
     protected val _state = MutableStateFlow(State(Level.DISCONNECTED))
     override val state: StateFlow<State> = _state
 

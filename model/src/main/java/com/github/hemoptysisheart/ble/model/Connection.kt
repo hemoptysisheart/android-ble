@@ -16,9 +16,17 @@ class Connection(
     private val gattConnector: (BluetoothGattCallback) -> BluetoothGatt
 ) : AbstractConnection<Device>("Connection/${device.address}", device) {
     private val callback = object : BluetoothGattCallback() {
+        @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             Log.d(tag, "#callback.onConnectionStateChange args : gatt=$gatt, status=$status, newState=$newState")
             require(null != gatt) { "gatt is required" }
+
+            if (this@Connection.gatt !== gatt) {
+                Log.e(
+                    tag,
+                    "#callback.onConnectionStateChange gatt does not match : gatt=$gatt, connection.gatt=${this@Connection.gatt}"
+                )
+            }
 
             if (BluetoothGatt.GATT_SUCCESS != status) {
                 throw IllegalArgumentException("status is not success : status=$status")
@@ -40,13 +48,42 @@ class Connection(
                 else ->
                     throw IllegalArgumentException("unsupported newState : newState=$newState")
             }
+            Log.i(tag, "#callback.onConnectionStateChange : newLevel=$newLevel")
 
             level = newLevel
-            Log.i(tag, "#callback.onConnectionStateChange : connection=${this@Connection}")
+            if (Level.CONNECTED == newLevel) {
+                gatt!!.discoverServices()
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            Log.d(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
+            require(null != gatt) { "gatt is required" }
+
+            if (this@Connection.gatt !== gatt) {
+                Log.e(
+                    tag,
+                    "#callback.onServicesDiscovered gatt does not match : gatt=$gatt, connection.gatt=${this@Connection.gatt}"
+                )
+            }
+
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            updateService()
         }
     }
 
     private lateinit var gatt: BluetoothGatt
+
+    private fun updateService() {
+        Log.d(tag, "#updateService called.")
+
+        for (service in gatt.services) {
+            Log.d(tag, "#updateService : service=$service")
+        }
+    }
 
     override fun connect() {
         Log.d(tag, "#connect called.")
