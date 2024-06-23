@@ -8,8 +8,6 @@ import com.github.hemoptysisheart.ble.model.DeviceCacheModel
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator.Companion.ARG_ADDRESS
 import com.github.hemoptysisheart.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
@@ -25,8 +23,8 @@ class DetailViewModel @Inject constructor(
     val device = deviceCacheModel[address]
         ?: throw IllegalArgumentException("device not found : address=$address")
 
-    private val _connection = MutableStateFlow<Connection?>(null)
-    val connection: StateFlow<Connection?> = _connection
+    private val _connection: Connection = connectionModel.build(address)
+    val connection: StateFlow<Connection.State> = _connection.state
 
     /**
      * 기기 연결하기.
@@ -35,16 +33,15 @@ class DetailViewModel @Inject constructor(
         Log.d(tag, "#onClickConnect called.")
 
         launch {
-            val connection = connectionModel.build(address)
             Log.d(tag, "#onClickConnect : connection=$connection")
-            if (this@DetailViewModel.device !== connection.device) {
+            if (this@DetailViewModel.device !== _connection.device) {
                 Log.w(
                     tag,
-                    "#onClickConnect device does not match : this.device=${this@DetailViewModel.device}, connection.device=${connection.device}"
+                    "#onClickConnect device does not match : this.device=${this@DetailViewModel.device}, connection.device=${_connection.device}"
                 )
             }
 
-            _connection.emit(connection)
+            _connection.connect()
         }
     }
 
@@ -53,16 +50,11 @@ class DetailViewModel @Inject constructor(
      */
     fun onClickDisconnect() {
         Log.d(tag, "#onClickDisconnect called.")
-
-        launch {
-            delay(2000)
-            _connection.emit(null)
-        }
     }
 
     override fun toString() = listOf(
         super.toString(),
         "address=$address",
-        "connection=${_connection.value}"
+        "connection=$_connection"
     ).joinToString(", ", "$tag(", ")")
 }

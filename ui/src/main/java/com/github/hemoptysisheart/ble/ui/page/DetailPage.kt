@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Connection
-import com.github.hemoptysisheart.ble.domain.Connection.Level
 import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
@@ -41,6 +40,7 @@ fun DetailPage(
     Log.v(TAG, "#DetailPage args : navigator=$navigator, viewModel=$viewModel")
 
     val connection by viewModel.connection.collectAsStateWithLifecycle()
+
     DetailPageContent(
         navigator = navigator,
         device = viewModel.device,
@@ -54,19 +54,27 @@ fun DetailPage(
 internal fun DetailPageContent(
     navigator: DetailNavigator,
     device: Device,
-    connection: Connection?,
+    connection: Connection.State,
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { }
 ) {
     Log.v(
         TAG,
-        "#DetailPageContent args : navigator=$navigator, device=$device, connection=$connection, onClickConnect=$onClickConnect, onClickDisconnect=$onClickDisconnect"
+        listOf(
+            "navigator=$navigator",
+            "device=$device",
+            "connection=$connection",
+            "onClickConnect=$onClickConnect",
+            "onClickDisconnect=$onClickDisconnect"
+        ).joinToString(", ", "#DetailPageContent args : ")
     )
 
     Column(Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         DeviceDetail(device, Modifier.fillMaxWidth())
+
+        Text(text = "연결 상태 : ${connection.level.label}", modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.weight(1F))
 
@@ -76,14 +84,14 @@ internal fun DetailPageContent(
             Button(
                 onClick = onClickConnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = null == connection || Level.DISCONNECTED == connection.level
+                enabled = Connection.Level.DISCONNECTED == connection.level
             ) {
                 Text(text = "연결")
             }
             Button(
                 onClick = onClickDisconnect,
                 modifier = Modifier.padding(8.dp),
-                enabled = Level.CONNECTED == connection?.level
+                enabled = Connection.Level.CONNECTED == connection.level
             ) {
                 Text(text = "해제")
             }
@@ -94,14 +102,14 @@ internal fun DetailPageContent(
 
 internal data class DetailPageParam(
     val device: Device,
-    val connection: Connection?
+    val connection: Connection.State
 )
 
 internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
     override val values = PREVIEW_CONNECTION_LIST.map {
         DetailPageParam(
             device = it.device,
-            connection = it
+            connection = it.state.value
         )
     }.asSequence()
 }

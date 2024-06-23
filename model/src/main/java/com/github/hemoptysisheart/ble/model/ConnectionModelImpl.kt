@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothDevice.TRANSPORT_LE
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.defaultToString
 
 class ConnectionModelImpl(
@@ -17,7 +16,7 @@ class ConnectionModelImpl(
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
-    override fun build(address: String): Connection {
+    override fun build(address: String): com.github.hemoptysisheart.ble.domain.Connection {
         Log.d(TAG, "#build args : address=$address")
 
         val device = deviceCacheModel[address]

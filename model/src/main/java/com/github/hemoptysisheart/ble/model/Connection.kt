@@ -3,7 +3,6 @@ package com.github.hemoptysisheart.ble.model
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothProfile.STATE_CONNECTED
-import android.bluetooth.BluetoothProfile.STATE_CONNECTING
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class Connection(
     device: Device,
-    private val connector: (BluetoothGattCallback) -> BluetoothGatt
+    private val gattConnector: (BluetoothGattCallback) -> BluetoothGatt
 ) : AbstractConnection<Device>(device) {
     companion object {
         internal const val TAG = "Connection"
@@ -31,9 +30,6 @@ class Connection(
             val newLevel = when (newState) {
                 STATE_DISCONNECTED ->
                     Level.DISCONNECTED
-
-                STATE_CONNECTING ->
-                    Level.CONNECTING
 
                 STATE_CONNECTED ->
                     Level.CONNECTED
@@ -54,13 +50,28 @@ class Connection(
     private lateinit var gatt: BluetoothGatt
 
     override fun connect() {
-        gatt = connector(callback)
+        if (Level.DISCONNECTED != level) {
+            throw IllegalStateException("connection is not disconnected : level=$level")
+        }
+
+        level = Level.CONNECTING
+        _state.update { it.copy(level = Level.CONNECTING) }
+
+        gatt = gattConnector(callback)
+
+        Log.i(TAG, "#connect : this=$this")
     }
 
     override fun toString() = listOf(
         "device=$device",
         "state=${state.value}",
-        "gatt=$gatt",
+        "gatt=${
+            if (::gatt.isInitialized) {
+                gatt.toString()
+            } else {
+                "not initialized"
+            }
+        }",
         "callback=$callback"
     ).joinToString(", ", "$TAG(", ")")
 }
