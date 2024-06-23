@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
+import com.github.hemoptysisheart.ble.ui.organism.ServiceType
 import com.github.hemoptysisheart.ble.ui.preview.ConnectionStateProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
@@ -39,13 +40,7 @@ fun ColumnScope.Connection(
         )
 
         for (service in services) {
-            Text(
-                text = service.toString(),
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
+            ServiceType(service = service.type, modifier = modifier.padding(start = 16.dp))
         }
     }
 }
