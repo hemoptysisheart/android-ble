@@ -29,6 +29,7 @@ import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_STATE_LIST
+import com.github.hemoptysisheart.ble.ui.template.Connection
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -76,7 +77,7 @@ internal fun DetailPageContent(
 
         DeviceDetail(device, Modifier.fillMaxWidth())
 
-        Text(text = "연결 상태 : ${connection.level.label}", modifier = Modifier.fillMaxWidth())
+        Connection(connection, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.weight(1F))
 
