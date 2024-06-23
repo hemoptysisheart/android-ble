@@ -20,6 +20,8 @@ internal class PreviewConnection(
     override val state: StateFlow<State> = MutableStateFlow(State(level))
 
     override fun connect() = throw UnsupportedOperationException("this is preview.")
+
+    override fun disconnect() = throw UnsupportedOperationException("this is preview.")
 }
 
 val PREVIEW_CONNECTION_DISCONNECTED: Connection = PreviewConnection(

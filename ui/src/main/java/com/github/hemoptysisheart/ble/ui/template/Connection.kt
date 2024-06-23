@@ -22,7 +22,7 @@ fun ColumnScope.Connection(
     Log.v(TAG, "#Connection args : connection=$connection")
 
     Text(
-        text = "Level : ${connection.level}",
+        text = "Level : ${connection.level.label}",
         modifier = modifier,
         color = MaterialTheme.colorScheme.onSurface,
         style = MaterialTheme.typography.bodyMedium

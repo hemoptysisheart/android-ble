@@ -47,4 +47,9 @@ interface Connection {
      * 기기에 연결을 시도한다.
      */
     fun connect()
+
+    /**
+     * 기기와의 연결을 끊는다.
+     */
+    fun disconnect()
 }

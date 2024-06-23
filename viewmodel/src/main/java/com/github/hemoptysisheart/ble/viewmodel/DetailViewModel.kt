@@ -50,6 +50,10 @@ class DetailViewModel @Inject constructor(
      */
     fun onClickDisconnect() {
         Log.d(tag, "#onClickDisconnect called.")
+
+        launch {
+            _connection.disconnect()
+        }
     }
 
     override fun toString() = listOf(
