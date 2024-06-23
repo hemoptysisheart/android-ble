@@ -21,7 +21,7 @@ fun ColumnScope.Connection(connection: Connection?, modifier: Modifier = Modifie
     if (null == connection) {
         Text("연결 정보가 없습니다.", modifier = modifier)
     } else {
-        ConnectionState(state = connection.connectionState)
+        ConnectionState(state = connection.state.value)
     }
 }
 

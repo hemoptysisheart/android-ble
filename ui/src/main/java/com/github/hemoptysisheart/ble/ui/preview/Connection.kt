@@ -45,6 +45,11 @@ class ConnectionProvider : PreviewParameterProvider<Connection?> {
     )
 }
 
-class ConnectionStateProvider : PreviewParameterProvider<ConnectionState> {
-    override val values = ConnectionState.entries.asSequence()
+class ConnectionStateProvider : PreviewParameterProvider<State> {
+    override val values = sequenceOf(
+        PREVIEW_CONNECTION_DISCONNECTED.state.value,
+        PREVIEW_CONNECTION_CONNECTING.state.value,
+        PREVIEW_CONNECTION_CONNECTED.state.value,
+        PREVIEW_CONNECTION_DISCONNECTING.state.value
+    )
 }
