@@ -21,5 +21,11 @@ class BleSpecConfigurationProcessor(
 
         ClassOfDeviceConfigurationProcessor(this.configuration)
             .process(deviceClass)
+
+        val gattService = configuration.arguments
+            .first { "gattService" == it.name?.asString() }
+            .value as KSAnnotation
+        GattServiceProcessor(this.configuration)
+            .process(gattService)
     }
 }
