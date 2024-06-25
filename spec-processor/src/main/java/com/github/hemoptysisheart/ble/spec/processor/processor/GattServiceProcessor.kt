@@ -42,7 +42,7 @@ class GattServiceProcessor(
     }
 
     fun generate(data: GattService) {
-
+        val packageName = "${configuration.target.packageName}.core"
         val listBuilder = CodeBlock.builder()
             .add("listOf(\n")
         for (service in data.uuids) {
@@ -58,10 +58,10 @@ class GattServiceProcessor(
         val builder = PropertySpec.builder(
             name = LIST_NAME,
             type = List::class.asClassName()
-                .parameterizedBy(ClassName("${configuration.target.packageName}.core", LIST_TYPE_NAME)),
+                .parameterizedBy(ClassName(packageName, LIST_TYPE_NAME)),
         ).initializer(listBuilder.build())
 
-        FileSpec.builder("${configuration.target.packageName}.core", FILE_NAME)
+        FileSpec.builder(packageName, FILE_NAME)
             .addProperty(builder.build())
             .build()
             .writeTo(configuration.target.codeGenerator, Dependencies(true))
