@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * - [`service_uuids.yaml`](https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/service_uuids.yaml)
  */
 @Serializable
-data class GattService(
+data class GattStandardAttributeList(
     @SerialName("uuids")
-    val uuids: List<GattServiceItem>
+    val uuids: List<GattStandardAttribute>
 )

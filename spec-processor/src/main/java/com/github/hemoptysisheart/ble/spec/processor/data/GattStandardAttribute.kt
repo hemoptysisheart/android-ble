@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GattServiceItem(
+data class GattStandardAttribute(
     @SerialName("uuid")
     val uuid: Int,
     @SerialName("name")

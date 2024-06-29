@@ -2,7 +2,7 @@ package com.github.hemoptysisheart.ble.spec.processor.processor
 
 import com.github.hemoptysisheart.ble.spec.processor.LOGGER
 import com.github.hemoptysisheart.ble.spec.processor.config.Config
-import com.github.hemoptysisheart.ble.spec.processor.data.GattService
+import com.github.hemoptysisheart.ble.spec.processor.data.GattStandardAttributeList
 import com.github.hemoptysisheart.ble.spec.processor.loader.GattServiceLoader
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.symbol.KSAnnotation
@@ -25,7 +25,7 @@ class GattServiceProcessor(
         const val FILE_NAME = "GattService.kt"
         const val MAP_NAME = "GATT_SERVICES"
         const val MAP_TYPE_NAME = "Service"
-        const val MAP_ELEMENT_NAME = "StandardService"
+        const val MAP_ACTUAL_NAME = "StandardService"
     }
 
     fun process(configuration: KSAnnotation) {
@@ -42,13 +42,13 @@ class GattServiceProcessor(
         generate(data)
     }
 
-    fun generate(data: GattService) {
+    fun generate(data: GattStandardAttributeList) {
         val packageName = "${configuration.target.packageName}.core"
         val mapBuilder = CodeBlock.builder()
             .add("listOf(\n")
         for (service in data.uuids) {
             mapBuilder.add(
-                "$MAP_ELEMENT_NAME(%L, %S, %S),\n",
+                "$MAP_ACTUAL_NAME(%L, %S, %S),\n",
                 "0x${service.uuid.toString(16).uppercase()}",
                 service.id,
                 service.name

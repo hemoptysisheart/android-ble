@@ -9,7 +9,12 @@ annotation class BleSpecConfiguration(
     val deviceClass: ClassOfDeviceConfiguration = ClassOfDeviceConfiguration(),
 
     /**
-     * "3.4 GATT Services"
+     * 3.4 GATT Services
      */
-    val gattService: GattServiceConfiguration = GattServiceConfiguration()
+    val gattService: GattServiceConfiguration = GattServiceConfiguration(),
+
+    /**
+     * 3.8 Characteristics
+     */
+    val gattCharacteristic: GattCharacteristicConfiguration = GattCharacteristicConfiguration()
 )

@@ -12,7 +12,7 @@ import java.io.File
  * 참고 :
  * - Bluetooth Core Specification [Vol 3] Part G, Section 3.3.1
  */
-class GattServiceLoader(
+class GattCharacteristicLoader(
     private val file: File
 ) {
     fun load(): GattStandardAttributeList {
