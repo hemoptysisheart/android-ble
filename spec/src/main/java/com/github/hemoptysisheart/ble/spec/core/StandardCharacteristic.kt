@@ -4,8 +4,8 @@ import java.util.UUID
 
 class StandardCharacteristic internal constructor(
     override val uuid: UUID,
-    val id: String,
-    val name: String
+    override val id: String,
+    override val name: String
 ) : Characteristic {
     internal constructor(
         uuid: Int,

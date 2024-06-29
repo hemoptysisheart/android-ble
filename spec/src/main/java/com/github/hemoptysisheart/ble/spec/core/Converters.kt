@@ -72,5 +72,6 @@ fun DeviceClass(bleClass: BluetoothClass): DeviceClass {
         ?: throw IllegalArgumentException("unsupported deviceClass : bleClass=$bleClass")
 }
 
-fun Service(uuid: UUID): Service = GATT_SERVICES[uuid]
-    ?: CustomService(uuid)
+fun Service(uuid: UUID): Service? = GATT_SERVICES[uuid]
+
+fun Characteristic(uuid: UUID): Characteristic? = GATT_CHARACTERISTICS[uuid]

@@ -41,6 +41,24 @@ fun ColumnScope.Connection(
 
         for (service in services) {
             ServiceType(service = service.type, modifier = modifier.padding(start = 16.dp))
+
+            Text(
+                text = "캐릭터리스틱 목록",
+                modifier = modifier.padding(start = 24.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            for (characteristic in service.characteristics) {
+                Text(
+                    text = characteristic.type.let {
+                        "UUID : ${it.uuid}\nID : ${it.id ?: "N/A"}\nName : ${it.name ?: "N/A"}"
+                    },
+                    modifier = modifier.padding(start = 32.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

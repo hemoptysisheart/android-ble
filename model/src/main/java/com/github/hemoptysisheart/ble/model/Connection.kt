@@ -10,6 +10,8 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
+import com.github.hemoptysisheart.ble.spec.core.CustomService
 import com.github.hemoptysisheart.ble.spec.core.Service
 
 class Connection(
@@ -87,7 +89,16 @@ class Connection(
 
         services = gatt.services.map { service ->
             Log.d(tag, "#updateService service=$service")
-            Service(type = Service(service.uuid))
+            Service(
+                type = Service(service.uuid) ?: CustomService(service.uuid),
+                characteristics = service.characteristics.map { characteristic ->
+                    Log.d(tag, "#updateService characteristic=$characteristic")
+                    Characteristic(
+                        type = com.github.hemoptysisheart.ble.spec.core.Characteristic(characteristic.uuid)
+                            ?: CustomCharacteristic(characteristic.uuid)
+                    )
+                }
+            )
         }
     }
 
