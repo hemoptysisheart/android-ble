@@ -14,6 +14,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 import java.nio.file.Paths
+import java.util.UUID
 
 class GattServiceProcessor(
     private val configuration: Config
@@ -22,9 +23,9 @@ class GattServiceProcessor(
         private const val TAG = "GattServiceProcessor"
 
         const val FILE_NAME = "GattService.kt"
-        const val LIST_NAME = "GATT_SERVICES"
-        const val LIST_TYPE_NAME = "Service"
-        const val LIST_ELEMENT_NAME = "ServiceImpl"
+        const val MAP_NAME = "GATT_SERVICES"
+        const val MAP_TYPE_NAME = "Service"
+        const val MAP_ELEMENT_NAME = "StandardService"
     }
 
     fun process(configuration: KSAnnotation) {
@@ -43,23 +44,26 @@ class GattServiceProcessor(
 
     fun generate(data: GattService) {
         val packageName = "${configuration.target.packageName}.core"
-        val listBuilder = CodeBlock.builder()
+        val mapBuilder = CodeBlock.builder()
             .add("listOf(\n")
         for (service in data.uuids) {
-            listBuilder.add(
-                "$LIST_ELEMENT_NAME(%L, %S, %S),\n",
+            mapBuilder.add(
+                "$MAP_ELEMENT_NAME(%L, %S, %S),\n",
                 "0x${service.uuid.toString(16).uppercase()}",
                 service.id,
                 service.name
             )
         }
-        listBuilder.add(")")
+        mapBuilder.add(").associateBy { it.uuid }")
 
         val builder = PropertySpec.builder(
-            name = LIST_NAME,
-            type = List::class.asClassName()
-                .parameterizedBy(ClassName(packageName, LIST_TYPE_NAME)),
-        ).initializer(listBuilder.build())
+            name = MAP_NAME,
+            type = Map::class.asClassName()
+                .parameterizedBy(
+                    ClassName(UUID::class.java.`package`.name, UUID::class.simpleName!!),
+                    ClassName(packageName, MAP_TYPE_NAME)
+                ),
+        ).initializer(mapBuilder.build())
 
         FileSpec.builder(packageName, FILE_NAME)
             .addProperty(builder.build())

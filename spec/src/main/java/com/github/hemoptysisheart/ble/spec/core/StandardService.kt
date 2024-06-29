@@ -2,21 +2,22 @@ package com.github.hemoptysisheart.ble.spec.core
 
 import java.util.UUID
 
-class ServiceImpl(
+/**
+ * [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers)에 등록된 서비스.
+ */
+class StandardService internal constructor(
     override val uuid: UUID,
     override val id: String,
-    override val name: String,
-    override val characteristics: List<Characteristic> = emptyList()
+    override val name: String
 ) : Service {
-    constructor(
+    internal constructor(
         uuid16: Int,
         id: String,
-        name: String,
-        characteristics: List<Characteristic> = emptyList()
-    ) : this(uuid16.toUUID(), id, name, characteristics)
+        name: String
+    ) : this(uuid16.toUUID(), id, name)
 
     override fun equals(other: Any?) = this === other || (
-            other is ServiceImpl &&
+            other is StandardService &&
                     uuid == other.uuid
             )
 
@@ -25,7 +26,6 @@ class ServiceImpl(
     override fun toString() = listOf(
         "uuid=$uuid",
         "id=$id",
-        "name=$name",
-        "characteristics=$characteristics"
+        "name=$name"
     ).joinToString(", ", "ServiceImpl(", ")")
 }
