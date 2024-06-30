@@ -9,10 +9,12 @@ import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
+import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomService
 import com.github.hemoptysisheart.ble.spec.core.Service
+import kotlinx.coroutines.flow.update
 
 class Connection(
     device: Device,
@@ -55,7 +57,8 @@ class Connection(
 
             level = newLevel
             if (Level.CONNECTED == newLevel) {
-                gatt!!.discoverServices()
+                gatt!!.requestMtu(Connection.MTU_DEFAULT)
+                gatt.discoverServices()
             }
         }
 
@@ -66,7 +69,10 @@ class Connection(
             if (this@Connection.gatt !== gatt) {
                 Log.e(
                     tag,
-                    "#callback.onServicesDiscovered gatt does not match : gatt=$gatt, connection.gatt=${this@Connection.gatt}"
+                    listOf(
+                        "gatt=$gatt",
+                        "connection.gatt=${this@Connection.gatt}"
+                    ).joinToString(", ", "#callback.onServicesDiscovered gatt does not match : ")
                 )
             }
 
@@ -76,9 +82,26 @@ class Connection(
 
             updateService()
         }
+
+        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
+            require(null != gatt) { "gatt is required" }
+
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                this@Connection.mtu = mtu
+            }
+        }
     }
 
     private lateinit var gatt: BluetoothGatt
+
+    override var mtu: Int? = null
+        private set(value) {
+            Log.d(tag, "#mtu.set : $value")
+
+            field = value
+            _state.update { it.copy(mtu = value) }
+        }
 
     private fun updateService() {
         Log.d(tag, "#updateService called.")
@@ -102,6 +125,7 @@ class Connection(
         }
     }
 
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override fun connect() {
         Log.d(tag, "#connect called.")
 

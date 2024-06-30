@@ -10,6 +10,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.github.hemoptysisheart.ble.domain.Connection
@@ -31,6 +34,29 @@ fun ColumnScope.ConnectionTemplate(
         style = MaterialTheme.typography.bodyMedium
     )
 
+    connection.mtu.let { mtu ->
+        if (null == mtu) {
+            Text(
+                text = buildAnnotatedString {
+                    append("MTU : ")
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)) {
+                        append("null")
+                    }
+                },
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        } else {
+            Text(
+                text = "MTU : $mtu byte(s)",
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+
     ServiceList(
         services = connection.services,
         modifier = modifier
@@ -44,9 +70,11 @@ fun ColumnScope.ConnectionTemplate(
 @PreviewComponent
 fun ConnectionPreview(@PreviewParameter(ConnectionStateProvider::class) state: Connection.State) {
     AndroidBleTheme {
-        Column(modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxWidth()
+        ) {
             ConnectionTemplate(state)
         }
     }
