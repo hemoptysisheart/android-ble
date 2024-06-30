@@ -80,7 +80,7 @@ internal fun DetailPageContent(
         Spacer(modifier = Modifier.height(32.dp))
         DeviceDetail(device, Modifier.fillMaxWidth())
         ConnectionTemplate(connection, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outlineVariant)
 
         Spacer(modifier = Modifier.height(8.dp))

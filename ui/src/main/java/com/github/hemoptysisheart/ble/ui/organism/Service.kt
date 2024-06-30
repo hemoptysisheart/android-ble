@@ -3,6 +3,7 @@ package com.github.hemoptysisheart.ble.ui.organism
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.ListItem
@@ -10,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import com.github.hemoptysisheart.ble.domain.Service
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.molecule.ServiceType
@@ -22,9 +24,15 @@ fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier) {
 
     ListItem(
         headlineContent = {
-            ServiceType(service = service.type)
+            ServiceType(service = service.type, modifier = Modifier.fillMaxWidth())
         },
         supportingContent = {
+            CharacteristicList(
+                characteristics = service.characteristics,
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .fillMaxWidth()
+            )
         },
         modifier = modifier
     )
