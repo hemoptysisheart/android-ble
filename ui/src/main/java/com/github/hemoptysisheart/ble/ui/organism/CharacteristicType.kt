@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.github.hemoptysisheart.ble.domain.restricted
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.CharacteristicTypeProvider
@@ -43,6 +44,12 @@ fun ColumnScope.CharacteristicType(
     }
     Text(
         text = "UUID : ${characteristic.uuid}",
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.bodySmall
+    )
+    Text(
+        text = "제한된 캐릭터리스틱 : ${characteristic.restricted}",
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodySmall
