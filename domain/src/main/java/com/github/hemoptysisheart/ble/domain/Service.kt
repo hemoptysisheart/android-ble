@@ -10,4 +10,6 @@ interface Service {
      * 서비스 종류.
      */
     val type: Service
+
+    val characteristics: List<Characteristic>
 }
