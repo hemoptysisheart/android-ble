@@ -27,3 +27,10 @@ val PREVIEW_SERVICE_LIST: List<Service> = listOf(
 class ServiceProvider : PreviewParameterProvider<Service> {
     override val values: Sequence<Service> = PREVIEW_SERVICE_LIST.asSequence()
 }
+
+class ServiceListProvider : PreviewParameterProvider<List<Service>?> {
+    override val values: Sequence<List<Service>?> = sequenceOf(
+        null,
+        PREVIEW_SERVICE_LIST
+    )
+}

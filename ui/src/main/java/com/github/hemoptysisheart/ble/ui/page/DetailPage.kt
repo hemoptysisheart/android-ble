@@ -28,7 +28,7 @@ import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
 import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_STATE_LIST
-import com.github.hemoptysisheart.ble.ui.template.Connection
+import com.github.hemoptysisheart.ble.ui.template.ConnectionTemplate
 import com.github.hemoptysisheart.ble.ui.template.DeviceDetail
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
@@ -78,14 +78,11 @@ internal fun DetailPageContent(
             .background(MaterialTheme.colorScheme.background)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-
         DeviceDetail(device, Modifier.fillMaxWidth())
-
-        Connection(connection, modifier = Modifier.fillMaxWidth())
-
+        ConnectionTemplate(connection, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.weight(1F))
+        HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outlineVariant)
 
-        HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outline)
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(
