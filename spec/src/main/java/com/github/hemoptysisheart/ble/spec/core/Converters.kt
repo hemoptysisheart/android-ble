@@ -1,7 +1,10 @@
+@file:Suppress("FunctionName")
+
 package com.github.hemoptysisheart.ble.spec.core
 
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothClass.Device
+import java.util.UUID
 
 /**
  * Android 플랫폼의 [BluetoothClass]를 [MajorServiceClass] 목록으로 변환한다.
@@ -68,3 +71,6 @@ fun DeviceClass(bleClass: BluetoothClass): DeviceClass {
     return deviceClass
         ?: throw IllegalArgumentException("unsupported deviceClass : bleClass=$bleClass")
 }
+
+fun Service(uuid: UUID): Service = GATT_SERVICES[uuid]
+    ?: CustomService(uuid)

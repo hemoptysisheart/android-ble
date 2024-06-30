@@ -10,9 +10,7 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
-import com.github.hemoptysisheart.ble.spec.core.CharacteristicImpl
-import com.github.hemoptysisheart.ble.spec.core.DescriptorImpl
-import com.github.hemoptysisheart.ble.spec.core.ServiceImpl
+import com.github.hemoptysisheart.ble.spec.core.Service
 
 class Connection(
     device: Device,
@@ -88,21 +86,8 @@ class Connection(
         }
 
         services = gatt.services.map { service ->
-            Service(
-                type = ServiceImpl(
-                    uuid = service.uuid,
-                    characteristics = service.characteristics
-                        .map { characteristic ->
-                            CharacteristicImpl(
-                                uuid = characteristic.uuid,
-                                descriptors = characteristic.descriptors
-                                    .map { descriptor ->
-                                        DescriptorImpl(descriptor.uuid)
-                                    }
-                            )
-                        }
-                )
-            )
+            Log.d(tag, "#updateService service=$service")
+            Service(type = Service(service.uuid))
         }
     }
 

@@ -8,5 +8,7 @@ package com.github.hemoptysisheart.ble.spec.core
  * - [`service_uuids.yaml`](https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/service_uuids.yaml)
  */
 interface Service : Attribute {
-    val characteristics: List<Characteristic>
+    val id: String?
+
+    val name: String?
 }

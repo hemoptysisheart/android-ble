@@ -2,8 +2,7 @@ package com.github.hemoptysisheart.ble.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.github.hemoptysisheart.ble.domain.Service
-import com.github.hemoptysisheart.ble.spec.core.ServiceImpl
-import java.util.UUID
+import com.github.hemoptysisheart.ble.spec.core.GATT_SERVICES
 
 
 class PreviewService(
@@ -14,15 +13,12 @@ class PreviewService(
     ).joinToString(", ", "PreviewService(", ")")
 }
 
-val PREVIEW_SERVICE_GAP = PreviewService(
-    type = ServiceImpl(
-        uuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb"),
-        characteristics = emptyList()
-    )
+val PREVIEW_RANDOM_STANDARD_SERVICE = PreviewService(
+    type = GATT_SERVICES.values.random()
 )
 
 val PREVIEW_SERVICE_LIST: List<Service> = listOf(
-    PREVIEW_SERVICE_GAP
+    PREVIEW_RANDOM_STANDARD_SERVICE
 )
 
 class ServiceProvider : PreviewParameterProvider<Service> {

@@ -21,5 +21,18 @@ class BleSpecConfigurationProcessor(
 
         ClassOfDeviceConfigurationProcessor(this.configuration)
             .process(deviceClass)
+
+        GattServiceProcessor(this.configuration)
+            .process(
+                configuration.arguments
+                    .first { "gattService" == it.name?.asString() }
+                    .value as KSAnnotation
+            )
+        GattCharacteristicProcessor(this.configuration)
+            .process(
+                configuration.arguments
+                    .first { "gattCharacteristic" == it.name?.asString() }
+                    .value as KSAnnotation
+            )
     }
 }
