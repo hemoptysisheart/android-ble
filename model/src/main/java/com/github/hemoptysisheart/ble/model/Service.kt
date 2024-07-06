@@ -1,13 +1,24 @@
 package com.github.hemoptysisheart.ble.model
 
+import android.bluetooth.BluetoothGattService
 import com.github.hemoptysisheart.ble.domain.Characteristic
+import com.github.hemoptysisheart.ble.spec.core.CustomService
 import com.github.hemoptysisheart.ble.spec.core.Service
 
 class Service(
-    override val type: Service,
-    override val characteristics: List<Characteristic>
+    private val target: BluetoothGattService,
+    private val gatt: GattWrapper
 ) : com.github.hemoptysisheart.ble.domain.Service {
+    override val type: Service = Service(target.uuid)
+        ?: CustomService(target.uuid)
+
+    override val characteristics: List<Characteristic> = target.characteristics
+        .map { Characteristic(target = it, gatt = gatt) }
+
     override fun toString() = listOf(
-        "type=$type"
+        "target=$target",
+        "gatt=$gatt",
+        "type=$type",
+        "characteristics=$characteristics"
     ).joinToString(", ", "Service(", ")")
 }

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Service
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.organism.Service
@@ -17,11 +18,11 @@ import com.github.hemoptysisheart.ble.ui.preview.ServiceListProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun ServiceList(services: List<Service>?, modifier: Modifier = Modifier) {
+fun ServiceList(services: List<Service>?, modifier: Modifier = Modifier, onClickRead: (Characteristic) -> Unit = {}) {
     if (null == services) {
         ServiceListNull(modifier = modifier)
     } else {
-        ServiceListNotNull(services = services, modifier = modifier)
+        ServiceListNotNull(services = services, modifier = modifier, onClickRead = onClickRead)
     }
 }
 
@@ -33,8 +34,12 @@ fun ServiceListNull(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ServiceListNotNull(services: List<Service>, modifier: Modifier = Modifier) {
-    Log.v(TAG, "#ServiceListNotNull args : services=$services, modifier=$modifier")
+fun ServiceListNotNull(
+    services: List<Service>,
+    modifier: Modifier = Modifier,
+    onClickRead: (Characteristic) -> Unit = {}
+) {
+    Log.v(TAG, "#ServiceListNotNull args : services=$services, modifier=$modifier, onClickRead=$onClickRead")
 
     LazyColumn(modifier = modifier) {
         item {
@@ -46,7 +51,7 @@ fun ServiceListNotNull(services: List<Service>, modifier: Modifier = Modifier) {
         }
 
         items(services) { service ->
-            Service(service = service, modifier = Modifier.fillMaxWidth())
+            Service(service = service, modifier = Modifier.fillMaxWidth(), onClickRead = onClickRead)
         }
     }
 }

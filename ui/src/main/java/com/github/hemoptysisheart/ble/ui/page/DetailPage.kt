@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
 import com.github.hemoptysisheart.ble.domain.Device
@@ -49,7 +50,8 @@ fun DetailPage(
         device = viewModel.device,
         connection = connection,
         onClickConnect = viewModel::onClickConnect,
-        onClickDisconnect = viewModel::onClickDisconnect
+        onClickDisconnect = viewModel::onClickDisconnect,
+        onClickRead = viewModel::onClickRead
     )
 }
 
@@ -59,7 +61,8 @@ internal fun DetailPageContent(
     device: Device,
     connection: Connection.State,
     onClickConnect: () -> Unit = { },
-    onClickDisconnect: () -> Unit = { }
+    onClickDisconnect: () -> Unit = { },
+    onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(
         TAG,
@@ -79,7 +82,7 @@ internal fun DetailPageContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         DeviceDetail(device, Modifier.fillMaxWidth())
-        ConnectionTemplate(connection, modifier = Modifier.fillMaxWidth())
+        ConnectionTemplate(connection, modifier = Modifier.fillMaxWidth(), onClickRead = onClickRead)
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outlineVariant)
 

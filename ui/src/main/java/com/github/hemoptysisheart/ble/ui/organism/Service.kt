@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Service
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.molecule.ServiceType
@@ -19,8 +20,8 @@ import com.github.hemoptysisheart.ble.ui.preview.ServiceProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier) {
-    Log.v(TAG, "#Service args : service=$service, modifier=$modifier")
+fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier, onClickRead: (Characteristic) -> Unit = {}) {
+    Log.v(TAG, "#Service args : service=$service, modifier=$modifier, onClickRead=$onClickRead")
 
     ListItem(
         headlineContent = {
@@ -31,7 +32,8 @@ fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier) {
                 characteristics = service.characteristics,
                 modifier = Modifier
                     .padding(start = 16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onClickRead = onClickRead
             )
         },
         modifier = modifier

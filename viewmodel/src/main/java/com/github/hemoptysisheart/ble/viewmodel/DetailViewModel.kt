@@ -2,6 +2,7 @@ package com.github.hemoptysisheart.ble.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.model.ConnectionModel
 import com.github.hemoptysisheart.ble.model.DeviceCacheModel
@@ -53,6 +54,14 @@ class DetailViewModel @Inject constructor(
 
         launch {
             _connection.disconnect()
+        }
+    }
+
+    fun onClickRead(characteristic: Characteristic) {
+        Log.d(tag, "#onClickRead args : characteristic=$characteristic")
+
+        launch {
+            characteristic.read()
         }
     }
 

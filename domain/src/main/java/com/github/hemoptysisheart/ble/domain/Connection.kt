@@ -6,6 +6,13 @@ import kotlinx.coroutines.flow.StateFlow
  * Bluetooth LE 연결.
  */
 interface Connection {
+    companion object {
+        /**
+         * Maximum Transmission Unit 기본값.
+         */
+        const val MTU_DEFAULT = 517
+    }
+
     /**
      * 연결 수준.
      */
@@ -28,6 +35,11 @@ interface Connection {
         val level: Level,
 
         /**
+         * Maximum Transmission Unit
+         */
+        val mtu: Int? = null,
+
+        /**
          * 연결이 사용할 수 있는 서비스 목록.
          */
         val services: List<Service>? = null
@@ -47,6 +59,11 @@ interface Connection {
      * 기기 연결 상태.
      */
     val level: Level
+
+    /**
+     * Maximum Transmission Unit
+     */
+    val mtu: Int?
 
     /**
      * 연결이 사용할 수 있는 서비스 목록.

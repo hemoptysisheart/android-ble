@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.github.hemoptysisheart.ble.domain.restricted
 import com.github.hemoptysisheart.ble.spec.core.Service
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.ServiceTypeProvider
@@ -39,6 +40,11 @@ fun ServiceType(service: Service, modifier: Modifier = Modifier) {
 
         Text(
             text = "UUID : ${service.uuid}",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodySmall
+        )
+        Text(
+            text = "제한된 서비스 : ${service.restricted}",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodySmall
         )

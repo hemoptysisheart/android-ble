@@ -30,4 +30,12 @@ abstract class AbstractConnection<D : AbstractDevice>(
             field = value
             _state.update { it.copy(services = value) }
         }
+
+    override var mtu: Int? = null
+        protected set(value) {
+            Log.d(tag, "#mtu.set : $value")
+
+            field = value
+            _state.update { it.copy(mtu = value) }
+        }
 }
