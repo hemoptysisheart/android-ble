@@ -2,122 +2,21 @@ package com.github.hemoptysisheart.ble.model
 
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
-import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothProfile.STATE_CONNECTED
-import android.bluetooth.BluetoothProfile.STATE_CONNECTING
-import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
-import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
-import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.Connection.Companion.MTU_DEFAULT
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Connection(
     device: Device,
-    private val gattConnector: (BluetoothGattCallback) -> BluetoothGatt
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    private val builder: (BluetoothGattCallback) -> BluetoothGatt
 ) : AbstractConnection<Device>("Connection/${device.address}", device) {
-    private val callback = object : BluetoothGattCallback() {
-        @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
-        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-            Log.d(tag, "#callback.onConnectionStateChange args : gatt=$gatt, status=$status, newState=$newState")
-            require(null != gatt) { "gatt is required" }
-
-            if (this@Connection.gatt !== gatt) {
-                Log.e(
-                    tag,
-                    "#callback.onConnectionStateChange gatt does not match : gatt=$gatt, connection.gatt=${this@Connection.gatt}"
-                )
-            }
-
-            if (BluetoothGatt.GATT_SUCCESS != status) {
-                throw IllegalArgumentException("status is not success : status=$status")
-            }
-
-            val newLevel = when (newState) {
-                STATE_DISCONNECTED ->
-                    Level.DISCONNECTED
-
-                STATE_CONNECTING ->
-                    Level.CONNECTING
-
-                STATE_CONNECTED ->
-                    Level.CONNECTED
-
-                STATE_DISCONNECTING ->
-                    Level.DISCONNECTING
-
-                else ->
-                    throw IllegalArgumentException("unsupported newState : newState=$newState")
-            }
-            Log.i(tag, "#callback.onConnectionStateChange : newLevel=$newLevel")
-
-            level = newLevel
-            if (Level.CONNECTED == newLevel) {
-                gatt!!.requestMtu(Connection.MTU_DEFAULT)
-                gatt.discoverServices()
-            }
-        }
-
-        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
-            require(null != gatt) { "gatt is required" }
-
-            if (BluetoothGatt.GATT_SUCCESS == status) {
-                this@Connection.mtu = mtu
-            }
-        }
-
-        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-            Log.d(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
-            require(null != gatt) { "gatt is required" }
-
-            if (this@Connection.gatt !== gatt) {
-                Log.e(
-                    tag,
-                    listOf(
-                        "gatt=$gatt",
-                        "connection.gatt=${this@Connection.gatt}"
-                    ).joinToString(", ", "#callback.onServicesDiscovered gatt does not match : ")
-                )
-            }
-
-            if (BluetoothGatt.GATT_SUCCESS != status) {
-                throw IllegalArgumentException("status is not success : status=$status")
-            }
-
-            updateService()
-        }
-
-        override fun onCharacteristicRead(
-            gatt: BluetoothGatt,
-            characteristic: BluetoothGattCharacteristic,
-            value: ByteArray,
-            status: Int
-        ) {
-            Log.d(
-                tag,
-                listOf(
-                    "gatt=$gatt",
-                    "characteristic=$characteristic",
-                    "value=${value.toList()}",
-                    "status=$status"
-                ).joinToString(", ", "#callback.onCharacteristicRead args : ")
-            )
-        }
-    }
-
-    private lateinit var gatt: BluetoothGatt
-
-    private fun updateService() {
-        Log.d(tag, "#updateService called.")
-
-        if (Level.CONNECTED != level) {
-            throw IllegalStateException("connection is not connected : level=$level")
-        }
-
-        services = gatt.services.map { Service(target = it, gatt = gatt) }
-    }
+    private val gattWrapper = GattWrapper(tag, builder)
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override fun connect() {
@@ -127,8 +26,12 @@ class Connection(
             throw IllegalStateException("connection is not disconnected : level=$level")
         }
 
-        level = Level.CONNECTING
-        gatt = gattConnector(callback)
+        scope.launch {
+            level = Level.CONNECTING
+            level = gattWrapper.connect()
+            mtu = gattWrapper.setMtu(MTU_DEFAULT)
+            services = gattWrapper.services()
+        }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
@@ -139,21 +42,17 @@ class Connection(
             throw IllegalStateException("connection is not connected : level=$level")
         }
 
-        level = Level.DISCONNECTING
-        services = null
-        gatt.disconnect()
+        scope.launch {
+            level = Level.DISCONNECTING
+            services = null
+            mtu = null
+            level = gattWrapper.disconnect()
+        }
     }
 
     override fun toString() = listOf(
         "device=$device",
         "state=${state.value}",
-        "gatt=${
-            if (::gatt.isInitialized) {
-                gatt.toString()
-            } else {
-                "not initialized"
-            }
-        }",
-        "callback=$callback"
+        "gatt=$gattWrapper",
     ).joinToString(", ", "$tag(", ")")
 }
