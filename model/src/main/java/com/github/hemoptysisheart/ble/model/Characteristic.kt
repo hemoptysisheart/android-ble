@@ -8,22 +8,22 @@ import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
 
 class Characteristic(
-    @Suppress("MemberVisibilityCanBePrivate")
-    val source: BluetoothGattCharacteristic,
+    private val target: BluetoothGattCharacteristic,
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
-    override val type: Characteristic = Characteristic(source.uuid)
-        ?: CustomCharacteristic(source.uuid)
+    override val type: Characteristic = Characteristic(target.uuid)
+        ?: CustomCharacteristic(target.uuid)
+
     override val readable: Boolean
-        get() = source.properties and PROPERTY_READ != 0
+        get() = target.properties and PROPERTY_READ != 0
 
     override val writable: Boolean
-        get() = source.properties and PROPERTY_WRITE != 0
+        get() = target.properties and PROPERTY_WRITE != 0
 
     override val writableWithoutResponse: Boolean
-        get() = source.properties and PROPERTY_WRITE_NO_RESPONSE != 0
+        get() = target.properties and PROPERTY_WRITE_NO_RESPONSE != 0
 
     override fun toString() = listOf(
-        "source=$source",
+        "target=$target",
         "type=$type",
         "readable=$readable",
         "writable=$writable",

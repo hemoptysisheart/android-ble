@@ -98,7 +98,7 @@ class Connection(
             throw IllegalStateException("connection is not connected : level=$level")
         }
 
-        services = gatt.services.map { Service(source = it) }
+        services = gatt.services.map { Service(target = it) }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")

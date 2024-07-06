@@ -6,16 +6,16 @@ import com.github.hemoptysisheart.ble.spec.core.CustomService
 import com.github.hemoptysisheart.ble.spec.core.Service
 
 class Service(
-    private val source: BluetoothGattService,
+    private val target: BluetoothGattService,
 ) : com.github.hemoptysisheart.ble.domain.Service {
-    override val type: Service = Service(source.uuid)
-        ?: CustomService(source.uuid)
+    override val type: Service = Service(target.uuid)
+        ?: CustomService(target.uuid)
 
-    override val characteristics: List<Characteristic> = source.characteristics
-        .map { Characteristic(it) }
+    override val characteristics: List<Characteristic> = target.characteristics
+        .map { Characteristic(target = it) }
 
     override fun toString() = listOf(
-        "source=$source",
+        "target=$target",
         "type=$type",
         "characteristics=$characteristics"
     ).joinToString(", ", "Service(", ")")
