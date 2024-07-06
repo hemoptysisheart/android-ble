@@ -21,7 +21,7 @@ class GattCharacteristicProcessor(
     companion object {
         private const val TAG = "GattCharacteristicProcessor"
 
-        const val FILE_NAME = "GattCharacteristic.kt"
+        const val FILE_NAME = "GattCharacteristics"
         const val MAP_NAME = "GATT_CHARACTERISTICS"
         const val MAP_TYPE_NAME = "Characteristic"
         const val MAP_ACTUAL_NAME = "StandardCharacteristic"
