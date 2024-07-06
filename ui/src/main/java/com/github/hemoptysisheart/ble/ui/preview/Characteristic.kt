@@ -17,9 +17,17 @@ val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC = PreviewCharacteristic(
 )
 
 val PREVIEW_CHARACTERISTIC_LIST: List<Characteristic> = listOf(
-    PREVIEW_RANDOM_STANDARD_CHARACTERISTIC
+    PREVIEW_RANDOM_STANDARD_CHARACTERISTIC,
+    PreviewCharacteristic(type = GATT_CHARACTERISTICS.values.random())
 )
 
 class CharacteristicProvider : PreviewParameterProvider<Characteristic> {
     override val values: Sequence<Characteristic> = PREVIEW_CHARACTERISTIC_LIST.asSequence()
+}
+
+class CharacteristicListProvider : PreviewParameterProvider<List<Characteristic>> {
+    override val values = sequenceOf(
+        emptyList(),
+        PREVIEW_CHARACTERISTIC_LIST
+    )
 }
