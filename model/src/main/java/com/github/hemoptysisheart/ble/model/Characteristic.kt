@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import com.github.hemoptysisheart.ble.domain.Descriptor
 import com.github.hemoptysisheart.ble.domain.toHexaString
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
@@ -31,6 +32,8 @@ class Characteristic(
     override val writableWithoutResponse: Boolean
         get() = target.properties and PROPERTY_WRITE_NO_RESPONSE != 0
 
+    override val descriptors: List<Descriptor> = target.descriptors.map { Descriptor(it) }
+
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override suspend fun read(): ByteArray {
         val bytes = gatt.read(this)
@@ -44,6 +47,7 @@ class Characteristic(
         "type=$type",
         "readable=$readable",
         "writable=$writable",
-        "writableWithoutResponse=$writableWithoutResponse"
+        "writableWithoutResponse=$writableWithoutResponse",
+        "descriptors=$descriptors"
     ).joinToString(", ", "$tag(", ")")
 }
