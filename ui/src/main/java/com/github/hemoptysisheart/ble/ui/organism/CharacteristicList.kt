@@ -18,13 +18,20 @@ import com.github.hemoptysisheart.ble.ui.preview.CharacteristicListProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun CharacteristicList(characteristics: List<Characteristic>, modifier: Modifier = Modifier) {
-    Log.v(TAG, "#CharacteristicList args : characteristics=$characteristics, modifier=$modifier")
+fun CharacteristicList(
+    characteristics: List<Characteristic>,
+    modifier: Modifier = Modifier,
+    onClickRead: (Characteristic) -> Unit = {}
+) {
+    Log.v(
+        TAG,
+        "#CharacteristicList args : characteristics=$characteristics, modifier=$modifier, onClickRead=$onClickRead"
+    )
 
     if (characteristics.isEmpty()) {
         CharacteristicListEmpty(modifier = modifier)
     } else {
-        CharacteristicListNotEmpty(characteristics = characteristics, modifier = modifier)
+        CharacteristicListNotEmpty(characteristics = characteristics, modifier = modifier, onClickRead = onClickRead)
     }
 }
 
@@ -39,11 +46,19 @@ fun CharacteristicListEmpty(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CharacteristicListNotEmpty(characteristics: List<Characteristic>, modifier: Modifier = Modifier) {
+fun CharacteristicListNotEmpty(
+    characteristics: List<Characteristic>,
+    modifier: Modifier = Modifier,
+    onClickRead: (Characteristic) -> Unit = {}
+) {
     Column(modifier = modifier) {
         for (characteristic in characteristics) {
             Spacer(modifier = Modifier.height(8.dp))
-            Characteristic(characteristic = characteristic, modifier = Modifier.fillMaxWidth())
+            Characteristic(
+                characteristic = characteristic,
+                modifier = Modifier.fillMaxWidth(),
+                onClickRead = onClickRead
+            )
         }
     }
 }

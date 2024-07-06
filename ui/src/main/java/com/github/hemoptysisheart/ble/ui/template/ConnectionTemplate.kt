@@ -15,6 +15,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.preview.ConnectionStateProvider
@@ -23,9 +24,10 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 @Composable
 fun ColumnScope.ConnectionTemplate(
     connection: Connection.State,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickRead: (Characteristic) -> Unit = {}
 ) {
-    Log.v(TAG, "#Connection args : connection=$connection")
+    Log.v(TAG, "#Connection args : connection=$connection, modifier=$modifier, onClickRead=$onClickRead")
 
     Text(
         text = "Connection Lv. : ${connection.level.label}",
@@ -62,7 +64,8 @@ fun ColumnScope.ConnectionTemplate(
         modifier = modifier
             .weight(1F)
             .background(MaterialTheme.colorScheme.background)
-            .padding(start = 16.dp)
+            .padding(start = 16.dp),
+        onClickRead = onClickRead
     )
 }
 
