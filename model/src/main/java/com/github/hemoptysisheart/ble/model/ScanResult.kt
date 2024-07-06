@@ -186,5 +186,5 @@ fun ScanResult.log(tag: String) {
         ).joinToString(", ")
     }
 
-    Log.d(tag, "#ScanResult.log : device=${this.device}(name=${this.device.name}), $device")
+    Log.v(tag, "#ScanResult.log : device=${this.device}(name=${this.device.name}), $device")
 }

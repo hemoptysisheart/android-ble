@@ -71,6 +71,17 @@ fun ColumnScope.Characteristic(
         Checkbox(checked = characteristic.writableWithoutResponse, onCheckedChange = null, enabled = false)
         Text(text = "Writable without Response", color = MaterialTheme.colorScheme.onBackground)
     }
+
+    if (characteristic.descriptors.isEmpty()) {
+        Text(text = "No Descriptor", color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.fillMaxWidth())
+    } else for (descriptor in characteristic.descriptors) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "${descriptor.type.name}${if (descriptor.readable) ", readable" else ", not-readable"}${if (descriptor.writable) ", writable" else ", not-writable"}",
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable

@@ -23,5 +23,5 @@ class StandardDescriptor(
         "uuid=$uuid",
         "id=$id",
         "name=$name"
-    ).joinToString(", ", "DescriptorImpl(", ")")
+    ).joinToString(", ", "StandardDescriptor(", ")")
 }
