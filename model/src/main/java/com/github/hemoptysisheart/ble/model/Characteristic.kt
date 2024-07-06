@@ -1,10 +1,12 @@
 package com.github.hemoptysisheart.ble.model
 
-import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
+import android.util.Log
+import androidx.annotation.RequiresPermission
+import com.github.hemoptysisheart.ble.domain.toHexaString
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
 
@@ -12,9 +14,11 @@ class Characteristic(
     /**
      * Android 시스템이 제공하는 캐릭터리스틱.
      */
-    private val target: BluetoothGattCharacteristic,
-    private val gatt: BluetoothGatt
+    internal val target: BluetoothGattCharacteristic,
+    private val gatt: GattWrapper
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
+    private val tag = "Characteristic/${target.uuid}"
+
     override val type: Characteristic = Characteristic(target.uuid)
         ?: CustomCharacteristic(target.uuid)
 
@@ -27,8 +31,11 @@ class Characteristic(
     override val writableWithoutResponse: Boolean
         get() = target.properties and PROPERTY_WRITE_NO_RESPONSE != 0
 
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override suspend fun read(): ByteArray {
-        TODO("Not yet implemented")
+        val bytes = gatt.read(this)
+        Log.d(tag, "#read : bytes=${bytes.toHexaString()}")
+        return bytes
     }
 
     override fun toString() = listOf(
@@ -38,5 +45,5 @@ class Characteristic(
         "readable=$readable",
         "writable=$writable",
         "writableWithoutResponse=$writableWithoutResponse"
-    ).joinToString(", ", "Characteristic(", ")")
+    ).joinToString(", ", "$tag(", ")")
 }

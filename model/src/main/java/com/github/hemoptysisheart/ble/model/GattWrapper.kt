@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.github.hemoptysisheart.ble.domain.Connection.Companion.MTU_DEFAULT
 import com.github.hemoptysisheart.ble.domain.Connection.Level
 import kotlinx.coroutines.CompletableDeferred
 
@@ -34,7 +33,7 @@ class GattWrapper(
             }
 
             if (BluetoothGatt.GATT_SUCCESS != status) {
-                throw IllegalArgumentException("status is not success : status=$status")
+                throw IllegalArgumentException("status is not success : status=${"0x%02X".format(status)}($status)")
             }
 
             val newLevel = when (newState) {
@@ -91,7 +90,7 @@ class GattWrapper(
                 throw IllegalArgumentException("status is not success : status=$status")
             }
 
-            val services = gatt!!.services.map { Service(target = it, gatt = gatt) }
+            val services = gatt!!.services.map { Service(target = it, gatt = this@GattWrapper) }
             Log.d(tag, "#callback.onServicesDiscovered : services=${services}")
             this@GattWrapper.services?.complete(services)
         }
@@ -111,6 +110,17 @@ class GattWrapper(
                     "status=$status"
                 ).joinToString(", ", "#callback.onCharacteristicRead args : ")
             )
+
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            val read = characteristicsRead[characteristic]
+            if (null == read) {
+                Log.e(tag, "#callback.onCharacteristicRead read is not set : characteristic=${characteristic}")
+                throw IllegalStateException("read is not set")
+            }
+            read.complete(value)
         }
     }
 
@@ -119,6 +129,7 @@ class GattWrapper(
     private var level: CompletableDeferred<Level>? = null
     private var mtu: CompletableDeferred<Int>? = null
     private var services: CompletableDeferred<List<Service>>? = null
+    private val characteristicsRead = mutableMapOf<BluetoothGattCharacteristic, CompletableDeferred<ByteArray>>()
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     suspend fun connect(): Level {
@@ -130,7 +141,6 @@ class GattWrapper(
         level = CompletableDeferred()
 
         gatt = builder(callback)
-        gatt.requestMtu(MTU_DEFAULT)
 
         return level?.await()
             ?: throw IllegalStateException("level is not set")
@@ -191,6 +201,30 @@ class GattWrapper(
         mtu!!.cancel()
         mtu = null
 
+        characteristicsRead.clear()
+
         return lv
+    }
+
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
+    suspend fun read(characteristic: Characteristic): ByteArray {
+        Log.d(tag, "#read args : characteristic=$characteristic")
+
+        when {
+            null == level || Level.CONNECTED != level?.await() ->
+                throw IllegalStateException("level is not connected : level=${level?.await()}")
+
+            characteristicsRead.containsKey(characteristic.target) ->
+                throw IllegalStateException("characteristic is already in read : characteristic=${characteristic}")
+        }
+
+        val read = CompletableDeferred<ByteArray>()
+        characteristicsRead[characteristic.target] = read
+
+        gatt.readCharacteristic(characteristic.target)
+        val bytes = read.await()
+
+        characteristicsRead.remove(characteristic.target)
+        return bytes
     }
 }
