@@ -1,3 +1,7 @@
 package com.github.hemoptysisheart.ble.spec.core
 
-interface Descriptor : Attribute
+interface Descriptor : Attribute {
+    val name: String?
+
+    val id: String?
+}
