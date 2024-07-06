@@ -11,10 +11,6 @@ import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.AbstractConnection
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
-import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
-import com.github.hemoptysisheart.ble.spec.core.CustomService
-import com.github.hemoptysisheart.ble.spec.core.Service
-import kotlinx.coroutines.flow.update
 
 class Connection(
     device: Device,
@@ -62,6 +58,15 @@ class Connection(
             }
         }
 
+        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
+            require(null != gatt) { "gatt is required" }
+
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                this@Connection.mtu = mtu
+            }
+        }
+
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             Log.d(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
             require(null != gatt) { "gatt is required" }
@@ -82,26 +87,9 @@ class Connection(
 
             updateService()
         }
-
-        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
-            require(null != gatt) { "gatt is required" }
-
-            if (BluetoothGatt.GATT_SUCCESS == status) {
-                this@Connection.mtu = mtu
-            }
-        }
     }
 
     private lateinit var gatt: BluetoothGatt
-
-    override var mtu: Int? = null
-        private set(value) {
-            Log.d(tag, "#mtu.set : $value")
-
-            field = value
-            _state.update { it.copy(mtu = value) }
-        }
 
     private fun updateService() {
         Log.d(tag, "#updateService called.")
@@ -110,19 +98,7 @@ class Connection(
             throw IllegalStateException("connection is not connected : level=$level")
         }
 
-        services = gatt.services.map { service ->
-            Log.d(tag, "#updateService service=$service")
-            Service(
-                type = Service(service.uuid) ?: CustomService(service.uuid),
-                characteristics = service.characteristics.map { characteristic ->
-                    Log.d(tag, "#updateService characteristic=$characteristic")
-                    Characteristic(
-                        type = com.github.hemoptysisheart.ble.spec.core.Characteristic(characteristic.uuid)
-                            ?: CustomCharacteristic(characteristic.uuid)
-                    )
-                }
-            )
-        }
+        services = gatt.services.map { Service(source = it) }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
