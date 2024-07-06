@@ -75,3 +75,5 @@ fun DeviceClass(bleClass: BluetoothClass): DeviceClass {
 fun Service(uuid: UUID): Service? = GATT_SERVICES[uuid]
 
 fun Characteristic(uuid: UUID): Characteristic? = GATT_CHARACTERISTICS[uuid]
+
+fun Descriptor(uuid: UUID): Descriptor? = GATT_DESCRIPTORS[uuid]
