@@ -10,7 +10,9 @@ data class PreviewCharacteristic(
     override val readable: Boolean = true,
     override val writable: Boolean = Random.nextBoolean(),
     override val writableWithoutResponse: Boolean = Random.nextBoolean()
-) : Characteristic
+) : Characteristic {
+    override suspend fun read(): ByteArray = throw UnsupportedOperationException("preview does not support.")
+}
 
 val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC = PreviewCharacteristic(
     type = GATT_CHARACTERISTICS.values.random()

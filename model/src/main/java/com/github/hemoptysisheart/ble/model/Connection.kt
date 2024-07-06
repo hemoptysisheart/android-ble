@@ -2,6 +2,7 @@ package com.github.hemoptysisheart.ble.model
 
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothProfile.STATE_CONNECTED
 import android.bluetooth.BluetoothProfile.STATE_CONNECTING
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
@@ -87,6 +88,23 @@ class Connection(
 
             updateService()
         }
+
+        override fun onCharacteristicRead(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray,
+            status: Int
+        ) {
+            Log.d(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "characteristic=$characteristic",
+                    "value=${value.toList()}",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onCharacteristicRead args : ")
+            )
+        }
     }
 
     private lateinit var gatt: BluetoothGatt
@@ -98,7 +116,7 @@ class Connection(
             throw IllegalStateException("connection is not connected : level=$level")
         }
 
-        services = gatt.services.map { Service(target = it) }
+        services = gatt.services.map { Service(target = it, gatt = gatt) }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
