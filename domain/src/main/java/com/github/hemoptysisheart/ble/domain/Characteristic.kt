@@ -22,6 +22,10 @@ interface Characteristic {
      */
     val writableWithoutResponse: Boolean
 
+    val indicatable: Boolean
+
+    val notifiable: Boolean
+
     val descriptors: List<Descriptor>
 
     /**

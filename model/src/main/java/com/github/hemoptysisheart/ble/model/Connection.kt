@@ -15,8 +15,8 @@ class Connection(
     device: Device,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val builder: (BluetoothGattCallback) -> BluetoothGatt
-) : AbstractConnection<Device>("Connection/${device.address}", device) {
-    private val gattWrapper = GattWrapper(tag, builder)
+) : AbstractConnection<Device>("Connection/${device.address.takeLast(17)}", device) {
+    private val gatt = GattWrapper(device.address.takeLast(17), builder)
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override fun connect() {
@@ -28,9 +28,9 @@ class Connection(
 
         scope.launch {
             level = Level.CONNECTING
-            level = gattWrapper.connect()
-            mtu = gattWrapper.setMtu(MTU_DEFAULT)
-            services = gattWrapper.services()
+            level = gatt.connect()
+            mtu = gatt.setMtu(MTU_DEFAULT)
+            services = gatt.services()
         }
     }
 
@@ -46,13 +46,13 @@ class Connection(
             level = Level.DISCONNECTING
             services = null
             mtu = null
-            level = gattWrapper.disconnect()
+            level = gatt.disconnect()
         }
     }
 
     override fun toString() = listOf(
         "device=$device",
         "state=${state.value}",
-        "gatt=$gattWrapper",
+        "gatt=$gatt",
     ).joinToString(", ", "$tag(", ")")
 }

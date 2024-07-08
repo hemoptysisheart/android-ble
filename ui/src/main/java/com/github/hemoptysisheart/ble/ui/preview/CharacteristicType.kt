@@ -14,12 +14,12 @@ val PREVIEW_CHARACTERISTIC_TYPE_LIST = listOf(
 )
 
 class CharacteristicTypeProvider : PreviewParameterProvider<Characteristic> {
-    override val values: Sequence<Characteristic> = sequenceOf(
+    override val values: Sequence<Characteristic> = setOf(
         CustomCharacteristic(UUID.randomUUID()),
         GATT_CHARACTERISTICS.values.random(),
         GATT_CHARACTERISTICS.values.random(),
         GATT_CHARACTERISTICS.values.random()
-    )
+    ).asSequence()
 }
 
 class CharacteristicTypeListProvider : PreviewParameterProvider<List<Characteristic>> {

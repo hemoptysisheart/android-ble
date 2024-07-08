@@ -6,4 +6,6 @@ interface Descriptor {
     val readable: Boolean
 
     val writable: Boolean
+
+    suspend fun write(value: ByteArray)
 }

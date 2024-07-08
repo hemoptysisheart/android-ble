@@ -8,16 +8,18 @@ import android.bluetooth.BluetoothProfile.STATE_CONNECTED
 import android.bluetooth.BluetoothProfile.STATE_CONNECTING
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
+import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.domain.toHexaString
 import kotlinx.coroutines.CompletableDeferred
 
 /**
  * [BluetoothGatt]와 [BluetoothGattCallback]을 래핑해서 `suspend fun` 함수로 제공한다.
  */
 class GattWrapper(
-    private val tag: String,
+    internal val id: String,
     private val builder: (BluetoothGattCallback) -> BluetoothGatt
 ) {
     private val callback = object : BluetoothGattCallback() {
@@ -125,7 +127,7 @@ class GattWrapper(
                 throw IllegalArgumentException("status is not success : status=$status")
             }
 
-            val read = characteristicsRead[characteristic]
+            val read = characteristicRead[characteristic]
             if (null == read) {
                 Log.e(tag, "#callback.onCharacteristicRead read is not set : characteristic=${characteristic}")
                 throw IllegalStateException("read is not set")
@@ -251,7 +253,10 @@ class GattWrapper(
     private var level: CompletableDeferred<Level>? = null
     private var mtu: CompletableDeferred<Int>? = null
     private var services: CompletableDeferred<List<Service>>? = null
-    private val characteristicsRead = mutableMapOf<BluetoothGattCharacteristic, CompletableDeferred<ByteArray>>()
+    private val characteristicRead = mutableMapOf<BluetoothGattCharacteristic, CompletableDeferred<ByteArray>>()
+    private val descriptorWrite = mutableMapOf<BluetoothGattDescriptor, CompletableDeferred<Unit>>()
+
+    val tag = "GattWrapper/$id"
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     suspend fun connect(): Level {
@@ -323,7 +328,7 @@ class GattWrapper(
         mtu!!.cancel()
         mtu = null
 
-        characteristicsRead.clear()
+        characteristicRead.clear()
 
         return lv
     }
@@ -336,17 +341,43 @@ class GattWrapper(
             null == level || Level.CONNECTED != level?.await() ->
                 throw IllegalStateException("level is not connected : level=${level?.await()}")
 
-            characteristicsRead.containsKey(characteristic.target) ->
+            characteristicRead.containsKey(characteristic.target) ->
                 throw IllegalStateException("characteristic is already in read : characteristic=${characteristic}")
         }
 
         val read = CompletableDeferred<ByteArray>()
-        characteristicsRead[characteristic.target] = read
+        characteristicRead[characteristic.target] = read
 
         gatt.readCharacteristic(characteristic.target)
         val bytes = read.await()
 
-        characteristicsRead.remove(characteristic.target)
+        characteristicRead.remove(characteristic.target)
         return bytes
+    }
+
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
+    suspend fun write(descriptor: Descriptor, value: ByteArray) {
+        Log.d(tag, "#write args : descriptor=$descriptor, value=${value.toHexaString()}")
+
+        when {
+            null == level || Level.CONNECTED != level?.await() ->
+                throw IllegalStateException("level is not connected : level=${level?.await()}")
+
+            descriptorWrite.containsKey(descriptor.target) ->
+                throw IllegalStateException("descriptor is already in write : descriptor=${descriptor}")
+        }
+
+        val write = CompletableDeferred<Unit>()
+        descriptorWrite[descriptor.target] = write
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            gatt.writeDescriptor(descriptor.target, value)
+        } else {
+            descriptor.target.value = value
+            gatt.writeDescriptor(descriptor.target)
+        }
+
+        write.await()
+        descriptorWrite.remove(descriptor.target)
     }
 }

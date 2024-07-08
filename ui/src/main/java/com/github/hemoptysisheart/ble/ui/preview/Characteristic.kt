@@ -4,7 +4,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Descriptor
 import com.github.hemoptysisheart.ble.spec.core.GATT_CHARACTERISTICS
-import com.github.hemoptysisheart.ble.spec.core.GATT_DESCRIPTORS
 import kotlin.random.Random
 
 data class PreviewCharacteristic(
@@ -12,6 +11,8 @@ data class PreviewCharacteristic(
     override val readable: Boolean = true,
     override val writable: Boolean = Random.nextBoolean(),
     override val writableWithoutResponse: Boolean = Random.nextBoolean(),
+    override val indicatable: Boolean = Random.nextBoolean(),
+    override val notifiable: Boolean = Random.nextBoolean(),
     override val descriptors: List<Descriptor> = emptyList()
 ) : Characteristic {
     override suspend fun read(): ByteArray = throw UnsupportedOperationException("preview does not support.")
@@ -20,13 +21,7 @@ data class PreviewCharacteristic(
 val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC: PreviewCharacteristic
     get() = PreviewCharacteristic(
         type = GATT_CHARACTERISTICS.values.random(),
-        descriptors = (0..Random.nextInt(0, 3)).map {
-            object : Descriptor {
-                override val type = GATT_DESCRIPTORS.values.random()
-                override val readable = Random.nextBoolean()
-                override val writable = Random.nextBoolean()
-            }
-        }
+        descriptors = PREVIEW_STANDARD_DESCRIPTORS.map { PreviewDescriptor(it) }
     )
 
 val PREVIEW_CHARACTERISTIC_LIST: List<Characteristic> = listOf(
