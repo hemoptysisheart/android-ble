@@ -34,5 +34,11 @@ class BleSpecConfigurationProcessor(
                     .first { "gattCharacteristic" == it.name?.asString() }
                     .value as KSAnnotation
             )
+        GattDescriptorProcessor(this.configuration)
+            .process(
+                configuration.arguments
+                    .first { "gattDescriptor" == it.name?.asString() }
+                    .value as KSAnnotation
+            )
     }
 }

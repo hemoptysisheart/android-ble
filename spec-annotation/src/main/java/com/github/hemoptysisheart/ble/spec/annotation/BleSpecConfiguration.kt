@@ -16,5 +16,10 @@ annotation class BleSpecConfiguration(
     /**
      * 3.8 Characteristics
      */
-    val gattCharacteristic: GattCharacteristicConfiguration = GattCharacteristicConfiguration()
+    val gattCharacteristic: GattCharacteristicConfiguration = GattCharacteristicConfiguration(),
+
+    /**
+     * 3.7 Descriptors
+     */
+    val gattDescriptor: GattDescriptorConfiguration = GattDescriptorConfiguration()
 )

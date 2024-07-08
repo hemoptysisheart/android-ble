@@ -22,6 +22,8 @@ interface Characteristic {
      */
     val writableWithoutResponse: Boolean
 
+    val descriptors: List<Descriptor>
+
     /**
      * 캐릭터리스틱의 값을 읽는다.
      *

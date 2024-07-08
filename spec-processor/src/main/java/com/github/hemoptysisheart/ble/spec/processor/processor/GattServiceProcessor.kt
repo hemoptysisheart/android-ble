@@ -22,7 +22,7 @@ class GattServiceProcessor(
     companion object {
         private const val TAG = "GattServiceProcessor"
 
-        const val FILE_NAME = "GattService.kt"
+        const val FILE_NAME = "GattServices"
         const val MAP_NAME = "GATT_SERVICES"
         const val MAP_TYPE_NAME = "Service"
         const val MAP_ACTUAL_NAME = "StandardService"

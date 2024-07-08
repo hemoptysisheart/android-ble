@@ -2,7 +2,7 @@ package com.github.hemoptysisheart.ble.spec.processor.processor
 
 import com.github.hemoptysisheart.ble.spec.processor.LOGGER
 import com.github.hemoptysisheart.ble.spec.processor.config.Config
-import com.github.hemoptysisheart.ble.spec.processor.loader.GattCharacteristicLoader
+import com.github.hemoptysisheart.ble.spec.processor.loader.GattDescriptorLoader
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.squareup.kotlinpoet.ClassName
@@ -15,41 +15,43 @@ import com.squareup.kotlinpoet.ksp.writeTo
 import java.nio.file.Paths
 import java.util.UUID
 
-class GattCharacteristicProcessor(
+class GattDescriptorProcessor(
     private val configuration: Config
 ) {
     companion object {
-        private const val TAG = "GattCharacteristicProcessor"
+        private const val TAG = "GattDescriptorProcessor"
 
-        const val FILE_NAME = "GattCharacteristics"
-        const val MAP_NAME = "GATT_CHARACTERISTICS"
-        const val MAP_TYPE_NAME = "Characteristic"
-        const val MAP_ACTUAL_NAME = "StandardCharacteristic"
+        const val FILE_NAME = "GattDescriptors"
+        const val MAP_NAME = "GATT_DESCRIPTORS"
+        const val MAP_TYPE_NAME = "Descriptor"
+        const val MAP_ACTUAL_NAME = "StandardDescriptor"
     }
 
     fun process(configuration: KSAnnotation) {
-        LOGGER.info("$TAG#process args : configuration=$configuration")
+        LOGGER.info("$TAG#process args : ksAnnotation=${configuration}")
 
         val file = Paths.get(
             this.configuration.source.path.absolutePath,
             configuration.arguments.first { "file" == it.name?.asString() }.value as String
         ).toFile()
-        val loader = GattCharacteristicLoader(file)
+        val loader = GattDescriptorLoader(file)
         LOGGER.info("${TAG}#process : file=$file, loader=$loader")
 
         val packageName = "${this.configuration.target.packageName}.core"
         val mapBuilder = CodeBlock.builder()
             .add("listOf(\n")
-        for (characteristic in loader.load().uuids) {
-            LOGGER.info("$TAG#process : characteristic=$characteristic")
+        for (descriptor in loader.load().uuids) {
+            LOGGER.info("$TAG#process : descriptor=$descriptor")
+
             mapBuilder.add(
                 "$MAP_ACTUAL_NAME(%L, %S, %S),\n",
-                "0x${characteristic.uuid.toString(16).uppercase()}",
-                characteristic.id,
-                characteristic.name
+                "0x${descriptor.uuid.toString(16).uppercase()}",
+                descriptor.id,
+                descriptor.name
             )
         }
         mapBuilder.add(").associateBy { it.uuid }")
+
 
         FileSpec.builder(packageName, FILE_NAME)
             .addProperty(
@@ -64,6 +66,4 @@ class GattCharacteristicProcessor(
             .build()
             .writeTo(this.configuration.target.codeGenerator, Dependencies(true))
     }
-
-    override fun toString() = "$TAG(configuration=$configuration)"
 }
