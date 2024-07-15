@@ -29,6 +29,7 @@ fun ColumnScope.Characteristic(
     characteristic: Characteristic,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {},
 ) {
     Log.v(TAG, "#Characteristic args : characteristic=$characteristic, modifier=$modifier")
@@ -46,6 +47,12 @@ fun ColumnScope.Characteristic(
         if (characteristic.notifiable) {
             Button(onClick = { onClickNotification(characteristic) }, Modifier.padding(4.dp)) {
                 Text(text = "Notification", color = MaterialTheme.colorScheme.onPrimary)
+            }
+        }
+
+        if (characteristic.indicatable) {
+            Button(onClick = { onClickIndication(characteristic) }, Modifier.padding(4.dp)) {
+                Text(text = "Indication", color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

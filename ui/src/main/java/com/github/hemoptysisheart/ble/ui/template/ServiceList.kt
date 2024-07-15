@@ -22,6 +22,7 @@ fun ServiceList(
     services: List<Service>?,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     if (null == services) {
@@ -31,6 +32,7 @@ fun ServiceList(
             services = services,
             modifier = modifier,
             onClickNotification = onClickNotification,
+            onClickIndication = onClickIndication,
             onClickRead = onClickRead
         )
     }
@@ -48,6 +50,7 @@ fun ServiceListNotNull(
     services: List<Service>,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(TAG, "#ServiceListNotNull args : services=$services, modifier=$modifier, onClickRead=$onClickRead")
@@ -66,6 +69,7 @@ fun ServiceListNotNull(
                 service = service,
                 modifier = Modifier.fillMaxWidth(),
                 onClickNotification = onClickNotification,
+                onClickIndication = onClickIndication,
                 onClickRead = onClickRead
             )
         }

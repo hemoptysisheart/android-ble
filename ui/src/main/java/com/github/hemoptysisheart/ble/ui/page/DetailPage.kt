@@ -52,6 +52,7 @@ fun DetailPage(
         onClickConnect = viewModel::onClickConnect,
         onClickDisconnect = viewModel::onClickDisconnect,
         onClickNotification = viewModel::onClickNotification,
+        onClickIndication = viewModel::onClickIndication,
         onClickRead = viewModel::onClickRead
     )
 }
@@ -64,6 +65,7 @@ internal fun DetailPageContent(
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { },
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(
@@ -90,6 +92,7 @@ internal fun DetailPageContent(
             connection,
             modifier = Modifier.fillMaxWidth(),
             onClickNotification = onClickNotification,
+            onClickIndication = onClickIndication,
             onClickRead = onClickRead
         )
         Spacer(modifier = Modifier.height(8.dp))

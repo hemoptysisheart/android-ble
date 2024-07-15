@@ -26,6 +26,7 @@ fun ColumnScope.ConnectionTemplate(
     connection: Connection.State,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(TAG, "#Connection args : connection=$connection, modifier=$modifier, onClickRead=$onClickRead")
@@ -67,6 +68,7 @@ fun ColumnScope.ConnectionTemplate(
             .background(MaterialTheme.colorScheme.background)
             .padding(start = 16.dp),
         onClickNotification = onClickNotification,
+        onClickIndication = onClickIndication,
         onClickRead = onClickRead
     )
 }

@@ -51,10 +51,27 @@ class Characteristic(
     override suspend fun requestNotify() {
         Log.d(tag, "#requestNotify called.")
 
+        if (!notifiable) {
+            throw IllegalStateException("Notifiable is false.")
+        }
+
         val cccd = descriptors.firstOrNull { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
             ?: throw IllegalStateException("Client Characteristic Configuration descriptor not found.")
 
         cccd.write(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+    }
+
+    override suspend fun requestIndicate() {
+        Log.d(tag, "#requestIndicate called.")
+
+        if (!indicatable) {
+            throw IllegalStateException("Indicatable is false.")
+        }
+
+        val cccd = descriptors.firstOrNull { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
+            ?: throw IllegalStateException("Client Characteristic Configuration descriptor not found.")
+
+        cccd.write(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE)
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")

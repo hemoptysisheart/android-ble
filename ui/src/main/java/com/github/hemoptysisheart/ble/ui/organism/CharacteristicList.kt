@@ -22,6 +22,7 @@ fun CharacteristicList(
     characteristics: List<Characteristic>,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(
@@ -36,6 +37,7 @@ fun CharacteristicList(
             characteristics = characteristics,
             modifier = modifier,
             onClickNotification = onClickNotification,
+            onClickIndication = onClickIndication,
             onClickRead = onClickRead
         )
     }
@@ -56,6 +58,7 @@ fun CharacteristicListNotEmpty(
     characteristics: List<Characteristic>,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Column(modifier = modifier) {
@@ -65,6 +68,7 @@ fun CharacteristicListNotEmpty(
                 characteristic = characteristic,
                 modifier = Modifier.fillMaxWidth(),
                 onClickNotification = onClickNotification,
+                onClickIndication = onClickIndication,
                 onClickRead = onClickRead
             )
         }

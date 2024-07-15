@@ -24,6 +24,7 @@ fun LazyItemScope.Service(
     service: Service,
     modifier: Modifier = Modifier,
     onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(TAG, "#Service args : service=$service, modifier=$modifier, onClickRead=$onClickRead")
@@ -39,6 +40,7 @@ fun LazyItemScope.Service(
                     .padding(start = 16.dp)
                     .fillMaxWidth(),
                 onClickNotification = onClickNotification,
+                onClickIndication = onClickIndication,
                 onClickRead = onClickRead
             )
         },
