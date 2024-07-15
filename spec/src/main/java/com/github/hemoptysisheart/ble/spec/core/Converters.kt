@@ -67,7 +67,6 @@ fun DeviceClass(bleClass: BluetoothClass): DeviceClass {
         it.major == major &&
                 it.value == value
     }
-    println("bleClass=$bleClass(0x${bleClass.majorDeviceClass.toString(16)}, 0x${bleClass.deviceClass.toString(16)}), major=$major, value=$value => $deviceClass")
     return deviceClass
         ?: throw IllegalArgumentException("unsupported deviceClass : bleClass=$bleClass")
 }

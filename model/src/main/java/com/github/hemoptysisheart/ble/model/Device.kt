@@ -18,4 +18,10 @@ class Device(
     override val category: DeviceClass = DeviceClass(source.bluetoothClass)
 
     override val services: List<MajorServiceClass> = MajorServiceClass(source.bluetoothClass)
+
+    init {
+        require(BluetoothDevice.DEVICE_TYPE_CLASSIC != source.type) {
+            "classic device not supported : type=${source.type}"
+        }
+    }
 }

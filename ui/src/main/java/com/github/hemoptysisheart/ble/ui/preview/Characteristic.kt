@@ -11,14 +11,25 @@ data class PreviewCharacteristic(
     override val readable: Boolean = true,
     override val writable: Boolean = Random.nextBoolean(),
     override val writableWithoutResponse: Boolean = Random.nextBoolean(),
+    override val indicatable: Boolean = Random.nextBoolean(),
+    override val notifiable: Boolean = Random.nextBoolean(),
     override val descriptors: List<Descriptor> = emptyList()
 ) : Characteristic {
-    override suspend fun read(): ByteArray = throw UnsupportedOperationException("preview does not support.")
+    override suspend fun indication(enable: Boolean) =
+        throw UnsupportedOperationException("preview does not support.")
+
+    override suspend fun notification(enable: Boolean) =
+        throw UnsupportedOperationException("preview does not support.")
+
+    override suspend fun read(): ByteArray =
+        throw UnsupportedOperationException("preview does not support.")
 }
 
-val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC = PreviewCharacteristic(
-    type = GATT_CHARACTERISTICS.values.random()
-)
+val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC: PreviewCharacteristic
+    get() = PreviewCharacteristic(
+        type = GATT_CHARACTERISTICS.values.random(),
+        descriptors = PREVIEW_STANDARD_DESCRIPTORS.map { PreviewDescriptor(it) }
+    )
 
 val PREVIEW_CHARACTERISTIC_LIST: List<Characteristic> = listOf(
     PREVIEW_RANDOM_STANDARD_CHARACTERISTIC,

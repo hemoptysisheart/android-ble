@@ -20,7 +20,13 @@ import com.github.hemoptysisheart.ble.ui.preview.ServiceProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier, onClickRead: (Characteristic) -> Unit = {}) {
+fun LazyItemScope.Service(
+    service: Service,
+    modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
+    onClickRead: (Characteristic) -> Unit = {}
+) {
     Log.v(TAG, "#Service args : service=$service, modifier=$modifier, onClickRead=$onClickRead")
 
     ListItem(
@@ -33,6 +39,8 @@ fun LazyItemScope.Service(service: Service, modifier: Modifier = Modifier, onCli
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .fillMaxWidth(),
+                onClickNotification = onClickNotification,
+                onClickIndication = onClickIndication,
                 onClickRead = onClickRead
             )
         },

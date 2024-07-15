@@ -10,15 +10,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.random.Random
 
+/**
+ * 연결 안됨.
+ */
 internal val PREVIEW_CONNECTION_STATE_DISCONNECTED = State(Level.DISCONNECTED)
 
+/**
+ * 연결중.
+ */
 internal val PREVIEW_CONNECTION_STATE_CONNECTING = State(Level.CONNECTING)
 
+/**
+ * 연결됨.
+ */
 internal val PREVIEW_CONNECTION_STATE_CONNECTED = State(
     level = Level.CONNECTED,
     services = PREVIEW_SERVICE_LIST.filter { Random.nextBoolean() }
 )
 
+/**
+ * 연결 끊는 중.
+ */
 internal val PREVIEW_CONNECTION_STATE_DISCONNECTING = State(Level.DISCONNECTING)
 
 internal class PreviewConnection(
@@ -34,24 +46,36 @@ internal class PreviewConnection(
     override fun disconnect() = throw UnsupportedOperationException("this is preview.")
 }
 
+/**
+ * 연결 안됨.
+ */
 val PREVIEW_CONNECTION_DISCONNECTED: Connection = PreviewConnection(
     level = Level.DISCONNECTED,
     device = PREVIEW_DEVICE_LIST.random(),
     services = null
 )
 
+/**
+ * 연결중.
+ */
 val PREVIEW_CONNECTION_CONNECTING: Connection = PreviewConnection(
     level = Level.CONNECTING,
     device = PREVIEW_DEVICE_LIST.random(),
     services = null
 )
 
+/**
+ * 연결됨.
+ */
 val PREVIEW_CONNECTION_CONNECTED: Connection = PreviewConnection(
     level = Level.CONNECTED,
     device = PREVIEW_DEVICE_LIST.random(),
     services = PREVIEW_SERVICE_LIST.filter { Random.nextBoolean() }
 )
 
+/**
+ * 연결 끊는 중.
+ */
 val PREVIEW_CONNECTION_DISCONNECTING: Connection = PreviewConnection(
     level = Level.DISCONNECTING,
     device = PREVIEW_DEVICE_LIST.random(),

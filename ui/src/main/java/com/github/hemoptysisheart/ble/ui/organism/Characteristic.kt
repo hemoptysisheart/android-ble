@@ -2,6 +2,7 @@ package com.github.hemoptysisheart.ble.ui.organism
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -27,12 +28,34 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 fun ColumnScope.Characteristic(
     characteristic: Characteristic,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {},
 ) {
     Log.v(TAG, "#Characteristic args : characteristic=$characteristic, modifier=$modifier")
 
     CharacteristicType(characteristic = characteristic.type, modifier = Modifier.fillMaxWidth())
     Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 2.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (characteristic.notifiable) {
+            Button(onClick = { onClickNotification(characteristic) }, Modifier.padding(4.dp)) {
+                Text(text = "Notification", color = MaterialTheme.colorScheme.onPrimary)
+            }
+        }
+
+        if (characteristic.indicatable) {
+            Button(onClick = { onClickIndication(characteristic) }, Modifier.padding(4.dp)) {
+                Text(text = "Indication", color = MaterialTheme.colorScheme.onPrimary)
+            }
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -70,6 +93,17 @@ fun ColumnScope.Characteristic(
     ) {
         Checkbox(checked = characteristic.writableWithoutResponse, onCheckedChange = null, enabled = false)
         Text(text = "Writable without Response", color = MaterialTheme.colorScheme.onBackground)
+    }
+
+    if (characteristic.descriptors.isEmpty()) {
+        Text(text = "No Descriptor", color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.fillMaxWidth())
+    } else for (descriptor in characteristic.descriptors) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "${descriptor.type.name}${if (descriptor.readable) ", readable" else ", not-readable"}${if (descriptor.writable) ", writable" else ", not-writable"}",
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

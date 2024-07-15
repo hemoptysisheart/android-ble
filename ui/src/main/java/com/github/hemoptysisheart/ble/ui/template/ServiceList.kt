@@ -18,11 +18,23 @@ import com.github.hemoptysisheart.ble.ui.preview.ServiceListProvider
 import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 
 @Composable
-fun ServiceList(services: List<Service>?, modifier: Modifier = Modifier, onClickRead: (Characteristic) -> Unit = {}) {
+fun ServiceList(
+    services: List<Service>?,
+    modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
+    onClickRead: (Characteristic) -> Unit = {}
+) {
     if (null == services) {
         ServiceListNull(modifier = modifier)
     } else {
-        ServiceListNotNull(services = services, modifier = modifier, onClickRead = onClickRead)
+        ServiceListNotNull(
+            services = services,
+            modifier = modifier,
+            onClickNotification = onClickNotification,
+            onClickIndication = onClickIndication,
+            onClickRead = onClickRead
+        )
     }
 }
 
@@ -37,6 +49,8 @@ fun ServiceListNull(modifier: Modifier = Modifier) {
 fun ServiceListNotNull(
     services: List<Service>,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
+    onClickIndication: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(TAG, "#ServiceListNotNull args : services=$services, modifier=$modifier, onClickRead=$onClickRead")
@@ -51,7 +65,13 @@ fun ServiceListNotNull(
         }
 
         items(services) { service ->
-            Service(service = service, modifier = Modifier.fillMaxWidth(), onClickRead = onClickRead)
+            Service(
+                service = service,
+                modifier = Modifier.fillMaxWidth(),
+                onClickNotification = onClickNotification,
+                onClickIndication = onClickIndication,
+                onClickRead = onClickRead
+            )
         }
     }
 }

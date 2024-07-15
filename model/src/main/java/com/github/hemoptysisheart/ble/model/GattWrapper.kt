@@ -3,32 +3,65 @@ package com.github.hemoptysisheart.ble.model
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile.STATE_CONNECTED
 import android.bluetooth.BluetoothProfile.STATE_CONNECTING
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
+import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.domain.toHexaString
 import kotlinx.coroutines.CompletableDeferred
 
 /**
  * [BluetoothGatt]와 [BluetoothGattCallback]을 래핑해서 `suspend fun` 함수로 제공한다.
  */
 class GattWrapper(
-    private val tag: String,
+    internal val id: String,
     private val builder: (BluetoothGattCallback) -> BluetoothGatt
 ) {
     private val callback = object : BluetoothGattCallback() {
+        override fun onPhyUpdate(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
+            Log.v(tag, "#callback.onPhyUpdate args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
+            gatt!!
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            // TODO
+        }
+
+        override fun onPhyRead(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
+            Log.v(tag, "#callback.onPhyRead args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
+            gatt!!
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            // TODO
+        }
+
         @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-            Log.d(tag, "#callback.onConnectionStateChange args : gatt=$gatt, status=$status, newState=$newState")
+            Log.i(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "status=$status(${"0x%X".format(status)})",
+                    "newState=$newState(${"0x%X".format(newState)})"
+                ).joinToString(", ", "#callback.onConnectionStateChange args : ")
+            )
             require(null != gatt) { "gatt is required" }
 
             if (this@GattWrapper.gatt !== gatt) {
                 Log.e(
                     tag,
-                    "#callback.onConnectionStateChange gatt does not match : gatt=$gatt, this.gatt=${this@GattWrapper.gatt}"
+                    listOf(
+                        "gatt=$gatt",
+                        "this.gatt=${this@GattWrapper.gatt}"
+                    ).joinToString(", ", "#callback.onConnectionStateChange gatt does not match : ")
                 )
             }
 
@@ -61,19 +94,8 @@ class GattWrapper(
                 }
         }
 
-        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
-            require(null != gatt) { "gatt is required" }
-
-            if (BluetoothGatt.GATT_SUCCESS != status) {
-                throw IllegalArgumentException("status is not success : status=$status")
-            }
-
-            this@GattWrapper.mtu!!.complete(mtu)
-        }
-
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-            Log.d(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
+            Log.v(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
             require(null != gatt) { "gatt is required" }
 
             if (this@GattWrapper.gatt !== gatt) {
@@ -101,7 +123,7 @@ class GattWrapper(
             value: ByteArray,
             status: Int
         ) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -115,12 +137,140 @@ class GattWrapper(
                 throw IllegalArgumentException("status is not success : status=$status")
             }
 
-            val read = characteristicsRead[characteristic]
+            val read = characteristicRead[characteristic]
             if (null == read) {
                 Log.e(tag, "#callback.onCharacteristicRead read is not set : characteristic=${characteristic}")
                 throw IllegalStateException("read is not set")
             }
             read.complete(value)
+        }
+
+        override fun onCharacteristicChanged(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray
+        ) {
+            Log.i(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "characteristic=$characteristic",
+                    "value=${value.toList()}"
+                ).joinToString(", ", "#callback.onCharacteristicChanged args : ")
+            )
+
+//            val read = characteristicRead[characteristic]
+//            if (null == read) {
+//                Log.e(tag, "#callback.onCharacteristicChanged read is not set : characteristic=${characteristic}")
+//                throw IllegalStateException("read is not set")
+//            }
+//            read.complete(value)
+        }
+
+        override fun onCharacteristicWrite(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
+        ) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "characteristic=$characteristic",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onCharacteristicWrite args : ")
+            )
+
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            // TODO
+        }
+
+        override fun onDescriptorRead(
+            gatt: BluetoothGatt,
+            descriptor: BluetoothGattDescriptor,
+            status: Int,
+            value: ByteArray
+        ) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "descriptor=$descriptor",
+                    "status=$status",
+                    "value=${value.toList()}"
+                ).joinToString(", ", "#callback.onDescriptorRead args : ")
+            )
+
+            // TODO
+        }
+
+        override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "descriptor=$descriptor",
+                    "status=$status(${"0x%X".format(status)})"
+                ).joinToString(", ", "#callback.onDescriptorWrite args : ")
+            )
+            require(null != gatt) { "gatt is required" }
+            require(null != descriptor) { "descriptor is required" }
+
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=${"0x%02X".format(status)}($status)")
+            }
+
+            descriptorWrite[descriptor]?.complete(Unit)
+                ?: run {
+                    Log.e(tag, "#callback.onDescriptorWrite descriptorWrite is not set : descriptor=${descriptor}")
+                    throw IllegalStateException("descriptorWrite is not set")
+                }
+            descriptorWrite.remove(descriptor)
+        }
+
+        override fun onReliableWriteCompleted(gatt: BluetoothGatt?, status: Int) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onReliableWriteCompleted args : ")
+            )
+
+            // TODO
+        }
+
+        override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "rssi=$rssi",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onReadRemoteRssi args : ")
+            )
+
+            // TODO
+        }
+
+        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+            Log.v(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
+            require(null != gatt) { "gatt is required" }
+
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=$status")
+            }
+
+            this@GattWrapper.mtu!!.complete(mtu)
+        }
+
+        override fun onServiceChanged(gatt: BluetoothGatt) {
+            Log.v(tag, "#callback.onServiceChanged args : gatt=$gatt")
+
+            // TODO
         }
     }
 
@@ -129,7 +279,10 @@ class GattWrapper(
     private var level: CompletableDeferred<Level>? = null
     private var mtu: CompletableDeferred<Int>? = null
     private var services: CompletableDeferred<List<Service>>? = null
-    private val characteristicsRead = mutableMapOf<BluetoothGattCharacteristic, CompletableDeferred<ByteArray>>()
+    private val characteristicRead = mutableMapOf<BluetoothGattCharacteristic, CompletableDeferred<ByteArray>>()
+    private val descriptorWrite = mutableMapOf<BluetoothGattDescriptor, CompletableDeferred<Unit>>()
+
+    val tag = "GattWrapper/$id"
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     suspend fun connect(): Level {
@@ -201,30 +354,57 @@ class GattWrapper(
         mtu!!.cancel()
         mtu = null
 
-        characteristicsRead.clear()
+        characteristicRead.clear()
 
         return lv
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     suspend fun read(characteristic: Characteristic): ByteArray {
-        Log.d(tag, "#read args : characteristic=$characteristic")
+        Log.v(tag, "#read args : characteristic=$characteristic")
 
         when {
             null == level || Level.CONNECTED != level?.await() ->
                 throw IllegalStateException("level is not connected : level=${level?.await()}")
 
-            characteristicsRead.containsKey(characteristic.target) ->
+            characteristicRead.containsKey(characteristic.target) ->
                 throw IllegalStateException("characteristic is already in read : characteristic=${characteristic}")
         }
 
         val read = CompletableDeferred<ByteArray>()
-        characteristicsRead[characteristic.target] = read
+        characteristicRead[characteristic.target] = read
 
         gatt.readCharacteristic(characteristic.target)
         val bytes = read.await()
+        characteristicRead.remove(characteristic.target)
 
-        characteristicsRead.remove(characteristic.target)
+        Log.d(tag, "#read return : ${bytes.toHexaString()}")
         return bytes
+    }
+
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
+    suspend fun write(descriptor: Descriptor, value: ByteArray) {
+        Log.d(tag, "#write args : descriptor=$descriptor, value=${value.toHexaString()}")
+
+        when {
+            null == level || Level.CONNECTED != level?.await() ->
+                throw IllegalStateException("level is not connected : level=${level?.await()}")
+
+            descriptorWrite.containsKey(descriptor.target) ->
+                throw IllegalStateException("descriptor is already in write : descriptor=${descriptor}")
+        }
+
+        val write = CompletableDeferred<Unit>()
+        descriptorWrite[descriptor.target] = write
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            gatt.writeDescriptor(descriptor.target, value)
+        } else {
+            descriptor.target.value = value
+            gatt.writeDescriptor(descriptor.target)
+        }
+
+        write.await()
+        descriptorWrite.remove(descriptor.target)
     }
 }
