@@ -24,7 +24,7 @@ class GattWrapper(
 ) {
     private val callback = object : BluetoothGattCallback() {
         override fun onPhyUpdate(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
-            Log.d(tag, "#callback.onPhyUpdate args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
+            Log.v(tag, "#callback.onPhyUpdate args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
             gatt!!
             if (BluetoothGatt.GATT_SUCCESS != status) {
                 throw IllegalArgumentException("status is not success : status=$status")
@@ -34,7 +34,7 @@ class GattWrapper(
         }
 
         override fun onPhyRead(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
-            Log.d(tag, "#callback.onPhyRead args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
+            Log.v(tag, "#callback.onPhyRead args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
             gatt!!
             if (BluetoothGatt.GATT_SUCCESS != status) {
                 throw IllegalArgumentException("status is not success : status=$status")
@@ -45,13 +45,23 @@ class GattWrapper(
 
         @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-            Log.d(tag, "#callback.onConnectionStateChange args : gatt=$gatt, status=$status, newState=$newState")
+            Log.i(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "status=$status(${"0x%X".format(status)})",
+                    "newState=$newState(${"0x%X".format(newState)})"
+                ).joinToString(", ", "#callback.onConnectionStateChange args : ")
+            )
             require(null != gatt) { "gatt is required" }
 
             if (this@GattWrapper.gatt !== gatt) {
                 Log.e(
                     tag,
-                    "#callback.onConnectionStateChange gatt does not match : gatt=$gatt, this.gatt=${this@GattWrapper.gatt}"
+                    listOf(
+                        "gatt=$gatt",
+                        "this.gatt=${this@GattWrapper.gatt}"
+                    ).joinToString(", ", "#callback.onConnectionStateChange gatt does not match : ")
                 )
             }
 
@@ -85,7 +95,7 @@ class GattWrapper(
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-            Log.d(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
+            Log.v(tag, "#callback.onServicesDiscovered args : gatt=$gatt, status=$status")
             require(null != gatt) { "gatt is required" }
 
             if (this@GattWrapper.gatt !== gatt) {
@@ -113,7 +123,7 @@ class GattWrapper(
             value: ByteArray,
             status: Int
         ) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -140,7 +150,7 @@ class GattWrapper(
             characteristic: BluetoothGattCharacteristic?,
             status: Int
         ) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -161,7 +171,7 @@ class GattWrapper(
             characteristic: BluetoothGattCharacteristic,
             value: ByteArray
         ) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -179,7 +189,7 @@ class GattWrapper(
             status: Int,
             value: ByteArray
         ) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -193,12 +203,12 @@ class GattWrapper(
         }
 
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
                     "descriptor=$descriptor",
-                    "status=$status"
+                    "status=$status(${"0x%X".format(status)})"
                 ).joinToString(", ", "#callback.onDescriptorWrite args : ")
             )
 
@@ -206,7 +216,7 @@ class GattWrapper(
         }
 
         override fun onReliableWriteCompleted(gatt: BluetoothGatt?, status: Int) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -218,7 +228,7 @@ class GattWrapper(
         }
 
         override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {
-            Log.d(
+            Log.v(
                 tag,
                 listOf(
                     "gatt=$gatt",
@@ -231,7 +241,7 @@ class GattWrapper(
         }
 
         override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            Log.d(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
+            Log.v(tag, "#callback.onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
             require(null != gatt) { "gatt is required" }
 
             if (BluetoothGatt.GATT_SUCCESS != status) {
@@ -242,7 +252,7 @@ class GattWrapper(
         }
 
         override fun onServiceChanged(gatt: BluetoothGatt) {
-            Log.d(tag, "#callback.onServiceChanged args : gatt=$gatt")
+            Log.v(tag, "#callback.onServiceChanged args : gatt=$gatt")
 
             // TODO
         }
