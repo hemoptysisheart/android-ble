@@ -8,15 +8,13 @@ import com.github.hemoptysisheart.ble.domain.Descriptor
 import com.github.hemoptysisheart.ble.domain.Descriptor.Companion.UUID_CLIENT_CHARACTERISTIC_CONFIGURATION
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 class Characteristic(
+    val key: String,
     /**
      * Android 시스템이 제공하는 캐릭터리스틱.
      */
-    internal val target: BluetoothGattCharacteristic,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    internal val target: BluetoothGattCharacteristic
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
     private val tag = "Characteristic"
 
@@ -40,8 +38,8 @@ class Characteristic(
         get() = target.properties and BluetoothGattCharacteristic.PROPERTY_NOTIFY != 0 &&
                 descriptors.any { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
 
-    override val descriptors: List<Descriptor>
-        get() = TODO()
+    override val descriptors: List<Descriptor> = target.descriptors
+        .map { Descriptor("Descriptor/$key", it) }
 
     override fun toString() = listOf(
         "target=$target",

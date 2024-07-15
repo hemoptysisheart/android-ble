@@ -41,6 +41,11 @@ internal data class PreviewConnection(
 
     override suspend fun requestMtu(mtu: Int): Int =
         throw UnsupportedOperationException("preview does not support this operation")
+
+    override suspend fun services(): List<Service> =
+        throw UnsupportedOperationException("preview does not support this operation")
+
+    override fun disconnect() = throw UnsupportedOperationException("preview does not support this operation")
 }
 
 /**

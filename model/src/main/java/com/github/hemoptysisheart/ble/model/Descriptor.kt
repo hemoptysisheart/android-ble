@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothGattDescriptor
 import com.github.hemoptysisheart.ble.spec.core.CustomDescriptor
 
 class Descriptor(
+    val key: String,
     internal val target: BluetoothGattDescriptor,
 ) : com.github.hemoptysisheart.ble.domain.Descriptor {
     private val tag = "Descriptor"

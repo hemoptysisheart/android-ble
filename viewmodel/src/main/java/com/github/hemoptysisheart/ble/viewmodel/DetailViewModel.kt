@@ -49,6 +49,9 @@ class DetailViewModel @Inject constructor(
      */
     fun onClickDisconnect() {
         Log.d(tag, "#onClickDisconnect called.")
+
+        device.disconnect()
+        _state.update { it.copy(connection = null) }
     }
 
     override fun toString() = listOf(

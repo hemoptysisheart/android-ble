@@ -67,9 +67,17 @@ interface Connection {
     val services: List<Service>
 
     /**
-     * MTU(Maximum Transmission Unit) 요청.
+     * MTU(Maximum Transmission Unit) 병경하도록 요청한다.
+     *
      *
      * @see Connection.mtu
      */
-    suspend fun requestMtu(mtu: Int): Int
+    suspend fun requestMtu(mtu: Int = MTU_DEFAULT): Int
+
+    /**
+     * 서비스 목록을 갱신하고 반환한다.
+     */
+    suspend fun services(): List<Service>
+
+    fun disconnect()
 }
