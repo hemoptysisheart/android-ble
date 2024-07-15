@@ -15,15 +15,24 @@ import com.github.hemoptysisheart.ble.domain.Descriptor.Companion.UUID_CLIENT_CH
 import com.github.hemoptysisheart.ble.domain.toHexaString
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class Characteristic(
     /**
      * Android 시스템이 제공하는 캐릭터리스틱.
      */
     internal val target: BluetoothGattCharacteristic,
-    private val gatt: GattWrapper
+    private val gatt: GattWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
     private val tag = "Characteristic/${gatt.id}"
+
+    private val scope = CoroutineScope(dispatcher)
+    private var notificationReadJob: Job? = null
 
     override val type: Characteristic = Characteristic(target.uuid)
         ?: CustomCharacteristic(target.uuid)
@@ -66,6 +75,7 @@ class Characteristic(
         }
     }
 
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override suspend fun notification(enable: Boolean) {
         Log.d(tag, "#notification args : enable=$enable")
 
@@ -78,15 +88,21 @@ class Characteristic(
 
         if (enable) {
             cccd.write(ENABLE_NOTIFICATION_VALUE)
+            notificationReadJob = scope.launch {
+                while (true == notificationReadJob?.isActive) {
+                    read()
+                }
+            }
         } else {
             cccd.write(DISABLE_NOTIFICATION_VALUE)
+            notificationReadJob?.cancel()
         }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override suspend fun read(): ByteArray {
         val bytes = gatt.read(this)
-        Log.d(tag, "#read : bytes=${bytes.toHexaString()}")
+        Log.i(tag, "#read : bytes=${bytes.toHexaString()}")
         return bytes
     }
 
