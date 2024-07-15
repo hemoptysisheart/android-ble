@@ -61,7 +61,7 @@ class DetailViewModel @Inject constructor(
         Log.d(tag, "#onClickIndication args : characteristic=$characteristic")
 
         launch {
-            characteristic.enableIndication()
+            characteristic.indication(true)
         }
     }
 
@@ -69,7 +69,7 @@ class DetailViewModel @Inject constructor(
         Log.d(tag, "#onClickNotification args : characteristic=$characteristic")
 
         launch {
-            characteristic.enableNotification()
+            characteristic.notification(true)
         }
     }
 

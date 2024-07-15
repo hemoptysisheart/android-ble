@@ -36,9 +36,9 @@ interface Characteristic {
      * - 데이터 전송이 더 신뢰성 있으며, 클라이언트가 데이터를 수신했는지 확인할 수 있습니다.
      * - Notification에 비해 배터리 사용량이나 리소스 소모가 더 클 수 있습니다.
      *
-     * @see enableNotification
+     * @see notification
      */
-    suspend fun enableIndication()
+    suspend fun indication(enable: Boolean)
 
     /**
      * Notification (알림)
@@ -48,9 +48,9 @@ interface Characteristic {
      * - 데이터 전송이 덜 신뢰성 있을 수 있으며, 데이터가 손실될 가능성이 있습니다.
      * - 배터리 사용량이나 리소스 소모 측면에서 더 효율적일 수 있습니다.
      *
-     * @see enableIndication
+     * @see indication
      */
-    suspend fun enableNotification()
+    suspend fun notification(enable: Boolean)
 
     /**
      * 캐릭터리스틱의 값을 읽는다.

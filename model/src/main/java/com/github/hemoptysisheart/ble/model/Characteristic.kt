@@ -5,7 +5,9 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
-import android.bluetooth.BluetoothGattDescriptor
+import android.bluetooth.BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
+import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
+import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.Descriptor
@@ -48,21 +50,24 @@ class Characteristic(
         Descriptor(it, gatt)
     }
 
-    override suspend fun enableIndication() {
-        Log.d(tag, "#enableIndication called.")
+    override suspend fun indication(enable: Boolean) {
+        Log.d(tag, "#indication args : enable=$enable")
 
         if (!indicatable) {
             throw IllegalStateException("Indicatable is false.")
         }
-
         val cccd = descriptors.firstOrNull { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
             ?: throw IllegalStateException("Client Characteristic Configuration descriptor does not found.")
 
-        cccd.write(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE)
+        if (enable) {
+            cccd.write(ENABLE_INDICATION_VALUE)
+        } else {
+            cccd.write(DISABLE_NOTIFICATION_VALUE)
+        }
     }
 
-    override suspend fun enableNotification() {
-        Log.d(tag, "#enableNotification called.")
+    override suspend fun notification(enable: Boolean) {
+        Log.d(tag, "#notification args : enable=$enable")
 
         if (!notifiable) {
             throw IllegalStateException("Notifiable is false.")
@@ -71,7 +76,11 @@ class Characteristic(
         val cccd = descriptors.firstOrNull { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
             ?: throw IllegalStateException("Client Characteristic Configuration descriptor does not found.")
 
-        cccd.write(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+        if (enable) {
+            cccd.write(ENABLE_NOTIFICATION_VALUE)
+        } else {
+            cccd.write(DISABLE_NOTIFICATION_VALUE)
+        }
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")

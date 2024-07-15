@@ -15,9 +15,14 @@ data class PreviewCharacteristic(
     override val notifiable: Boolean = Random.nextBoolean(),
     override val descriptors: List<Descriptor> = emptyList()
 ) : Characteristic {
-    override suspend fun enableIndication() = throw UnsupportedOperationException("preview does not support.")
-    override suspend fun enableNotification() = throw UnsupportedOperationException("preview does not support.")
-    override suspend fun read(): ByteArray = throw UnsupportedOperationException("preview does not support.")
+    override suspend fun indication(enable: Boolean) =
+        throw UnsupportedOperationException("preview does not support.")
+
+    override suspend fun notification(enable: Boolean) =
+        throw UnsupportedOperationException("preview does not support.")
+
+    override suspend fun read(): ByteArray =
+        throw UnsupportedOperationException("preview does not support.")
 }
 
 val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC: PreviewCharacteristic
