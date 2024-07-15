@@ -51,11 +51,6 @@ interface Connection {
     val state: StateFlow<State>
 
     /**
-     * 연결 대상 기기.
-     */
-    val device: Device
-
-    /**
      * 기기 연결 상태.
      */
     val level: Level
@@ -67,17 +62,7 @@ interface Connection {
 
     /**
      * 연결이 사용할 수 있는 서비스 목록.
-     * [level]이 [Level.CONNECTED]일 때만 `null`이 아니다.
+     * [level]이 [Level.CONNECTED]가 아니면 [IllegalStateException]을 던진다.
      */
-    val services: List<Service>?
-
-    /**
-     * 기기에 연결을 시도한다.
-     */
-    fun connect()
-
-    /**
-     * 기기와의 연결을 끊는다.
-     */
-    fun disconnect()
+    val services: List<Service>
 }

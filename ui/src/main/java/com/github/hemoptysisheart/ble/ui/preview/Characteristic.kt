@@ -8,22 +8,13 @@ import kotlin.random.Random
 
 data class PreviewCharacteristic(
     override val type: com.github.hemoptysisheart.ble.spec.core.Characteristic,
-    override val readable: Boolean = true,
-    override val writable: Boolean = Random.nextBoolean(),
-    override val writableWithoutResponse: Boolean = Random.nextBoolean(),
-    override val indicatable: Boolean = Random.nextBoolean(),
-    override val notifiable: Boolean = Random.nextBoolean(),
+    val readable: Boolean = true,
+    val writable: Boolean = Random.nextBoolean(),
+    val writableWithoutResponse: Boolean = Random.nextBoolean(),
+    val indicatable: Boolean = Random.nextBoolean(),
+    val notifiable: Boolean = Random.nextBoolean(),
     override val descriptors: List<Descriptor> = emptyList()
-) : Characteristic {
-    override suspend fun indication(enable: Boolean) =
-        throw UnsupportedOperationException("preview does not support.")
-
-    override suspend fun notification(enable: Boolean) =
-        throw UnsupportedOperationException("preview does not support.")
-
-    override suspend fun read(): ByteArray =
-        throw UnsupportedOperationException("preview does not support.")
-}
+) : Characteristic
 
 val PREVIEW_RANDOM_STANDARD_CHARACTERISTIC: PreviewCharacteristic
     get() = PreviewCharacteristic(

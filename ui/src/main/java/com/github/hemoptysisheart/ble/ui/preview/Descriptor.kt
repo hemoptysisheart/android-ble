@@ -7,11 +7,9 @@ import kotlin.random.Random
 
 class PreviewDescriptor(
     override val type: com.github.hemoptysisheart.ble.spec.core.Descriptor,
-    override val readable: Boolean = Random.nextBoolean(),
-    override val writable: Boolean = Random.nextBoolean()
-) : Descriptor {
-    override suspend fun write(value: ByteArray) = throw UnsupportedOperationException("preview does not support.")
-}
+    val readable: Boolean = Random.nextBoolean(),
+    val writable: Boolean = Random.nextBoolean()
+) : Descriptor
 
 val PREVIEW_DESCRIPTORS: List<Descriptor> = setOf(
     PreviewDescriptor(GATT_DESCRIPTORS.values.random()),

@@ -7,17 +7,15 @@ import com.github.hemoptysisheart.ble.spec.core.Service
 
 class Service(
     private val target: BluetoothGattService,
-    private val gatt: GattWrapper
 ) : com.github.hemoptysisheart.ble.domain.Service {
     override val type: Service = Service(target.uuid)
         ?: CustomService(target.uuid)
 
-    override val characteristics: List<Characteristic> = target.characteristics
-        .map { Characteristic(target = it, gatt = gatt) }
+    override val characteristics: List<Characteristic>
+        get() = TODO()
 
     override fun toString() = listOf(
         "target=$target",
-        "gatt=$gatt",
         "type=$type",
         "characteristics=$characteristics"
     ).joinToString(", ", "Service(", ")")

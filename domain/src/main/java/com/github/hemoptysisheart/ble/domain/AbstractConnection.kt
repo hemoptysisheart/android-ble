@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 abstract class AbstractConnection<D : AbstractDevice>(
-    protected val tag: String = "AbstractConnection",
-    override val device: D
+    protected val tag: String = "AbstractConnection"
 ) : Connection {
     @Suppress("PropertyName", "MemberVisibilityCanBePrivate")
     protected val _state = MutableStateFlow(State(Level.DISCONNECTED))
@@ -23,14 +22,6 @@ abstract class AbstractConnection<D : AbstractDevice>(
             _state.update { it.copy(level = value) }
         }
 
-    override var services: List<Service>? = null
-        protected set(value) {
-            Log.d(tag, "#services.set : $value")
-
-            field = value
-            _state.update { it.copy(services = value) }
-        }
-
     override var mtu: Int? = null
         protected set(value) {
             Log.d(tag, "#mtu.set : $value")
@@ -38,4 +29,7 @@ abstract class AbstractConnection<D : AbstractDevice>(
             field = value
             _state.update { it.copy(mtu = value) }
         }
+
+    override val services: List<Service>
+        get() = TODO("Not yet implemented")
 }
