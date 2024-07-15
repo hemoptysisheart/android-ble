@@ -28,6 +28,8 @@ interface Characteristic {
 
     val descriptors: List<Descriptor>
 
+    suspend fun requestNotify()
+
     /**
      * 캐릭터리스틱의 값을 읽는다.
      *

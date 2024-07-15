@@ -59,6 +59,10 @@ class DetailViewModel @Inject constructor(
 
     fun onClickNotification(characteristic: Characteristic) {
         Log.d(tag, "#onClickNotification args : characteristic=$characteristic")
+
+        launch {
+            characteristic.requestNotify()
+        }
     }
 
     fun onClickRead(characteristic: Characteristic) {

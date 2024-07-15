@@ -43,8 +43,10 @@ fun ColumnScope.Characteristic(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Button(onClick = { onClickNotification(characteristic) }, Modifier.padding(4.dp)) {
-            Text(text = "Notification", color = MaterialTheme.colorScheme.onPrimary)
+        if (characteristic.notifiable) {
+            Button(onClick = { onClickNotification(characteristic) }, Modifier.padding(4.dp)) {
+                Text(text = "Notification", color = MaterialTheme.colorScheme.onPrimary)
+            }
         }
     }
 
