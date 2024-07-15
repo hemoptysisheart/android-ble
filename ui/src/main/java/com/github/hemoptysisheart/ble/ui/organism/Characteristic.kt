@@ -2,6 +2,7 @@ package com.github.hemoptysisheart.ble.ui.organism
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -27,12 +28,25 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 fun ColumnScope.Characteristic(
     characteristic: Characteristic,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {},
 ) {
     Log.v(TAG, "#Characteristic args : characteristic=$characteristic, modifier=$modifier")
 
     CharacteristicType(characteristic = characteristic.type, modifier = Modifier.fillMaxWidth())
     Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 2.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(onClick = { onClickNotification(characteristic) }, Modifier.padding(4.dp)) {
+            Text(text = "Notification", color = MaterialTheme.colorScheme.onPrimary)
+        }
+    }
 
     Row(
         modifier = Modifier

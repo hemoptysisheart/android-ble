@@ -25,6 +25,7 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 fun ColumnScope.ConnectionTemplate(
     connection: Connection.State,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(TAG, "#Connection args : connection=$connection, modifier=$modifier, onClickRead=$onClickRead")
@@ -65,6 +66,7 @@ fun ColumnScope.ConnectionTemplate(
             .weight(1F)
             .background(MaterialTheme.colorScheme.background)
             .padding(start = 16.dp),
+        onClickNotification = onClickNotification,
         onClickRead = onClickRead
     )
 }

@@ -21,6 +21,7 @@ import com.github.hemoptysisheart.ui.compose.preview.PreviewComponent
 fun CharacteristicList(
     characteristics: List<Characteristic>,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(
@@ -31,7 +32,12 @@ fun CharacteristicList(
     if (characteristics.isEmpty()) {
         CharacteristicListEmpty(modifier = modifier)
     } else {
-        CharacteristicListNotEmpty(characteristics = characteristics, modifier = modifier, onClickRead = onClickRead)
+        CharacteristicListNotEmpty(
+            characteristics = characteristics,
+            modifier = modifier,
+            onClickNotification = onClickNotification,
+            onClickRead = onClickRead
+        )
     }
 }
 
@@ -49,6 +55,7 @@ fun CharacteristicListEmpty(modifier: Modifier = Modifier) {
 fun CharacteristicListNotEmpty(
     characteristics: List<Characteristic>,
     modifier: Modifier = Modifier,
+    onClickNotification: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Column(modifier = modifier) {
@@ -57,6 +64,7 @@ fun CharacteristicListNotEmpty(
             Characteristic(
                 characteristic = characteristic,
                 modifier = Modifier.fillMaxWidth(),
+                onClickNotification = onClickNotification,
                 onClickRead = onClickRead
             )
         }

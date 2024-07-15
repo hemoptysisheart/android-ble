@@ -51,6 +51,7 @@ fun DetailPage(
         connection = connection,
         onClickConnect = viewModel::onClickConnect,
         onClickDisconnect = viewModel::onClickDisconnect,
+        onClickNotification = viewModel::onClickNotification,
         onClickRead = viewModel::onClickRead
     )
 }
@@ -62,6 +63,7 @@ internal fun DetailPageContent(
     connection: Connection.State,
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { },
+    onClickNotification: (Characteristic) -> Unit = {},
     onClickRead: (Characteristic) -> Unit = {}
 ) {
     Log.v(
@@ -71,7 +73,9 @@ internal fun DetailPageContent(
             "device=$device",
             "connection=$connection",
             "onClickConnect=$onClickConnect",
-            "onClickDisconnect=$onClickDisconnect"
+            "onClickDisconnect=$onClickDisconnect",
+            "onClickNotification=$onClickNotification",
+            "onClickRead=$onClickRead"
         ).joinToString(", ", "#DetailPageContent args : ")
     )
 
@@ -82,7 +86,12 @@ internal fun DetailPageContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         DeviceDetail(device, Modifier.fillMaxWidth())
-        ConnectionTemplate(connection, modifier = Modifier.fillMaxWidth(), onClickRead = onClickRead)
+        ConnectionTemplate(
+            connection,
+            modifier = Modifier.fillMaxWidth(),
+            onClickNotification = onClickNotification,
+            onClickRead = onClickRead
+        )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.outlineVariant)
 
