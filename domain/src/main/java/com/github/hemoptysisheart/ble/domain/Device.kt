@@ -22,10 +22,28 @@ interface Device {
      */
     val category: DeviceClass
 
+    /**
+     * 기기가 제공하는 서비스.
+     */
     val services: List<MajorServiceClass>
 
     /**
      * 기기 신호 세기.
      */
     val rssi: Int
+
+    /**
+     * 기기 연결.
+     */
+    val connection: Connection?
+
+    /**
+     * 기기에 연결한다.
+     */
+    fun connect(): Connection
+
+    /**
+     * 기기 연결을 끊는다.
+     */
+    fun disconnect()
 }

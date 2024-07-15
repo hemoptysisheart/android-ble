@@ -3,10 +3,13 @@ package com.github.hemoptysisheart.ble.model
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
+import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.Context
+import android.content.Context.BLUETOOTH_SERVICE
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -19,15 +22,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ScanModelImpl(
+    private val context: Context,
     private val permissionModel: PermissionModel,
     private val deviceCacheModel: DeviceCacheModel,
-    private val scanner: BluetoothLeScanner,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ScanModel {
     companion object {
         private const val TAG = "ScanModelImpl"
     }
 
+    private val scanner: BluetoothLeScanner = (context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager)
+        .adapter
+        .bluetoothLeScanner
     private val devices = mutableSetOf<Device>()
 
     private val callback = object : ScanCallback() {
@@ -35,7 +41,7 @@ class ScanModelImpl(
         @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         private fun handle(result: ScanResult) {
             result.log(TAG)
-            devices.add(Device(result.device, result.rssi))
+            devices.add(Device(context, result.rssi, result.device))
         }
 
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)

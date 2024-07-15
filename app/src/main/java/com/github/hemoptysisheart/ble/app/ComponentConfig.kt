@@ -1,8 +1,6 @@
 package com.github.hemoptysisheart.ble.app
 
-import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Context.BLUETOOTH_SERVICE
 import android.util.Log
 import com.github.hemoptysisheart.ble.model.DeviceCacheModel
 import com.github.hemoptysisheart.ble.model.DeviceCacheModelImpl
@@ -52,9 +50,9 @@ class ComponentConfig {
         deviceCacheModel: DeviceCacheModel
     ): ScanModel {
         val model = ScanModelImpl(
+            context = context,
             permissionModel = permissionModel,
-            deviceCacheModel = deviceCacheModel,
-            scanner = (context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter.bluetoothLeScanner
+            deviceCacheModel = deviceCacheModel
         )
         Log.i(TAG, "#provideScanModel return : model=$model")
         return model

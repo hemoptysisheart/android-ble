@@ -32,12 +32,12 @@ internal val PREVIEW_CONNECTION_STATE_CONNECTED = State(
  */
 internal val PREVIEW_CONNECTION_STATE_DISCONNECTING = State(Level.DISCONNECTING)
 
-internal class PreviewConnection(
+internal data class PreviewConnection(
     override val level: Level,
     override val services: List<Service> = listOf(),
     override val mtu: Int? = null
 ) : Connection {
-    override val state: StateFlow<State> = MutableStateFlow(State(level))
+    override val state: StateFlow<State> = MutableStateFlow(State(level, mtu, services))
 }
 
 /**

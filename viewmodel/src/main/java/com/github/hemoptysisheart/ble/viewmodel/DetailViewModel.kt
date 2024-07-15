@@ -24,6 +24,8 @@ class DetailViewModel @Inject constructor(
      */
     fun onClickConnect() {
         Log.d(tag, "#onClickConnect called.")
+
+        device.connect()
     }
 
     /**

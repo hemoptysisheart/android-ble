@@ -30,6 +30,12 @@ abstract class AbstractConnection<D : AbstractDevice>(
             _state.update { it.copy(mtu = value) }
         }
 
+    protected abstract var _services: List<Service>?
+
     override val services: List<Service>
-        get() = TODO("Not yet implemented")
+        get() = if (null == _services) {
+            emptyList()
+        } else {
+            _services!!
+        }
 }

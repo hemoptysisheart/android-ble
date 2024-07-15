@@ -1,7 +1,9 @@
 package com.github.hemoptysisheart.ble.model
 
 import com.github.hemoptysisheart.ble.domain.AbstractDevice
+import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
+import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.isRootTest
@@ -33,7 +35,12 @@ class DeviceCacheModelImplTest : BehaviorSpec() {
                 override val name = "name #$address"
                 override val address = address
                 override val category = DeviceClass.entries.random()
-                override val rssi: Int = -100
+                override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random())
+                override val rssi: Int = Random.nextInt(-100, 0)
+                override var connection: Connection? = null
+
+                override fun connect(): Connection = TODO("Not yet implemented")
+                override fun disconnect() = TODO("Not yet implemented")
             }
             logger.info { "[GIVEN] address='$address', device=$device" }
 
@@ -62,7 +69,12 @@ class DeviceCacheModelImplTest : BehaviorSpec() {
                 override val name = "name"
                 override val address: String = "00:00"
                 override val category: DeviceClass = DeviceClass.entries.random()
-                override val rssi: Int = -100
+                override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random())
+                override val rssi: Int = Random.nextInt(-100, 0)
+                override var connection: Connection? = null
+
+                override fun connect(): Connection = TODO("Not yet implemented")
+                override fun disconnect(): Unit = TODO("Not yet implemented")
             }
             logger.info { "[GIVEN] ttl=$ttl, device=$device" }
 

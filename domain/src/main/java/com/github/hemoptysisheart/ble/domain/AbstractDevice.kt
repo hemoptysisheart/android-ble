@@ -1,6 +1,9 @@
 package com.github.hemoptysisheart.ble.domain
 
 abstract class AbstractDevice : Device, Comparable<Device> {
+    override var connection: Connection? = null
+        protected set
+
     override fun compareTo(other: Device): Int {
         var result = when {
             null != name && null == other.name ->
@@ -15,11 +18,6 @@ abstract class AbstractDevice : Device, Comparable<Device> {
             else ->
                 0
         }
-        if (0 != result) {
-            return result
-        }
-
-        result = rssi - other.rssi
         if (0 != result) {
             return result
         }
@@ -43,6 +41,8 @@ abstract class AbstractDevice : Device, Comparable<Device> {
         "name=$name",
         "address=$address",
         "category=$category",
-        "rssi=$rssi"
+        "services=$services",
+        "rssi=$rssi",
+        "connection=$connection"
     ).joinToString(", ", "Device(", ")")
 }
