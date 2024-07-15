@@ -6,7 +6,7 @@ import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 /**
  * Bluetooth LE 기기.
  */
-interface Device {
+interface Device : Comparable<Device> {
     /**
      * 기기 이름.
      */
@@ -46,4 +46,30 @@ interface Device {
      * 기기 연결을 끊는다.
      */
     fun disconnect()
+
+    override fun compareTo(other: Device): Int {
+        var result = when {
+            null != name && null == other.name ->
+                -1
+
+            null == name && null != other.name ->
+                1
+
+            null != name && null != other.name ->
+                name!!.compareTo(other.name!!)
+
+            else ->
+                0
+        }
+        if (0 != result) {
+            return result
+        }
+
+        result = category.compareTo(other.category)
+        if (0 != result) {
+            return result
+        }
+
+        return address.compareTo(other.address)
+    }
 }

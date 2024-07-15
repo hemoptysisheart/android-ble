@@ -38,6 +38,9 @@ internal data class PreviewConnection(
     override val mtu: Int? = null
 ) : Connection {
     override val state: StateFlow<State> = MutableStateFlow(State(level, mtu, services))
+
+    override suspend fun requestMtu(mtu: Int): Int =
+        throw UnsupportedOperationException("preview does not support this operation")
 }
 
 /**

@@ -65,4 +65,11 @@ interface Connection {
      * [level]이 [Level.CONNECTED]가 아니면 [IllegalStateException]을 던진다.
      */
     val services: List<Service>
+
+    /**
+     * MTU(Maximum Transmission Unit) 요청.
+     *
+     * @see Connection.mtu
+     */
+    suspend fun requestMtu(mtu: Int): Int
 }

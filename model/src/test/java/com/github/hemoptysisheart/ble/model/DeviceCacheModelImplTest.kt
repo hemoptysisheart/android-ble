@@ -1,6 +1,5 @@
 package com.github.hemoptysisheart.ble.model
 
-import com.github.hemoptysisheart.ble.domain.AbstractDevice
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
@@ -17,6 +16,18 @@ import java.time.Instant
 import kotlin.random.Random
 
 class DeviceCacheModelImplTest : BehaviorSpec() {
+    private data class TestDevice(
+        override val name: String = "name",
+        override val address: String = "00:00",
+        override val category: DeviceClass = DeviceClass.entries.random(),
+        override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random()),
+        override val rssi: Int = Random.nextInt(-100, 0),
+        override var connection: Connection? = null
+    ) : com.github.hemoptysisheart.ble.domain.Device {
+        override fun connect(): Connection = TODO("Not yet implemented")
+        override fun disconnect(): Unit = TODO("Not yet implemented")
+    }
+
     private val logger = KotlinLogging.logger { }
 
     private lateinit var model: DeviceCacheModelImpl
@@ -31,17 +42,7 @@ class DeviceCacheModelImplTest : BehaviorSpec() {
 
         given("ttl - 유효시간이 지나지 않으면 캐시에 접근할 수 있다.") {
             val address = "00:%02X".format(Random.nextBytes(1)[0])
-            val device = object : AbstractDevice() {
-                override val name = "name #$address"
-                override val address = address
-                override val category = DeviceClass.entries.random()
-                override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random())
-                override val rssi: Int = Random.nextInt(-100, 0)
-                override var connection: Connection? = null
-
-                override fun connect(): Connection = TODO("Not yet implemented")
-                override fun disconnect() = TODO("Not yet implemented")
-            }
+            val device = TestDevice(address = address)
             logger.info { "[GIVEN] address='$address', device=$device" }
 
             model.cache(listOf(device))
@@ -65,17 +66,7 @@ class DeviceCacheModelImplTest : BehaviorSpec() {
             val ttl = Duration.ofMillis(1000L)
             model = DeviceCacheModelImpl(ttl = ttl)
 
-            val device = object : AbstractDevice() {
-                override val name = "name"
-                override val address: String = "00:00"
-                override val category: DeviceClass = DeviceClass.entries.random()
-                override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random())
-                override val rssi: Int = Random.nextInt(-100, 0)
-                override var connection: Connection? = null
-
-                override fun connect(): Connection = TODO("Not yet implemented")
-                override fun disconnect(): Unit = TODO("Not yet implemented")
-            }
+            val device = TestDevice()
             logger.info { "[GIVEN] ttl=$ttl, device=$device" }
 
             model.cache(listOf(device))

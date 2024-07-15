@@ -11,17 +11,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.hemoptysisheart.ble.domain.Connection
-import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.ui.atom.AndroidBleTheme
 import com.github.hemoptysisheart.ble.ui.navigator.DetailNavigator
-import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_CONNECTION_LIST
-import com.github.hemoptysisheart.ble.ui.preview.PREVIEW_RANDOM_DEVICE
+import com.github.hemoptysisheart.ble.ui.preview.DeviceStateProvider
+import com.github.hemoptysisheart.ble.ui.state.DeviceState
 import com.github.hemoptysisheart.ble.viewmodel.DetailViewModel
 import com.github.hemoptysisheart.ui.compose.preview.PreviewPage
 import com.github.hemoptysisheart.ui.navigation.compose.baseNavigator
@@ -34,9 +34,11 @@ fun DetailPage(
 ) {
     Log.v(TAG, "#DetailPage args : navigator=$navigator, viewModel=$viewModel")
 
+    val device by viewModel.state.collectAsStateWithLifecycle()
+
     DetailPageContent(
         navigator = navigator,
-        device = viewModel.device,
+        device = device,
         onClickConnect = viewModel::onClickConnect,
         onClickDisconnect = viewModel::onClickDisconnect,
     )
@@ -45,7 +47,7 @@ fun DetailPage(
 @Composable
 internal fun DetailPageContent(
     navigator: DetailNavigator,
-    device: Device,
+    device: DeviceState,
     onClickConnect: () -> Unit = { },
     onClickDisconnect: () -> Unit = { },
 ) {
@@ -58,7 +60,6 @@ internal fun DetailPageContent(
             "onClickDisconnect=$onClickDisconnect",
         ).joinToString(", ", "#DetailPageContent args : ")
     )
-
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "$device")
@@ -91,23 +92,13 @@ internal fun DetailPageContent(
     }
 }
 
-internal data class DetailPageParam(
-    val device: Device
-)
-
-internal class DetailPageParamProvider : PreviewParameterProvider<DetailPageParam> {
-    override val values: Sequence<DetailPageParam> = PREVIEW_CONNECTION_LIST.map {
-        DetailPageParam(PREVIEW_RANDOM_DEVICE.copy(connection = it))
-    }.asSequence()
-}
-
 @Composable
 @PreviewPage
-internal fun PreviewDetailPageContent(@PreviewParameter(DetailPageParamProvider::class) param: DetailPageParam) {
+internal fun PreviewDetailPageContent(@PreviewParameter(DeviceStateProvider::class) device: DeviceState) {
     AndroidBleTheme {
         DetailPageContent(
             navigator = DetailNavigator(baseNavigator()),
-            device = param.device
+            device = device
         )
     }
 }

@@ -9,17 +9,25 @@ import android.bluetooth.BluetoothProfile.STATE_CONNECTING
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTED
 import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
-import com.github.hemoptysisheart.ble.domain.AbstractConnection
+import androidx.annotation.RequiresPermission
+import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.domain.Connection.State
 import com.github.hemoptysisheart.ble.domain.Service
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class Connection(
     /**
      * 태그 접미사.
      */
-    tag: String,
+    private val tag: String,
+    private val scope: CoroutineScope,
     builder: (BluetoothGattCallback) -> BluetoothGatt
-) : AbstractConnection<Device>("Connection/$tag") {
+) : Connection {
     private val callback = object : BluetoothGattCallback() {
         override fun onPhyUpdate(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
             Log.v(tag, "#onPhyUpdate args : gatt=$gatt, txPhy=$txPhy, rxPhy=$rxPhy, status=$status")
@@ -91,14 +99,61 @@ class Connection(
         override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
             Log.v(tag, "#onMtuChanged args : gatt=$gatt, mtu=$mtu, status=$status")
             gatt!!
+            if (BluetoothGatt.GATT_SUCCESS != status) {
+                throw IllegalArgumentException("status is not success : status=${"0x%02X".format(status)}($status)")
+            }
+
+            mtuDeferred!!.complete(mtu)
         }
     }
 
+    private val _state = MutableStateFlow(State(Level.DISCONNECTED))
+    override val state: StateFlow<State> = _state
+
+    override var level: Level = Level.DISCONNECTED
+        protected set(value) {
+            Log.d(tag, "#level.set : $value")
+
+            field = value
+            _state.update { it.copy(level = value) }
+        }
+
+    override var mtu: Int? = null
+        private set(value) {
+            Log.d(tag, "#mtu.set : $value")
+
+            field = value
+            _state.update { it.copy(mtu = value) }
+        }
+
+    private var _services: List<Service>? = null
+        set(value) {
+            field = value
+            _state.update { it.copy(services = value) }
+        }
+
+    override val services: List<Service>
+        get() = if (null == _services) {
+            emptyList()
+        } else {
+            _services!!
+        }
+
     private val gatt = builder(callback)
 
-    override var _services: List<Service>?
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    private var mtuDeferred: CompletableDeferred<Int>? = null
+
+
+    @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
+    override suspend fun requestMtu(mtu: Int): Int {
+        Log.d(tag, "#requestMtu args : mtu=$mtu")
+
+        mtuDeferred = CompletableDeferred()
+        gatt.requestMtu(mtu)
+        this.mtu = mtuDeferred!!.await()
+        mtuDeferred = null
+        return this.mtu!!
+    }
 
     override fun toString() = listOf(
         "state=${state.value}"

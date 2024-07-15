@@ -1,8 +1,8 @@
 package com.github.hemoptysisheart.ble.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.github.hemoptysisheart.ble.domain.AbstractDevice
 import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 import java.util.UUID
@@ -15,10 +15,12 @@ data class PreviewDevice(
     override val services: List<MajorServiceClass> = MajorServiceClass.entries.filter { Random.nextBoolean() },
     override val rssi: Int = Random.nextInt(-100, 0),
     override var connection: Connection? = PREVIEW_CONNECTION_LIST.random()
-) : AbstractDevice() {
+) : Device {
     override fun connect(): Connection = throw UnsupportedOperationException("preview device does not support connect.")
 
     override fun disconnect() = throw UnsupportedOperationException("preview device does not support disconnect.")
+
+    override fun compareTo(other: Device): Int = address.compareTo(other.address)
 }
 
 val PREVIEW_RANDOM_DEVICE = PreviewDevice(
@@ -65,6 +67,6 @@ val PREVIEW_DEVICE_LIST = listOf(
     PREVIEW_DEVICE_DISCONNECTING
 )
 
-internal class DevicePreviewProvider : PreviewParameterProvider<AbstractDevice> {
+internal class DevicePreviewProvider : PreviewParameterProvider<Device> {
     override val values = PREVIEW_DEVICE_LIST.asSequence()
 }

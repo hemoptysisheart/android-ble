@@ -40,5 +40,7 @@ android {
 }
 
 dependencies {
+    api(project(":domain"))
+
     implementation(libs.androidx.compose.runtime)
 }

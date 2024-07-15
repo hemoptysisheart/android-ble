@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.defaultToString
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,7 +42,14 @@ class ScanModelImpl(
         @RequiresPermission("android.permission.BLUETOOTH_CONNECT")
         private fun handle(result: ScanResult) {
             result.log(TAG)
-            devices.add(Device(context, result.rssi, result.device))
+            devices.add(
+                Device(
+                    context = context,
+                    _rssi = result.rssi,
+                    source = result.device,
+                    scope = CoroutineScope(Dispatchers.IO)
+                )
+            )
         }
 
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
