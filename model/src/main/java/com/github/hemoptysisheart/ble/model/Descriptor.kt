@@ -1,11 +1,16 @@
 package com.github.hemoptysisheart.ble.model
 
 import android.bluetooth.BluetoothGattDescriptor
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomDescriptor
 
 class Descriptor(
     val key: String,
+    /**
+     * Android 시스템이 제공하는 디스크립터.
+     */
     internal val target: BluetoothGattDescriptor,
+    override val characteristic: Characteristic,
 ) : com.github.hemoptysisheart.ble.domain.Descriptor {
     private val tag = "Descriptor"
 

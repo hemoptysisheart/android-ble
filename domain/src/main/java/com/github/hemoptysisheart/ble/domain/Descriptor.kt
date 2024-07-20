@@ -10,5 +10,13 @@ interface Descriptor {
         val UUID_CLIENT_CHARACTERISTIC_CONFIGURATION = UUID.fromString("00002902-0000-1000-8000-00805F9B34FB")
     }
 
+    val characteristic: Characteristic
+
+    /**
+     * 디스크립터 종류.
+     *
+     * 참조 :
+     * - [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers)
+     */
     val type: com.github.hemoptysisheart.ble.spec.core.Descriptor
 }

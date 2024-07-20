@@ -3,11 +3,13 @@ package com.github.hemoptysisheart.ble.ui.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Descriptor
+import com.github.hemoptysisheart.ble.domain.Service
 import com.github.hemoptysisheart.ble.spec.core.GATT_CHARACTERISTICS
 import kotlin.random.Random
 
 data class PreviewCharacteristic(
     override val type: com.github.hemoptysisheart.ble.spec.core.Characteristic,
+    override val service: Service = PREVIEW_SERVICE_LIST.random(),
     val readable: Boolean = true,
     val writable: Boolean = Random.nextBoolean(),
     val writableWithoutResponse: Boolean = Random.nextBoolean(),

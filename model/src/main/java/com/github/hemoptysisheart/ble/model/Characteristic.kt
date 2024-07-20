@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
 import com.github.hemoptysisheart.ble.domain.Descriptor
 import com.github.hemoptysisheart.ble.domain.Descriptor.Companion.UUID_CLIENT_CHARACTERISTIC_CONFIGURATION
+import com.github.hemoptysisheart.ble.domain.Service
 import com.github.hemoptysisheart.ble.spec.core.Characteristic
 import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
 
@@ -14,7 +15,8 @@ class Characteristic(
     /**
      * Android 시스템이 제공하는 캐릭터리스틱.
      */
-    internal val target: BluetoothGattCharacteristic
+    internal val target: BluetoothGattCharacteristic,
+    override val service: Service
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
     private val tag = "Characteristic"
 

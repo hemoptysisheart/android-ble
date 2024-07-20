@@ -1,12 +1,14 @@
 package com.github.hemoptysisheart.ble.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.github.hemoptysisheart.ble.domain.Characteristic
 import com.github.hemoptysisheart.ble.domain.Descriptor
 import com.github.hemoptysisheart.ble.spec.core.GATT_DESCRIPTORS
 import kotlin.random.Random
 
-class PreviewDescriptor(
+data class PreviewDescriptor(
     override val type: com.github.hemoptysisheart.ble.spec.core.Descriptor,
+    override val characteristic: Characteristic = PREVIEW_CHARACTERISTIC_LIST.random(),
     val readable: Boolean = Random.nextBoolean(),
     val writable: Boolean = Random.nextBoolean()
 ) : Descriptor

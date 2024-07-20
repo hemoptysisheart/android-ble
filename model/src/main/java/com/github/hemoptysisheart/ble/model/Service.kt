@@ -13,7 +13,7 @@ class Service(
         ?: CustomService(target.uuid)
 
     override val characteristics: List<Characteristic> = target.characteristics
-        .map { Characteristic("Characteristic/$key", it) }
+        .map { Characteristic("Characteristic/$key", it, this@Service) }
 
     override fun toString() = listOf(
         "target=$target",
