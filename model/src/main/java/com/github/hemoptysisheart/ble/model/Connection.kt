@@ -1,5 +1,6 @@
 package com.github.hemoptysisheart.ble.model
 
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.Connection
 import com.github.hemoptysisheart.ble.domain.Connection.Level
@@ -27,7 +28,7 @@ class Connection(
         get() = gatt.mtu
 
     override val services: List<Service>
-        get() = gatt.services ?: emptyList()
+        get() = gatt.services
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override suspend fun requestMtu(mtu: Int) = gatt.requestMtu(mtu)
@@ -36,7 +37,11 @@ class Connection(
      * 서비스 목록을 갱신하고 반환한다.
      */
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
-    override suspend fun services(): List<Service> = gatt.discoverServices()
+    override suspend fun services(): List<Service> {
+        val services = gatt.discoverServices()
+        Log.i(tag, "#services return : $services")
+        return services
+    }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     override fun disconnect() = gatt.disconnect()

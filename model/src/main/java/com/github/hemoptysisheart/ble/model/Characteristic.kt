@@ -12,13 +12,14 @@ import com.github.hemoptysisheart.ble.spec.core.CustomCharacteristic
 
 class Characteristic(
     val key: String,
+    private val gatt: GattWrapper,
     /**
      * Android 시스템이 제공하는 캐릭터리스틱.
      */
     internal val target: BluetoothGattCharacteristic,
     override val service: Service
 ) : com.github.hemoptysisheart.ble.domain.Characteristic {
-    private val tag = "Characteristic"
+    private val tag = "Characteristic/$key"
 
     override val type: Characteristic = Characteristic(target.uuid)
         ?: CustomCharacteristic(target.uuid)
@@ -41,7 +42,7 @@ class Characteristic(
                 descriptors.any { it.type.uuid == UUID_CLIENT_CHARACTERISTIC_CONFIGURATION }
 
     override val descriptors: List<Descriptor> = target.descriptors
-        .map { Descriptor("Descriptor/$key", it) }
+        .map { Descriptor(key, gatt, it, this@Characteristic) }
 
     override fun toString() = listOf(
         "target=$target",
@@ -52,5 +53,5 @@ class Characteristic(
         "indicatable=$indicatable",
         "notifiable=$notifiable",
         "descriptors=$descriptors"
-    ).joinToString(", ", "$tag(", ")")
+    ).joinToString(", ", "Characteristic(", ")")
 }

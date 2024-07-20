@@ -11,7 +11,10 @@ data class PreviewDescriptor(
     override val characteristic: Characteristic = PREVIEW_CHARACTERISTIC_LIST.random(),
     val readable: Boolean = Random.nextBoolean(),
     val writable: Boolean = Random.nextBoolean()
-) : Descriptor
+) : Descriptor {
+    override suspend fun write(value: ByteArray) =
+        throw UnsupportedOperationException("preview does not support write.")
+}
 
 val PREVIEW_DESCRIPTORS: List<Descriptor> = setOf(
     PreviewDescriptor(GATT_DESCRIPTORS.values.random()),

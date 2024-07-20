@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothProfile.STATE_DISCONNECTING
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.domain.toHexaString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -77,9 +78,26 @@ class GattWrapper(
             }
 
             val services = gatt.services.map {
-                Service("Service/$key", it)
+                Service(key, this@GattWrapper, it)
             }
             servicesChannel.produce(services)
+        }
+
+        override fun onCharacteristicRead(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray,
+            status: Int
+        ) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "characteristic=$characteristic",
+                    "value=${value.toHexaString()}",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onCharacteristicRead args : ")
+            )
         }
 
         override fun onCharacteristicWrite(
@@ -92,6 +110,38 @@ class GattWrapper(
                 "#callback.onCharacteristicWrite args : gatt=$gatt, characteristic=$characteristic, status=$status"
             )
             gatt!!
+        }
+
+        override fun onCharacteristicChanged(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray
+        ) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "characteristic=$characteristic",
+                    "value=${value.toHexaString()}"
+                ).joinToString(", ", "#callback.onCharacteristicChanged args : ")
+            )
+        }
+
+        override fun onDescriptorRead(
+            gatt: BluetoothGatt,
+            descriptor: BluetoothGattDescriptor,
+            status: Int,
+            value: ByteArray
+        ) {
+            Log.v(
+                tag,
+                listOf(
+                    "gatt=$gatt",
+                    "descriptor=$descriptor",
+                    "value=${value.toHexaString()}",
+                    "status=$status"
+                ).joinToString(", ", "#callback.onDescriptorRead args : ")
+            )
         }
 
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
@@ -119,6 +169,10 @@ class GattWrapper(
             this@GattWrapper.mtu = mtu
             mtuChannel.produce(mtu)
         }
+
+        override fun onServiceChanged(gatt: BluetoothGatt) {
+            Log.v(tag, "#callback.onServiceChanged args : gatt=$gatt")
+        }
     }
 
     private val tag: String = "GattWrapper/$key"
@@ -133,7 +187,13 @@ class GattWrapper(
         private set
 
     private val servicesChannel: Channel<List<Service>> = Channel(1)
-    var services: List<Service>? = null
+
+    /**
+     * 서비스 목록.
+     *
+     * @see discoverServices
+     */
+    var services: List<Service> = emptyList()
         private set
 
     suspend fun awaitConnected() {
@@ -162,6 +222,11 @@ class GattWrapper(
         return mtuChannel.receive()
     }
 
+    /**
+     * 서비스 목록을 조회하고 갱신한다.
+     *
+     * @see services
+     */
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
     suspend fun discoverServices(): List<Service> {
         if (Level.CONNECTED != level) {
@@ -169,7 +234,8 @@ class GattWrapper(
         }
 
         gatt.discoverServices()
-        return servicesChannel.receive()
+        services = servicesChannel.receive()
+        return services
     }
 
     @RequiresPermission(value = "android.permission.BLUETOOTH_CONNECT")
