@@ -1,6 +1,7 @@
 package com.github.hemoptysisheart.ble.model
 
 import com.github.hemoptysisheart.ble.domain.Connection
+import com.github.hemoptysisheart.ble.domain.Device
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -11,6 +12,8 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.Duration
 import java.time.Instant
 import kotlin.random.Random
@@ -20,10 +23,21 @@ class DeviceCacheModelImplTest : BehaviorSpec() {
         override val name: String = "name",
         override val address: String = "00:00",
         override val category: DeviceClass = DeviceClass.entries.random(),
-        override val services: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random()),
+        override val serviceClasses: List<MajorServiceClass> = listOf(MajorServiceClass.entries.random()),
         override val rssi: Int = Random.nextInt(-100, 0),
         override var connection: Connection? = null
-    ) : com.github.hemoptysisheart.ble.domain.Device {
+    ) : Device {
+        override val state: StateFlow<Device.State> = MutableStateFlow(
+            Device.State(
+                name,
+                address,
+                category,
+                serviceClasses,
+                rssi,
+                connection?.state?.value
+            )
+        )
+
         override fun connect(): Connection = TODO("Not yet implemented")
         override fun disconnect(): Unit = TODO("Not yet implemented")
     }

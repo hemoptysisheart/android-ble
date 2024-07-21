@@ -7,10 +7,14 @@ import android.bluetooth.BluetoothDevice.TRANSPORT_LE
 import android.content.Context
 import android.util.Log
 import com.github.hemoptysisheart.ble.domain.Connection.Level
+import com.github.hemoptysisheart.ble.domain.Device.State
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
@@ -28,13 +32,32 @@ class Device(
 
     override val category: DeviceClass = DeviceClass(source.bluetoothClass)
 
-    override val services: List<MajorServiceClass> = MajorServiceClass(source.bluetoothClass)
+    override val serviceClasses: List<MajorServiceClass> = MajorServiceClass(source.bluetoothClass)
 
-    override val rssi: Int
-        get() = _rssi
+    override var rssi: Int = _rssi
+        private set(value) {
+            field = value
+            _state.update { it.copy(rssi = value) }
+        }
 
     override var connection: Connection? = null
-        private set
+        private set(value) {
+            field = value
+            _state.update {
+                it.copy(
+                    connection = value?.let { connection ->
+                        com.github.hemoptysisheart.ble.domain.Connection.State(
+                            connection.level,
+                            connection.mtu,
+                            connection.services
+                        )
+                    }
+                )
+            }
+        }
+
+    private val _state = MutableStateFlow(State(name, address, category, serviceClasses, rssi, null))
+    override val state: StateFlow<State> = _state
 
     init {
         require(DEVICE_TYPE_CLASSIC != source.type) {
@@ -57,9 +80,20 @@ class Device(
             gatt.awaitConnected()
             connection.requestMtu()
             connection.services()
+
+            _state.update {
+                it.copy(
+                    connection = com.github.hemoptysisheart.ble.domain.Connection.State(
+                        level = connection.level,
+                        mtu = connection.mtu,
+                        services = connection.services
+                    )
+                )
+            }
         }
         this.connection = connection
 
+        Log.d(tag, "#connect return : $connection")
         return connection
     }
 
@@ -88,7 +122,7 @@ class Device(
         "name=$name",
         "address=[ PROTECTED ]",
         "category=$category",
-        "services=$services",
+        "services=$serviceClasses",
         "rssi=$rssi",
         "connection=$connection"
     ).joinToString(", ", "Device/$tag(", ")")

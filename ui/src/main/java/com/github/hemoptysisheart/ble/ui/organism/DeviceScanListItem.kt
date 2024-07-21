@@ -50,7 +50,8 @@ fun LazyItemScope.DeviceScanListItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
-                device.services.let { services ->
+
+                device.serviceClasses.let { services ->
                     if (services.isNotEmpty()) {
                         Text(
                             text = services.joinToString(", ", "Service : ") { it.label },

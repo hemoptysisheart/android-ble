@@ -2,11 +2,21 @@ package com.github.hemoptysisheart.ble.domain
 
 import com.github.hemoptysisheart.ble.spec.core.DeviceClass
 import com.github.hemoptysisheart.ble.spec.core.MajorServiceClass
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Bluetooth LE 기기.
  */
 interface Device : Comparable<Device> {
+    data class State(
+        val name: String?,
+        val address: String,
+        val category: DeviceClass,
+        val services: List<MajorServiceClass>,
+        val rssi: Int,
+        val connection: Connection.State?
+    )
+
     /**
      * 기기 이름.
      */
@@ -25,7 +35,7 @@ interface Device : Comparable<Device> {
     /**
      * 기기가 제공하는 서비스.
      */
-    val services: List<MajorServiceClass>
+    val serviceClasses: List<MajorServiceClass>
 
     /**
      * 기기 신호 세기.
@@ -36,6 +46,8 @@ interface Device : Comparable<Device> {
      * 기기 연결.
      */
     val connection: Connection?
+
+    val state: StateFlow<State>
 
     /**
      * 기기에 연결한다.
