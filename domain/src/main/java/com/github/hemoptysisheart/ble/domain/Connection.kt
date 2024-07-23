@@ -42,7 +42,7 @@ interface Connection {
         /**
          * 연결이 사용할 수 있는 서비스 목록.
          */
-        val services: List<Service>? = null
+        val services: List<Service> = emptyList()
     )
 
     /**

@@ -88,7 +88,7 @@ class PreviewDeviceProvider : PreviewParameterProvider<Device> {
     override val values = PREVIEW_DEVICE_LIST.asSequence()
 }
 
-class PreviewDeviceStateProvider : PreviewParameterProvider<Device.State> {
+class DeviceStateProvider : PreviewParameterProvider<Device.State> {
     override val values = PREVIEW_DEVICE_LIST
         .map {
             Device.State(

@@ -97,3 +97,7 @@ val PREVIEW_CONNECTION_STATE_LIST = listOf(
 class ConnectionStateProvider : PreviewParameterProvider<State> {
     override val values: Sequence<State> = PREVIEW_CONNECTION_STATE_LIST.asSequence()
 }
+
+class ConnectionLevelProvider : PreviewParameterProvider<Level> {
+    override val values = Level.entries.asSequence()
+}
