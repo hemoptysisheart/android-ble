@@ -19,4 +19,8 @@ interface Descriptor {
      * - [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers)
      */
     val type: com.github.hemoptysisheart.ble.spec.core.Descriptor
+    val readable: Boolean
+    val writable: Boolean
+
+    suspend fun write(value: ByteArray)
 }

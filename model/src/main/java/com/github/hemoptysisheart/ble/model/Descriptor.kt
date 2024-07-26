@@ -20,7 +20,7 @@ class Descriptor(
     override val type = com.github.hemoptysisheart.ble.spec.core.Descriptor(target.uuid)
         ?: CustomDescriptor(target.uuid)
 
-    val readable: Boolean
+    override val readable: Boolean
         get() = target.permissions.let {
             it and BluetoothGattDescriptor.PERMISSION_READ != 0 ||
                     it and BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED != 0 ||
@@ -28,7 +28,7 @@ class Descriptor(
         }
 
 
-    val writable: Boolean
+    override val writable: Boolean
         get() = target.permissions.let {
             it and BluetoothGattDescriptor.PERMISSION_WRITE != 0 ||
                     it and BluetoothGattDescriptor.PERMISSION_WRITE_SIGNED != 0 ||

@@ -3,6 +3,9 @@
     <string name="molecule_property_value_null">(null)</string>
 
     <string name="domain_characteristic_label">캐릭터리스틱</string>
+    <string name="domain_characteristic_prop_readable_label">%s읽기</string>
+    <string name="domain_characteristic_prop_writable_label">%s쓰기</string>
+    <string name="domain_characteristic_prop_writable_without_response_label">%s응답 없이 쓰기</string>
     <string name="domain_characteristic_type_prop_name_label">이름</string>
     <string name="domain_characteristic_type_prop_uuid_label">UUID</string>
     <string name="domain_characteristic_type_prop_id_label">ID</string>
@@ -19,6 +22,8 @@
     <string name="domain_connection_level_value_disconnected_label">연결 끊김</string>
 
     <string name="domain_descriptor_type_prop_name_label">이름</string>
+    <string name="domain_descriptor_readable_label">%s읽기</string>
+    <string name="domain_descriptor_writable_label">%s쓰기</string>
 
     <string name="domain_device_prop_address_label">주소</string>
     <string name="domain_device_prop_category_label">카테고리</string>

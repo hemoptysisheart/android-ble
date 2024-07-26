@@ -26,6 +26,8 @@ fun Descriptor(descriptor: Descriptor, modifier: Modifier = Modifier) {
             value = descriptor.type.uuid
         )
         PropertySmall(name = stringResource(R.string.domain_descriptor_type_prop_id_label), value = descriptor.type.id)
+
+        DescriptorProperties(descriptor)
     }
 }
 

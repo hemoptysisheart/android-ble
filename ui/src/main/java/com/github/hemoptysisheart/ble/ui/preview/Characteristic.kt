@@ -10,9 +10,9 @@ import kotlin.random.Random
 data class PreviewCharacteristic(
     override val type: com.github.hemoptysisheart.ble.spec.core.Characteristic,
     override val service: Service = PREVIEW_SERVICE_LIST.random(),
-    val readable: Boolean = true,
-    val writable: Boolean = Random.nextBoolean(),
-    val writableWithoutResponse: Boolean = Random.nextBoolean(),
+    override val readable: Boolean = true,
+    override val writable: Boolean = Random.nextBoolean(),
+    override val writableWithoutResponse: Boolean = Random.nextBoolean(),
     val indicatable: Boolean = Random.nextBoolean(),
     val notifiable: Boolean = Random.nextBoolean(),
     override val descriptors: List<Descriptor> = emptyList()

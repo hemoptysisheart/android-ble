@@ -24,13 +24,13 @@ class Characteristic(
     override val type: Characteristic = Characteristic(target.uuid)
         ?: CustomCharacteristic(target.uuid)
 
-    val readable: Boolean
+    override val readable: Boolean
         get() = target.properties and PROPERTY_READ != 0
 
-    val writable: Boolean
+    override val writable: Boolean
         get() = target.properties and PROPERTY_WRITE != 0
 
-    val writableWithoutResponse: Boolean
+    override val writableWithoutResponse: Boolean
         get() = target.properties and PROPERTY_WRITE_NO_RESPONSE != 0
 
     val indicatable: Boolean
